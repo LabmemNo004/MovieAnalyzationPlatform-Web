@@ -1,16 +1,15 @@
 <template>
 <div :class="[{root: true, sidebarClose, sidebarStatic}, 'sing-dashboard']">
   <Sidebar />
-  <Helper />
   <div class="wrap">
-    <Header />
+   <!-- <Header />-->
     <v-touch class="content" @swipe="handleSwipe" :swipe-options="{direction: 'horizontal'}">
       <breadcrumb-history></breadcrumb-history>
       <transition name="router-animation">
         <router-view />
       </transition>
       <footer class="contentFooter">
-        Sing App Vue Dashboard Free Template - Made by <a href="https://flatlogic.com" rel="nofollow noopener noreferrer" target="_blank">Flatlogic</a>
+        Amazon Movies Analyze Dashboard - Made by <a href="https://github.com/LabmemNo004" rel="nofollow noopener noreferrer" target="_blank">LabmemNo004</a>
       </footer>
     </v-touch>
   </div>
@@ -23,14 +22,13 @@ const { mapState, mapActions } = createNamespacedHelpers('layout');
 
 import Sidebar from '@/components/Sidebar/Sidebar';
 import Header from '@/components/Header/Header';
-import Helper from '@/components/Helper/Helper';
 import BreadcrumbHistory from '@/components/BreadcrumbHistory/BreadcrumbHistory';
 
 import './Layout.scss';
 
 export default {
   name: 'Layout',
-  components: { Sidebar, Header, Helper, BreadcrumbHistory },
+  components: { Sidebar, Header, BreadcrumbHistory },
   methods: {
     ...mapActions(['switchSidebar', 'handleSwipe', 'changeSidebarActive', 'toggleSidebar'],
     ),

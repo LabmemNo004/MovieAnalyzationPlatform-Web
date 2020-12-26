@@ -1,5 +1,5 @@
 <template>
-  <b-navbar class="header d-print-none app-header">
+  <b-navbar class="header d-print-none app-header" sticky="true" >
     <b-nav>
       <b-nav-item>
         <a class="d-md-down-none px-2" href="#" @click="toggleSidebarMethod" id="barsTooltip">
@@ -48,7 +48,7 @@
           <span class="avatar rounded-circle thumb-sm float-left mr-2">
             <img class="rounded-circle" src="../../assets/people/a5.jpg" alt="..." />
           </span>
-          <span class="small">Philip Smith</span>
+          <span class="small">LabmemNo004</span>
           <span class="ml-1 mr-3 circle bg-primary text-white fw-bold">13</span>
         </template>
         <Notifications />

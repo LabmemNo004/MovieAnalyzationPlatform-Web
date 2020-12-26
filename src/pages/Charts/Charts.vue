@@ -6,15 +6,16 @@
     </h1>
     <div>
       <b-row>
-        <b-col xs="12" lg="7">
+
+        <b-col xs="12" lg="4">
           <Widget
               title="<h5>Apex <span class='fw-semi-bold'>Column Chart</span></h5>"
               close collapse customHeader
           >
             <apexchart type="bar" height="350" :series="cd.apex.column.series" :options="cd.apex.column.options"/>
           </Widget>
-
         </b-col>
+
         <b-col xs="12" lg="5">
           <Widget
               title="<h5>Echarts <span class='fw-semi-bold'>Line Chart</span></h5>"
@@ -23,6 +24,7 @@
             <echart :options="cd.echarts.line" :init-options="initEchartsOptions" style="height: 370px"></echart>
           </Widget>
         </b-col>
+
         <b-col xs='12' lg='5'>
           <Widget
               title="<h5>Highcharts <span class='fw-semi-bold'>Line Chart</span></h5>"
@@ -56,6 +58,7 @@
             </b-row>
           </Widget>
         </b-col>
+
         <b-col xs='12' lg='7'>
           <b-row>
             <b-col xs="12" lg="6">
@@ -84,6 +87,7 @@
             </b-col>
           </b-row>
         </b-col>
+
         <b-col xs="12" lg="12">
           <Widget
               title="<h5>Echart <span class='fw-semi-bold'>River Chart</span></h5>"
@@ -92,6 +96,7 @@
             <echart :options="cd.echarts.river" :init-options="initEchartsOptions" style="height: 350px;"></echart>
           </Widget>
         </b-col>
+
       </b-row>
     </div>
   </div>

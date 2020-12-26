@@ -1,28 +1,29 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-import Layout from '@/components/Layout/Layout';
-import Login from '@/pages/Login/Login';
-import ErrorPage from '@/pages/Error/Error';
+import Layout from './components/Layout/Layout';
+import Login from './pages/Login/Login';
+import ErrorPage from './pages/Error/Error';
 // Core
-import TypographyPage from '@/pages/Typography/Typography';
+import TypographyPage from './pages/Typography/Typography';
 
 // Tables
-import TablesBasicPage from '@/pages/Tables/Basic';
-
-// Maps
-import GoogleMapPage from '@/pages/Maps/Google';
+import TablesBasicPage from './pages/Tables/Basic';
 
 // Main
-import AnalyticsPage from '@/pages/Dashboard/Dashboard';
+import AnalyticsPage from './pages/Dashboard/Dashboard';
 
 // Charts
-import ChartsPage from '@/pages/Charts/Charts';
+import ChartsPage from './pages/Charts/Charts';
 
 // Ui
-import IconsPage from '@/pages/Icons/Icons';
-import NotificationsPage from '@/pages/Notifications/Notifications';
+import IconsPage from './pages/Icons/Icons';
 
+//Analysis
+import AnalysisBasic from './pages/Analysis/Basic';
+
+//Data governance
+import DataGovernance from "./pages/DataGovernance/DataGovernance";
 
 Vue.use(Router);
 
@@ -34,7 +35,7 @@ export default new Router({
       component: Login,
     },
     {
-      path: '/error',
+      path: '*',
       name: 'Error',
       component: ErrorPage,
     },
@@ -49,19 +50,9 @@ export default new Router({
           component: AnalyticsPage,
         },
         {
-          path: 'typography',
-          name: 'TypographyPage',
-          component: TypographyPage,
-        },
-        {
           path: 'components/icons',
           name: 'IconsPage',
           component: IconsPage,
-        },
-        {
-          path: 'notifications',
-          name: 'NotificationsPage',
-          component: NotificationsPage,
         },
         {
           path: 'components/charts',
@@ -69,14 +60,24 @@ export default new Router({
           component: ChartsPage,
         },
         {
-          path: 'tables',
+          path: 'components/tables',
           name: 'TablesBasicPage',
           component: TablesBasicPage,
         },
         {
-          path: 'components/maps',
-          name: 'GoogleMapPage',
-          component: GoogleMapPage,
+          path: 'analysis/basic',
+          name: 'AnalysisBasic',
+          component: AnalysisBasic,
+        },
+        {
+          path: 'components/typography',
+          name: 'TypographyPage',
+          component: TypographyPage,
+        },
+        {
+          path: 'dataGovernance',
+          name: 'DataGovernance',
+          component: DataGovernance,
         },
       ],
     },

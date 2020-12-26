@@ -16,6 +16,8 @@
   overflow-y: auto;
   overflow-x: hidden;
   width: $sidebar-width-open;
+  background-color: var(--sidebar-bg-color);
+  color: var(--sidebar-color);
   transition: width $sidebar-transition-time ease-in-out, left $sidebar-transition-time ease-in-out;
 
   @include sidebar-scrollbar();
@@ -34,7 +36,7 @@
 }
 
 .logo {
-  margin: 15px 0;
+  margin: 14px 0;
   font-size: 18px;
   width: 100%;
   font-weight: $font-weight-thin;
@@ -49,6 +51,7 @@
   }
 
   .primary-word {
+    transition: opacity $sidebar-transition-time ease-in-out;
     color: var(--sidebar-item-active);
     font-weight: $font-weight-normal;
   }

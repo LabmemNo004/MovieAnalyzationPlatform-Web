@@ -7,6 +7,13 @@
           title="<h5>Table <span class='fw-semi-bold'>Styles</span></h5>"
           customHeader settings close
         >
+          <div>
+            <b-button variant="light" @click="dataReady" >
+              <b-spinner v-if=this.state small ></b-spinner>
+              {{dataR}}
+            </b-button>
+          </div>
+
           <div class="table-resposive">
             <table class="table">
               <thead>
@@ -78,351 +85,6 @@
         </Widget>
       </b-col>
     </b-row>
-    <b-row>
-     <b-col lg="6">
-       <Widget
-         title="<h5>Table <span class='fw-semi-bold'>Styles</span></h5>"
-         customHeader settings close
-       >
-         <h3>Stripped <span class="fw-semi-bold">Table</span></h3>
-         <p>Each row is highlighted. You will never lost
-           there. Just <code>.table-striped</code> it.</p>
-         <table class="table table-striped">
-           <thead>
-             <tr>
-               <th>
-                 <div class="abc-checkbox">
-                   <input type="checkbox"
-                     id="checkbox1" :checked="checkboxes1[0]"
-                     @change="event => checkAll(event, 'checkboxes1')"
-                   />
-                   <label for="checkbox1" />
-                 </div>
-               </th>
-               <th>First Name</th>
-               <th>Last Name</th>
-               <th>Info</th>
-             </tr>
-           </thead>
-           <tbody>
-             <tr>
-               <td>
-                 <div class="abc-checkbox">
-                   <input type="checkbox"
-                     id="checkbox2" :checked="checkboxes1[1]"
-                     @change="event => changeCheck(event, 'checkboxes1', 1)"
-                   />
-                   <label for="checkbox2" />
-                 </div>
-               </td>
-               <td>Mark</td>
-               <td>Otto</td>
-               <td><b-badge variant="success">Online</b-badge></td>
-             </tr>
-             <tr>
-               <td>
-                 <div class="abc-checkbox">
-                   <input type="checkbox"
-                     id="checkbox3" :checked="checkboxes1[2]"
-                     @change="event => changeCheck(event, 'checkboxes1', 2)"
-                   />
-                   <label for="checkbox3" />
-                 </div>
-               </td>
-               <td>Jacob <b-badge variant="warning" class="text-gray-dark">ALERT!</b-badge></td>
-               <td>Thornton</td>
-               <td><b-badge variant="gray">Away</b-badge></td>
-             </tr>
-             <tr>
-               <td>
-                 <div class="abc-checkbox">
-                   <input type="checkbox"
-                     id="checkbox4" :checked="checkboxes1[3]"
-                     @change="event => changeCheck(event, 'checkboxes1', 3)"
-                   />
-                   <label for="checkbox4" />
-                 </div>
-               </td>
-               <td>Larry</td>
-               <td>the Bird</td>
-               <td><b-badge variant="danger">Construct</b-badge></td>
-             </tr>
-           </tbody>
-         </table>
-         <br /><br />
-         <h3>Hover <span class="fw-semi-bold">Table</span></h3>
-         <p>Trace only what's really important. <code>.table-hover</code> is made for it.</p>
-         <div class="table-responsive">
-           <table class="table table-hover">
-             <thead>
-               <tr>
-                 <th>#</th>
-                 <th>First Name</th>
-                 <th>Last Name</th>
-                 <th>Email</th>
-                 <th>Status</th>
-               </tr>
-             </thead>
-             <tbody>
-               <tr>
-                 <td>1</td>
-                 <td>Mark</td>
-                 <td>Otto</td>
-                 <td><a href="#">ottoto@example.com</a></td>
-                 <td><b-badge variant="primary" pill>Pending</b-badge></td>
-               </tr>
-               <tr>
-                 <td>2</td>
-                 <td>Jacob</td>
-                 <td>Thornton</td>
-                 <td><a href="#">fat.thor@example.com</a></td>
-                 <td><b-badge variant="info" pill>Unconfirmed</b-badge></td>
-               </tr>
-               <tr>
-                 <td>3</td>
-                 <td>Larry</td>
-                 <td>the Bird</td>
-                 <td><a href="#">larry@example.com</a></td>
-                 <td><b-badge variant="success" pill>New</b-badge></td>
-               </tr>
-               <tr>
-                 <td>4</td>
-                 <td>Peter</td>
-                 <td>Horadnia</td>
-                 <td><a href="#">peter@example.com</a></td>
-                 <td><b-badge variant="warning" pill>Active</b-badge></td>
-               </tr>
-             </tbody>
-           </table>
-         </div>
-       </Widget>
-     </b-col>
-     <b-col lg="6">
-        <Widget
-          title="<h5>Table <span class='fw-semi-bold'>Styles</span></h5>"
-          customHeader ettings close
-        >
-          <h3>Bordered <span class="fw-semi-bold">Table</span></h3>
-          <p>Each row is highlighted. You will never lost there. That&apos;s how
-            all of us learned in school the table should look like. Just add
-            <code>.table-bordered</code> to it.</p>
-          <table class="table table-bordered table-lg mt-lg mb-0">
-            <thead class="text-uppercase">
-              <tr>
-                <th>
-                  <div class="abc-checkbox">
-                    <input type="checkbox"
-                      id="checkbox10" :checked="checkboxes2[0]"
-                      @change="event => checkAll(event, 'checkboxes2')"
-                    />
-                    <label for="checkbox10" />
-                  </div>
-                </th>
-                <th>Product</th>
-                <th class="text-right">Price</th>
-                <th class="text-center">Sales</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <div class="abc-checkbox">
-                    <input type="checkbox"
-                      id="checkbox11" :checked="checkboxes2[1]"
-                      @change="event => changeCheck(event, 'checkboxes2', 1)"
-                    />
-                    <label for="checkbox11" />
-                  </div>
-                </td>
-                <td>On the Road</td>
-                <td class="text-right">$25 224.2</td>
-                <td class="text-center">
-                  <Sparklines :data="getRandomData()" :options="getRandomColor()"></Sparklines>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="abc-checkbox">
-                    <input type="checkbox"
-                      id="checkbox12" :checked="checkboxes2[2]"
-                      @change="event => changeCheck(event, 'checkboxes2', 2)"
-                    />
-                    <label for="checkbox12" />
-                  </div>
-                </td>
-                <td>HP Core i7</td>
-                <td class="text-right">$87 346.1</td>
-                <td class="text-center">
-                  <Sparklines :data="getRandomData()" :options="getRandomColor()"></Sparklines>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="abc-checkbox">
-                    <input type="checkbox"
-                      id="checkbox13" :checked="checkboxes2[3]"
-                      @change="event => changeCheck(event, 'checkboxes2', 3)"
-                    />
-                    <label for="checkbox13" />
-                  </div>
-                </td>
-                <td>Let&apos;s Dance</td>
-                <td class="text-right">$57 944.6</td>
-                <td class="text-center">
-                  <Sparklines :data="getRandomData()" :options="getRandomColor()"></Sparklines>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="abc-checkbox">
-                    <input type="checkbox"
-                      id="checkbox14" :checked="checkboxes2[4]"
-                      @change="event => changeCheck(event, 'checkboxes2', 4)"
-                    />
-                    <label for="checkbox14" />
-                  </div>
-                </td>
-                <td>Air Pro</td>
-                <td class="text-right">$118 533.1</td>
-                <td class="text-center">
-                  <Sparklines :data="getRandomData()" :options="getRandomColor()"></Sparklines>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="abc-checkbox">
-                    <input type="checkbox"
-                      id="checkbox15" :checked="checkboxes2[5]"
-                      @change="event => changeCheck(event, 'checkboxes2', 5)"
-                    />
-                    <label for="checkbox15" />
-                  </div>
-                </td>
-                <td>Version Control</td>
-                <td class="text-right">$72 854.5</td>
-                <td class="text-center">
-                  <Sparklines :data="getRandomData()" :options="getRandomColor()"></Sparklines>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </Widget>
-        <Widget
-          title="<h5>Table <span class='fw-semi-bold'>Styles</span></h5>"
-          customHeader settings close
-        >
-          <h3>Overflow <span class="fw-semi-bold">Table</span></h3>
-          <p>
-            Add any non-bordered .table within a widget for a seamless design.
-            Awesome look for no cost.
-            Just wrap the table with simple css class <code>.widget-table-overflow</code> inside
-            of widget
-          </p>
-          <div class="widget-table-overflow">
-            <table class="table table-striped table-lg mt-lg mb-0">
-              <thead>
-                <tr>
-                  <th>
-                    <div class="abc-checkbox">
-                      <input type="checkbox"
-                        id="checkbox20" :checked="checkboxes3[0]"
-                        @change="event => checkAll(event, 'checkboxes3')"
-                      />
-                      <label for="checkbox20" />
-                    </div>
-                  </th>
-                  <th>Product</th>
-                  <th class="text-right">Price</th>
-                  <th class="text-center">Sales</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <div class="abc-checkbox">
-                      <input type="checkbox"
-                        id="checkbox21" :checked="checkboxes3[1]"
-                        @change="event => changeCheck(event, 'checkboxes3', 1)"
-                      />
-                      <label for="checkbox21" />
-                    </div>
-                  </td>
-                  <td>On the Road</td>
-                  <td class="text-right">$25 224.2</td>
-                  <td class="text-center">
-                    <Sparklines :data="getRandomData()" :options="getRandomColor()"></Sparklines>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="abc-checkbox">
-                      <input type="checkbox"
-                        id="checkbox22" :checked="checkboxes3[2]"
-                        @change="event => changeCheck(event, 'checkboxes3', 2)"
-                      />
-                      <label for="checkbox22" />
-                    </div>
-                  </td>
-                  <td>HP Core i7</td>
-                  <td class="text-right">$87 346.1</td>
-                  <td class="text-center">
-                    <Sparklines :data="getRandomData()" :options="getRandomColor()"></Sparklines>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="abc-checkbox">
-                      <input type="checkbox"
-                        id="checkbox23" :checked="checkboxes3[3]"
-                        @change="event => changeCheck(event, 'checkboxes3', 3)"
-                      />
-                      <label for="checkbox23" />
-                    </div>
-                  </td>
-                  <td>Let&apos;s Dance</td>
-                  <td class="text-right">$57 944.6</td>
-                  <td class="text-center">
-                    <Sparklines :data="getRandomData()" :options="getRandomColor()"></Sparklines>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="abc-checkbox">
-                      <input type="checkbox"
-                        id="checkbox24" :checked="checkboxes3[4]"
-                        @change="event => changeCheck(event, 'checkboxes3', 4)"
-                      />
-                      <label for="checkbox24" />
-                    </div>
-                  </td>
-                  <td>Air Pro</td>
-                  <td class="text-right">$118 533.1</td>
-                  <td class="text-center">
-                    <Sparklines :data="getRandomData()" :options="getRandomColor()"></Sparklines>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="abc-checkbox">
-                      <input type="checkbox"
-                        id="checkbox25" :checked="checkboxes3[5]"
-                        @change="event => changeCheck(event, 'checkboxes3', 5)"
-                      />
-                      <label for="checkbox25" />
-                    </div>
-                  </td>
-                  <td>Version Control</td>
-                  <td class="text-right">$72 854.5</td>
-                  <td class="text-center">
-                    <Sparklines :data="getRandomData()" :options="getRandomColor()"></Sparklines>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </Widget>
-      </b-col>
-   </b-row>
   </div>
 </template>
 
@@ -436,22 +98,10 @@ export default {
   components: { Widget, Sparklines },
   data() {
     return {
+      dataR:"Loading...",
+      state:true,
       tableStyles: [
-        {
-          id: 1,
-          picture: require('../../assets/tables/1.jpg'), // eslint-disable-line global-require
-          description: 'Palo Alto',
-          info: {
-            type: 'JPEG',
-            dimensions: '200x150',
-          },
-          date: new Date('September 14, 2012'),
-          size: '45.6 KB',
-          progress: {
-            percent: 29,
-            colorClass: 'success',
-          },
-        },
+
         {
           id: 2,
           picture: require('../../assets/tables/2.jpg'), // eslint-disable-line global-require
@@ -523,6 +173,16 @@ export default {
     };
   },
   methods: {
+    dataReady(){
+      if(this.state===false) {
+        this.dataR = "Loading...";
+        this.state=true;
+      }
+      else {
+        this.dataR = "Down";
+        this.state=false;
+      }
+    },
     parseDate(date) {
       const dateSet = date.toDateString().split(' ');
       return `${date.toLocaleString('en-us', { month: 'long' })} ${dateSet[2]}, ${dateSet[3]}`;

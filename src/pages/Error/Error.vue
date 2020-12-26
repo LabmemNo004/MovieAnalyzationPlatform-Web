@@ -7,13 +7,13 @@
             Opps, it seems that this page does not exist.
         </p>
         <p class="errorHelp mb-3">
-            If you are sure it should, search for it.
+            Search Pages Path—— like "/app/dashboard".
         </p>
         <b-form>
           <b-form-group>
-            <b-form-input class="input-no-border" type="text" placeholder="Search Pages" />
+            <b-form-input class="input-no-border" type="text" placeholder="/app/dashboard" v-model="routeName"/>
           </b-form-group>
-          <router-link tag="a" to="/app/extra/search">
+          <router-link tag="a" :to=routeName>
             <b-button class="errorBtn" type="submit" variant="success">
                 Search <i class="la la-search ml-xs" />
             </b-button>
@@ -21,7 +21,7 @@
         </b-form>
       </div>
       <footer class="pageFooter">
-        2019 &copy; Sing App Vue Admin Dashboard Template.
+        Amazon Movies Analyze Dashboard - Made by <a href="https://github.com/LabmemNo004" rel="nofollow noopener noreferrer" target="_blank">LabmemNo004</a>
       </footer>
     </b-container>
   </div>
@@ -30,6 +30,11 @@
 <script>
 export default {
   name: 'ErrorPage',
+  data() {
+    return {
+      routeName: '/app/dashboard'
+    }
+  }
 };
 </script>
 

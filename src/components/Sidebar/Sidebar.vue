@@ -6,83 +6,85 @@
         @mouseleave="sidebarMouseLeave"
     >
       <header class="logo">
-        <router-link to="/app"><span class="primary-word">Sing</span> App</router-link>
+        <router-link to="/app">
+          <span class="navTitle">{{Title}}</span>
+          </router-link>
       </header>
       <ul class="nav">
+
         <NavLink
             :activeItem="activeItem"
             header="Dashboard"
             link="/app/dashboard"
-            iconName="flaticon-home"
+            iconName="glyphicon glyphicon-signal"
             index="dashboard"
             isHeader
         />
         <NavLink
-            :activeItem="activeItem"
-            header="Typography"
-            link="/app/typography"
-            iconName="flaticon-list"
-            index="typography"
-            isHeader
+                :activeItem="activeItem"
+                header="Analysis"
+                link="/app/analysis"
+                iconName="fi flaticon-network"
+                index="analysis"
+                :childrenLinks="[
+              { header: 'Basic', link: '/app/analysis/basic' },
+
+            ]"
         />
         <NavLink
-            :activeItem="activeItem"
-            header="Tables Basic"
-            link="/app/tables"
-            iconName="flaticon-equal-1"
-            index="tables"
-            isHeader
+                :activeItem="activeItem"
+                header="Data Governance"
+                link="/app/dataGovernance"
+                iconName="fa fa-database"
+                index="dataGovernance"
+                isHeader
         />
         <NavLink
-            :activeItem="activeItem"
-            header="Notifications"
-            link="/app/notifications"
-            iconName="flaticon-star"
-            index="notifications"
-            isHeader
-        />
-        <NavLink
-            :activeItem="activeItem"
-            header="Components"
-            link="/app/components"
-            iconName="flaticon-network"
-            index="components"
-            :childrenLinks="[
+                :activeItem="activeItem"
+                header="Components"
+                link="/app/components"
+                iconName="fa fa-cubes"
+                index="components"
+                :childrenLinks="[
               { header: 'Charts', link: '/app/components/charts' },
               { header: 'Icons', link: '/app/components/icons' },
-              { header: 'Maps', link: '/app/components/maps' },
+              { header: 'Texts', link: '/app/components/typography' },
+              { header: 'Tables', link: '/app/components/tables' },
             ]"
         />
       </ul>
       <p>
       <h5 class="navTitle">
-        LABELS
-        <a class="actionLink">
-          <i class="la la-plus float-right"/>
-        </a>
+      Collaborators
       </h5>
       <ul class="sidebarLabels">
         <li>
-          <a href="#">
+          <a href="https://github.com/LabmemNo004" target="_blank">
             <i class="fa fa-circle text-danger mr-2"/>
-            <span class="labelName">My Recent</span>
+            <span class="labelName">LabmemNo004</span>
           </a>
         </li>
         <li>
-          <a href="#">
+          <a href="https://github.com/ComposeC">
             <i class="fa fa-circle text-primary mr-2"/>
-            <span class="labelName">Starred</span>
+            <span class="labelName">ComposeC</span>
           </a>
         </li>
         <li>
-          <a href="#">
+          <a href="https://github.com/745184533">
+            <i class="fa fa-circle text-info mr-2"/>
+            <span class="labelName">Dark Soul</span>
+          </a>
+        </li>
+        <li>
+          <a href="https://github.com/sophiedoremi">
             <i class="fa fa-circle mr-2"/>
-            <span class="labelName">Background</span>
+            <span class="labelName">Sophiedoremi</span>
           </a>
         </li>
       </ul>
       <h5 class="navTitle">
-        PROJECTS
+        DataBase
       </h5>
       <div class="sidebarAlerts">
         <b-alert
@@ -94,7 +96,7 @@
           <span>{{alert.title}}</span><br/>
           <b-progress class="sidebarProgress progress-xs mt-1"
                       :variant="alert.color" :value="alert.value" :max="100"/>
-          <small>{{alert.footer}}</small>
+          <small>Storage in use . . . {{alert.value}} GB</small>
         </b-alert>
       </div>
     </nav>
@@ -114,19 +116,24 @@ export default {
       alerts: [
         {
           id: 0,
-          title: 'Sales Report',
+          title: 'Hive',
           value: 15,
-          footer: 'Calculating x-axis bias... 65%',
           color: 'danger',
         },
         {
           id: 1,
-          title: 'Personal Responsibility',
+          title: 'MySQL',
           value: 20,
-          footer: 'Provide required notes',
           color: 'primary',
         },
+        {
+          id: 2,
+          title: 'Neo4j',
+          value: 25,
+          color: 'info',
+        },
       ],
+      Title:"AM Data Warehouse",
     };
   },
   methods: {
@@ -140,12 +147,14 @@ export default {
       if (!this.sidebarStatic && (isScreen('lg') || isScreen('xl'))) {
         this.switchSidebar(false);
         this.setActiveByRoute();
+        //this.Title="Data Warehouse";
       }
     },
     sidebarMouseLeave() {
       if (!this.sidebarStatic && (isScreen('lg') || isScreen('xl'))) {
         this.switchSidebar(true);
         this.changeSidebarActive(null);
+        //this.Title="DW";
       }
     },
   },

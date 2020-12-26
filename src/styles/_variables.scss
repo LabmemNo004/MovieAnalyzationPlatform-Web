@@ -76,6 +76,7 @@ $text-color: $gray-700 !default;
 
 $font-weight-bold: 700 !default;
 $font-weight-semi-bold: 600 !default;
+$font-weight-normal-plus: 500 !default;
 $font-weight-normal: 400 !default;
 $font-weight-thin: 300 !default;
 $font-weight-base: $font-weight-thin !default;
@@ -83,6 +84,7 @@ $font-weight-base: $font-weight-thin !default;
 $addition-bg: $gray-100 !default;
 
 $body-bg: #f9fbfd !default;
+$body-bg-dark: darken($body-bg,1%) !default;
 $body-bg-light: lighten($body-bg, 3%);
 
 //== Components
@@ -102,8 +104,8 @@ $border-radius-sm:       0.45rem !default;
 //== Sidebar
 //
 
-$sidebar-width-open: 224px;
-$sidebar-width-closed: 50px;
+$sidebar-width-open: 200px;
+$sidebar-width-closed: 52px;
 $sidebar-transition-time: 0.3s !default;
 
 $sidebar-item-border-color: transparent !default;

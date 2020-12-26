@@ -39,7 +39,7 @@
   flex-direction: column;
   flex-grow: 1;
   padding: $content-padding $content-padding ($content-padding + 20px);
-  background-color: $body-bg;
+  background-color: $body-bg-dark;
 
   @media (max-width: breakpoint-max(sm)) {
     padding: 20px $content-padding-sm ($content-padding + 30px);
