@@ -43,7 +43,7 @@
                   <div class="my_rate">
                     <span>My Rate: </span>
                     <i class="el-icon-star-on color1"></i>
-                    <span class="info_rate">{{comment.my_rate}}</span>
+                    <span class="info_rate">{{parseFloat(comment.my_rate).toFixed(1)}}</span>
                   </div>
                   <div class="my_comment">My Comment: {{comment.my_comment}}</div>
                 </div>
@@ -52,12 +52,12 @@
             </el-row>
           </div>
         </div>
-        <div class="page">
+        <div class="page" v-if="commentNum!=0">
           <el-pagination
             @current-change="handleCurrentChange"
             :current-page="pagenum"
             layout="prev, pager, next"
-            :total="total"
+            :total="commentNum"
             :page-size="4">
           </el-pagination>
         </div>
@@ -72,9 +72,8 @@ export default {
       username:'nianwuluo',
       movieCollectNum:0,
       peopleCollectNum:0,
-      commentNum:0,
+      commentNum:10,
       pagenum:1,
-      total:3,
       commentList:[
         {
           movie_id:1,
@@ -234,5 +233,21 @@ export default {
 .personalhome .my_comment{
   font-size: 18px;
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.personalhome .page .el-pagination button{
+    background-color:  #fff;
+    font-size: 18px;
+}
+.personalhome .page .el-pagination .el-pager li{
+  font-size: 18px;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  background-color:  #fff;
+}
+.personalhome .page .el-pagination .el-pager li.active{
+  color: #0084ff;
+}
+.personalhome .page .el-pagination .el-pager li:hover{
+  color: #6db9ff;
 }
 </style>
