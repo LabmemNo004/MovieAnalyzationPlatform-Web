@@ -290,7 +290,7 @@ export default {
 .home .searchMovieList{
   margin-top:20px;
 }
-.home .color1{
+.color1{
   color:gold;
 }
 .home .info{
