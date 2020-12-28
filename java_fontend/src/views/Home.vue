@@ -14,6 +14,8 @@
       </div>
       <div class="movie1">
         <div class="title">---HollyWood Movies of 2019---</div>
+        <div class=movieList1>
+        </div>
       </div>
     </div>
 </template>
