@@ -1,87 +1,97 @@
 <template>
     <div class="tables-basic">
-        <Helper />
-        <h2 class="page-title">Tables - <span class="fw-semi-bold">Static</span></h2>
+        <Helper @choose="appFilter"/>
+        <h2 class="page-title">APP - <span class="fw-semi-bold">{{localParam.organization}}</span></h2>
         <b-row>
             <b-col>
-                <Widget
-                        title="<h5>Table <span class='fw-semi-bold'>Styles</span></h5>"
-                        customHeader settings close
-                >
-                    <div>
-                        <b-button variant="light" @click="dataReady" >
-                            <b-spinner v-if=this.state small ></b-spinner>
-                            {{dataR}}
-                        </b-button>
+                <Widget v-if="queryChoose.p1">
+                    <h6 v-if="localParam.sights.sight0">Before customizing and testing , select a query in the
+                        <span class='fw-semi-bold'>right sidebar</span>
+                    </h6>
+                    <h4 v-if="localParam.sights.sight1" class='fw-semi-bold ' style="margin-left: 8px">Query
+                        <h5 style="margin-left: 73px">Query all movie products under the movieName  <span class='fw-semi-bold'>{{localParam.param.title}}</span> , which sort by ReleaseTime.</h5>
+                    </h4>
+                    <h4 v-if="localParam.sights.sight1 && localParam.sights.sight2" class='fw-semi-bold ' style="margin-left: 8px">Param
+                        <b-input v-model="localParam.param.title" style="margin-left: 73px;width:250px"></b-input>
+                    </h4>
+                    <b-button variant="outline-secondary" text="text" style="float: right" v-if="localParam.sights.sight1" @click="setQuery">{{localParam.queryState}}
+                            <b-spinner  small v-if=localParam.sights.state></b-spinner>
+                    </b-button>
+                </Widget>
+                <Widget v-if="queryChoose.p2">
+                    <h6 v-if="localParam.sights.sight0">Before customizing and testing , select a query in the
+                        <span class='fw-semi-bold'>right sidebar</span>
+                    </h6>
+                    <h4 v-if="localParam.sights.sight1" class='fw-semi-bold ' style="margin-left: 10px">Query
+                        <h5 style="margin-left: 73px">{{localParam.essentials}}</h5>
+                    </h4>
+                    <b-button variant="outline-secondary" text="text" style="float: right" v-if="localParam.sights.sight1" @click="setQuery">{{localParam.queryState}}
+                        <b-spinner  small v-if=localParam.sights.state></b-spinner>
+                    </b-button>
+                </Widget>
+
+
+
+
+                <Widget v-if="localParam.sights.sight3 ">
+                    <div class="d-flex justify-content-between flex-wrap px-4">
+                        <h4 class='d-flex align-items-center pb-1 bigStatTitle'>
+                            <span :class="`circle bg-${color} mr-sm`" :style="{ fontSize: '6px' }" />
+                            Data coming from——<span class='fw-semi-bold'>{{localParam.dataBase}}</span>
+                            <span class="fw-normal ml-xs"></span>
+                        </h4>
+                        <b-dropdown :text="text" variant="white" size="sm">
+                            <b-dropdown-item-button @click="setDatabase('Mysql')" >Mysql</b-dropdown-item-button>
+                            <b-dropdown-item-button @click="setDatabase('Hive')">Hive</b-dropdown-item-button>
+                            <b-dropdown-item-button @click="setDatabase('Neo4j')">Neo4j</b-dropdown-item-button>
+                        </b-dropdown>
                     </div>
 
-                    <div class="table-resposive">
-                        <table class="table">
+                    <div class="table-resposive design2" >
+                        <table class="table" style="height: 100px ;overflow: scroll">
                             <thead>
                             <tr>
                                 <th class="hidden-sm-down">#</th>
-                                <th>Picture</th>
-                                <th>Description</th>
-                                <th class="hidden-sm-down">Info</th>
-                                <th class="hidden-sm-down">Date</th>
-                                <th class="hidden-sm-down">Size</th>
-                                <th class="hidden-sm-down">Status</th>
+                                <th class="hidden-sm-down" v-for="title in this.localParam.title" :key="title">{{title}}</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr v-for="row in tableStyles" :key="row.id">
-                                <td>{{row.id}}</td>
-                                <td>
-                                    <img class="img-rounded" :src="row.picture" alt="" height="50" />
-                                </td>
-                                <td>
-                                    {{row.description}}
-                                    <div v-if="row.label">
-                                        <b-badge :variant="row.label.colorClass">{{row.label.text}}</b-badge>
-                                    </div>
-                                </td>
+
+                            <tr v-if="queryChoose.p1" v-for="row in localParam.infoShown.data" :key="row">
+                                <td>"N"</td>
+                                <td>{{row.URL}}</td>
+                                <td>{{row.ASIN}}</td>
+                                <td>{{row.type}}</td>
+                                <td>{{row.format}}</td>
                                 <td>
                                     <p class="mb-0">
                                         <small>
-                                            <span class="fw-semi-bold">Type:</span>
-                                            <span class="text-muted">&nbsp; {{row.info.type}}</span>
+                                            <span class="fw-semi-bold">Day:</span>
+                                            <span class="text-muted">&nbsp; {{row.ReleaseTime.Day}}</span>
                                         </small>
                                     </p>
-                                    <p>
+                                    <p class="mb-0">
                                         <small>
-                                            <span class="fw-semi-bold">Dimensions:</span>
-                                            <span class="text-muted">&nbsp; {{row.info.dimensions}}</span>
+                                            <span class="fw-semi-bold">Month:</span>
+                                            <span class="text-muted">{{row.ReleaseTime.Month}}</span>
                                         </small>
                                     </p>
-                                </td>
-                                <td class="text-semi-muted">
-                                    {{parseDate(row.date)}}
-                                </td>
-                                <td class="text-semi-muted">
-                                    {{row.size}}
-                                </td>
-                                <td class="width-150">
-                                    <b-progress
-                                            :variant="row.progress.colorClass" :value="row.progress.percent" :max="100"
-                                            class="progress-sm mb-xs"
-                                    />
+                                    <p class="mb-0">
+                                        <small>
+                                            <span class="fw-semi-bold">Year:</span>
+                                            <span class="text-muted">{{row.ReleaseTime.Year}}</span>
+                                        </small>
+                                    </p>
                                 </td>
                             </tr>
+
+                            <tr v-if="queryChoose.p2" >
+                                <td>"N"</td>
+
+                            </tr>
+
                             </tbody>
                         </table>
-                    </div>
-                    <div class="clearfix">
-                        <div class="float-right">
-                            <b-button variant="default" class="mr-3" size="sm">Send to...</b-button>
-                            <b-dropdown variant="inverse" class="mr-xs" size="sm" text="Clear" right>
-                                <b-dropdown-item>Clear</b-dropdown-item>
-                                <b-dropdown-item>Move ...</b-dropdown-item>
-                                <b-dropdown-item>Something else here</b-dropdown-item>
-                                <b-dropdown-divider />
-                                <b-dropdown-item>Separated link</b-dropdown-item>
-                            </b-dropdown>
-                        </div>
-                        <p>Basic table with styled content</p>
                     </div>
                 </Widget>
             </b-col>
@@ -90,7 +100,7 @@
 </template>
 
 <script>
-    import Vue from 'vue';
+
     import Widget from '@/components/Widget/Widget';
     import Sparklines from '../../components/Sparklines/Sparklines'
     import Helper from '@/components/Helper/Helper';
@@ -99,120 +109,264 @@
         components: { Widget, Sparklines,Helper},
         data() {
             return {
-                dataR:"Loading...",
-                state:true,
-                tableStyles: [
+                baseURL:"http://localhost:8091/",
+                queryChoose:{
+                    p1:true,
+                    p2:false,
+                    p3:false,
+                    p4:false,
+                    p5:false,
+                    p6:false,
+                    p7:false,
+                    p8:false,
+                    p9:false,
+                    p10:false,
+                    p11:false,
+                    p12:false,
+                    p13:false,
+                    p14:false,
+                    p15:false,
+                    p16:false,
+                    p17:false,
+                    p18:false,
+                    p19:false,
+                    p20:false,
+                    p21:false,
+                },
+                localParam:{
+                    type:"post",
+                    organization:"Default",
+                    essentials:"Default",
+                    pathMysql:"",
+                    pathHive:"",
+                    pathNeo4j:"",
+                    param:null,
+                    paramCopy:null,
+                    title:["Key1","Key2","Key3"],
+                    infoShown:[],
+                    infoMysql:[],
+                    infoHive:[],
+                    infoNeo4j:[],
+                    dataBase:"Mysql",
+                    queryState:"Query",
+                    sights:{
+                        state:false,
+                        sight0:true,
+                        sight1:false,
+                        sight2:false,
+                        sight3:false,
+                    }
+                },
+                params:{
+                    p0:{
+                        type:"post",
+                        organization:"Default",
+                        essentials:"",
+                        pathMysql:"",
+                        pathHive:"",
+                        pathNeo4j:"",
+                        param:null,
+                        paramCopy:null,
+                        title:["Key1","Key2","Key3"],
+                        infoShown:null,
+                        infoMysql:null,
+                        infoHive:null,
+                        infoNeo4j:null,
+                        dataBase:"Mysql",
+                        queryState:"Query",
+                        sights:{
+                            state:false,
+                            sight0:true,
+                            sight1:false,
+                            sight2:false,
+                            sight3:false,
+                        }
 
-                    {
-                        id: 2,
-                        picture: require('../../assets/tables/2.jpg'), // eslint-disable-line global-require
-                        description: 'The Sky',
-                        info: {
-                            type: 'PSD',
-                            dimensions: '2400x1455',
-                        },
-                        date: new Date('November 14, 2012'),
-                        size: '15.3 MB',
-                        progress: {
-                            percent: 33,
-                            colorClass: 'warning',
-                        },
                     },
-                    {
-                        id: 3,
-                        picture: require('../../assets/tables/3.jpg'), // eslint-disable-line global-require
-                        description: 'Down the road',
-                        label: {
-                            colorClass: 'danger',
-                            text: 'INFO!',
+                    p1:{
+                        type:"post",
+                        organization:"Searching By Movie",
+                        essentials:"Query all movie products under the movieName ,which sort by ReleaseTime.",
+                        pathMysql:"movie/DetailMovie",
+                        pathHive:"",
+                        pathNeo4j:"",
+                        param:{
+                            title:"P1"
                         },
-                        info: {
-                            type: 'JPEG',
-                            dimensions: '200x150',
+                        paramCopy:{
+                            title:"P1"
                         },
-                        date: new Date('September 14, 2012'),
-                        size: '49.0 KB',
-                        progress: {
-                            percent: 38,
-                            colorClass: 'inverse',
-                        },
+                        title:["Url","ASIN","Type","Format","ReleaseTime"],
+                        infoShown:null,
+                        infoMysql:null,
+                        infoHive:null,
+                        infoNeo4j:null,
+                        dataBase:"Mysql",
+                        queryState:"Query",
+                        sights:{
+                            state:false,
+                            sight0:false,
+                            sight1:true,
+                            sight2:true,
+                            sight3:false,
+                        }
+
                     },
-                    {
-                        id: 4,
-                        picture: require('../../assets/tables/4.jpg'), // eslint-disable-line global-require
-                        description: 'The Edge',
-                        info: {
-                            type: 'PNG',
-                            dimensions: '210x160',
-                        },
-                        date: new Date('September 15, 2012'),
-                        size: '69.1 KB',
-                        progress: {
-                            percent: 17,
-                            colorClass: 'danger',
-                        },
-                    },
-                    {
-                        id: 5,
-                        picture: require('../../assets/tables/5.jpg'), // eslint-disable-line global-require
-                        description: 'Fortress',
-                        info: {
-                            type: 'JPEG',
-                            dimensions: '1452x1320',
-                        },
-                        date: new Date('October 1, 2012'),
-                        size: '2.3 MB',
-                        progress: {
-                            percent: 41,
-                            colorClass: 'primary',
-                        },
-                    },
-                ],
-                checkboxes1: [false, false, false, false],
-                checkboxes2: [false, false, false, false, false, false],
-                checkboxes3: [false, false, false, false, false, false],
+                    p2:{
+                        type:"post",
+                        organization:"Searching By Movie",
+                        essentials:"Query the number of movie products released each year,which sort by ReleaseNum。",
+                        pathMysql:"movie/ListMovie",
+                        pathHive:"",
+                        pathNeo4j:"",
+                        param:null,
+                        paramCopy:null,
+                        title:["Year","ReleaseNum"],
+                        infoShown:null,
+                        infoMysql:null,
+                        infoHive:null,
+                        infoNeo4j:null,
+                        dataBase:"Mysql",
+                        queryState:"Query",
+                        sights:{
+                            state:false,
+                            sight0:false,
+                            sight1:true,
+                            sight2:true,
+                            sight3:false,
+                        }
+
+                    }
+                },
+
             };
         },
         methods: {
-            dataReady(){
-                if(this.state===false) {
-                    this.dataR = "Loading...";
-                    this.state=true;
-                }
-                else {
-                    this.dataR = "Down";
-                    this.state=false;
-                }
-            },
-            parseDate(date) {
-                const dateSet = date.toDateString().split(' ');
-                return `${date.toLocaleString('en-us', { month: 'long' })} ${dateSet[2]}, ${dateSet[3]}`;
-            },
-            checkAll(ev, checkbox) {
-                const checkboxArr = (new Array(this[checkbox].length)).fill(ev.target.checked);
-                Vue.set(this, checkbox, checkboxArr);
-            },
-            changeCheck(ev, checkbox, id) {
-                this[checkbox][id] = ev.target.checked;
-                if (!ev.target.checked) {
-                    this[checkbox][0] = false;
-                }
-            },
-            getRandomData() {
-                const result = [];
 
-                for (let i = 0; i <= 8; i += 1) {
-                    result.push(Math.floor(Math.random() * 20) + 1);
-                }
-
-                return [{data: result}];
+            getData(path,param,log){
+                this.$http.get(this.baseURL+path ,{params: param,emulateJSON:true,_timeout:3000,
+                    onTimeout: () => {
+                        alert("Get TimeOut")
+                    }})
+                    .then(function (response) {
+                        console.log(response.data);
+                        this.localParam[log]=response.data;
+                    }).catch(function () {
+                        alert("Get Error")
+                });
             },
-            getRandomColor() {
-                const {primary, success, info, danger} = this.appConfig.colors;
-                const colors = [info, primary, danger, success];
-                return {colors: [colors[Math.floor(Math.random() * colors.length)]]}
-            }
+
+            postData(path,param,log){
+                this.$http.post(this.baseURL+path , param,{emulateJSON:true,_timeout:3000,
+                    onTimeout: () => {
+                        alert("Post TimeOut")
+                    }})
+                    .then(function (response) {
+                        console.log(response.data);
+                        this.localParam[log]=response.data;
+                    }).catch(function () {
+                        alert("Post Error")
+                })
+            },
+
+            queryAll(){
+                if(this.localParam.type==="post")
+                {
+                    this.postData(this.localParam.pathMysql,this.localParam.param,"infoMysql");
+                    //this.postData(this.localParam.pathHive,this.localParam.param,"infoHive");
+                    //this.postData(this.localParam.pathNeo4j,this.localParam.param,"infoNeo4j");
+                    //待添加并发请求
+                    //this.localParam.infoShown=this.localParam.infoMysql;
+
+
+                }
+                else if(this.localParam.type==="get")
+                {
+                    this.getData(this.localParam.pathMysql,this.localParam.param,"infoMysql");
+                    //this.getData(this.localParam.pathHive,this.localParam.param,"infoHive");
+                    //this.getData(this.localParam.pathNeo4j,this.localParam.param,"infoNeo4j");
+                    //待添加并发请求
+                    this.localParam.infoShown=this.localParam.infoMysql;
+
+                }
+            },
+
+            appFilter(num){//选择新的query
+                console.log("appFilter"+num)
+                this.localParam=this.params[num];//移动local指针
+                this.queryChoose["p1"]=false;//设置head显示
+                this.queryChoose["p2"]=false;
+                this.queryChoose["p3"]=false;
+                this.queryChoose["p4"]=false;
+                this.queryChoose["p5"]=false;
+                this.queryChoose["p6"]=false;
+                this.queryChoose["p7"]=false;
+                this.queryChoose["p8"]=false;
+                this.queryChoose["p9"]=false;
+                this.queryChoose["p10"]=false;
+                this.queryChoose["p11"]=false;
+                this.queryChoose["p12"]=false;
+                this.queryChoose["p13"]=false;
+                this.queryChoose["p14"]=false;
+                this.queryChoose["p15"]=false;
+                this.queryChoose["p16"]=false;
+                this.queryChoose["p17"]=false;
+                this.queryChoose["p18"]=false;
+                this.queryChoose["p19"]=false;
+                this.queryChoose["p20"]=false;
+                this.queryChoose["p21"]=false;
+                this.queryChoose[num]=true;
+            },
+            reset(){ //重置界面
+                this.localParam.queryState="Query";
+                this.localParam.sights.state=false;
+                this.localParam.sights.sight0=false;
+                this.localParam.sights.sight1=true;
+                this.localParam.sights.sight2=true;
+                this.localParam.sights.sight3=false;
+                this.localParam.dataBase="Mysql";
+                this.localParam.infoHive=[];
+                this.localParam.infoMysql=[];
+                this.localParam.infoNeo4j=[];
+                this.localParam.param=JSON.parse(JSON.stringify(this.localParam.paramCopy));
+
+            },
+            setDatabase(str){
+                this.localParam.dataBase=str;
+                if(str==="Mysql")
+                    this.localParam.infoShown=this.localParam.infoMysql;
+                else if(str==="Hive")
+                    this.localParam.infoShown=this.localParam.infoHive;
+                else if(str==="Neo4j")
+                    this.localParam.infoShown=this.localParam.infoNeo4j;
+                console.log(this.localParam.infoShown)
+            },
+            setQuery(){ //切换查询状态
+                if(this.localParam.queryState==="Query")
+                {
+                    this.localParam.sights.sight2=false;
+                    this.localParam.sights.state=true;
+                    this.localParam.queryState="Querying";
+                    this.queryAll();
+                    setTimeout(this.dataReady,2000);
+                }
+                else
+                {
+                    this.localParam.sights.state=true;
+                    this.localParam.queryState="";
+                    setTimeout(this.reset,1000);
+                }
+            },
+
+            dataReady(){ //获取到数据后进行渲染
+                this.localParam.queryState="Reset";
+                this.localParam.sights.state=false;
+                this.localParam.sights.sight3=true;
+                this.localParam.infoShown=this.localParam.infoMysql;
+            },
         },
+
+
     };
 </script>
 

@@ -65,8 +65,8 @@ export default new Router({
           component: TablesBasicPage,
         },
         {
-          path: 'analysis/basic',
-          name: 'AnalysisBasic',
+          path: 'analysis',
+          name: 'Analysis',
           component: AnalysisBasic,
         },
         {

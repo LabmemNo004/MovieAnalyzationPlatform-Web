@@ -26,10 +26,8 @@
                 link="/app/analysis"
                 iconName="fi flaticon-network"
                 index="analysis"
-                :childrenLinks="[
-              { header: 'Basic', link: '/app/analysis/basic' },
+                isHeader
 
-            ]"
         />
         <NavLink
                 :activeItem="activeItem"

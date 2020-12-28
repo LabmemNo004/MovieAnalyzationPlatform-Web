@@ -4,7 +4,7 @@
   width: $helper-width;
   position: fixed;
   right: -$helper-width;
-  top: 100px;
+  top: 40px;
   z-index: 101;
   @include transition(right $sidebar-transition-time ease-in-out);
 
@@ -15,7 +15,7 @@
   .theme-helper-toggler {
     position: absolute;
     right: 100%;
-    top: 15%;
+    top: 0;
     width: $sidebar-width-open / 4;
     margin-left: -($sidebar-width-open / 4);
     cursor: pointer;
@@ -95,3 +95,8 @@
     top: 0;
   }
 }
+
+  .design{
+    height:500px ;
+    overflow:scroll ;
+  }
