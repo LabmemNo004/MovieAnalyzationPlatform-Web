@@ -14,14 +14,14 @@
           <div class="title">My Collections</div>
           <div class="l collectMovie">
             <div class="title1">Collection of Movies</div>
-            <div class="icon">
+            <div class="icon" @click="toMovieCollection()">
               <i class="el-icon-s-unfold"></i>
             </div>
             <div class="num">Num: {{movieCollectNum}}</div>
           </div>
           <div class="l collectPeople">
             <div class="title1">Collection of People</div>
-            <div class="icon">
+            <div class="icon" @click="toPeopleCollection()">
               <i class="el-icon-s-unfold"></i>
             </div>
             <div class="num">Num: {{peopleCollectNum}}</div>
@@ -109,6 +109,12 @@ export default {
       this.pagenum=val;
       this.getCommentList();
     },
+    toMovieCollection(){
+      this.$router.push('/MovieCollection');
+    },
+    toPeopleCollection(){
+      this.$router.push('/PeopleCollection');
+    },
   }
 }
 </script>
@@ -138,7 +144,7 @@ export default {
 }
 
 .personalhome .line{
-  width:1220px;
+  /*width:1220px;*/
   height: 2px;
   border-style: dashed none dashed none;
   border-color: #000;

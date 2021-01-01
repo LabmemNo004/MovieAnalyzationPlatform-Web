@@ -17,17 +17,17 @@
         <div class=movieList1>
           <el-row>
             <el-col :span="4" class="col3" v-for="movie in movieList1" :key="movie.movie_id">
-              <div class="movieCard">
+              <div class="movieCard" @click="toMovieInfo()">
                 <el-card :body-style="{ padding: '0px' }">
-              <img :src="movie.movie_pic"/>
-              <div class="info">
-                <div class="info1">
-                  <i class="el-icon-star-on color1"></i>
-                  <span class="info_rate">{{movie.movie_rate}}</span>
-                </div> 
-                <div class="info2">{{movie.movie_name}}</div>  
-              </div>
-            </el-card>
+                  <img :src="movie.movie_pic" />
+                  <div class="info">
+                    <div class="info1">
+                      <i class="el-icon-star-on color1"></i>
+                      <span class="info_rate">{{movie.movie_rate}}</span>
+                    </div> 
+                    <div class="info2">{{movie.movie_name}}</div>  
+                  </div>
+                </el-card>
               </div>
             </el-col>
           </el-row>
@@ -38,10 +38,10 @@
         <div class="movieList2">
           <el-row>
             <el-col :span="4" class="col3" v-for="movie in movieList2" :key="movie.movie_id">
-              <div class="movieCard">
+              <div class="movieCard"  @click="toMovieInfo()">
                 <el-card :body-style="{ padding: '0px' }">
               <img :src="movie.movie_pic"/>
-              <div class="info">
+              <div class="info"> 
                 <div class="info1">
                   <i class="el-icon-star-on color1"></i>
                   <span class="info_rate">{{movie.movie_rate}}</span>
@@ -59,7 +59,7 @@
         <div class="searchMovieList">
           <el-row>
             <el-col :span="4" class="col3" v-for="movie in searchMovieList" :key="movie.movie_id">
-              <div class="movieCard">
+              <div class="movieCard"  @click="toMovieInfo()">
                 <el-card :body-style="{ padding: '0px' }">
               <img :src="movie.movie_pic"/>
               <div class="info">
@@ -234,6 +234,9 @@ export default {
       this.pagenum=val;
       this.getMovieList();
     },
+    toMovieInfo(){
+      this.$router.push('/MovieInfo');
+    }
   }
 }
 </script>
@@ -279,6 +282,7 @@ export default {
 
 .home .movieCard{
   width:250px;
+  cursor: pointer;
 }
 
 .home .movieList1{
