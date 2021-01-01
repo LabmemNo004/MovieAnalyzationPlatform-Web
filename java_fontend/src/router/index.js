@@ -8,6 +8,10 @@ import Main from '../components/Main.vue'
 import People from '../views/People.vue'
 import PersonalHome from '../views/PersonalHome.vue'
 import PersonalInfo from '../views/PersonalInfo.vue'
+import MovieCollection from '../views/MovieCollection.vue'
+import PeopleCollection from '../views/PeopleCollection.vue'
+import MovieInfo from '../views/MovieInfo.vue'
+import PeopleInfo from '../views/PeopleInfo.vue'
 
 Vue.use(VueRouter)
 
@@ -56,6 +60,26 @@ const routes = [
         path: '/PersonalInfo',
         name: 'PersonalInfo',
         component: PersonalInfo
+      },
+      {
+        path: '/MovieCollection',
+        name: 'MovieCollection',
+        component: MovieCollection
+      },
+      {
+        path: '/PeopleCollection',
+        name: 'PeopleCollection',
+        component: PeopleCollection
+      },
+      {
+        path: '/MovieInfo',
+        name: 'MovieInfo',
+        component: MovieInfo
+      },
+      {
+        path: '/PeopleInfo',
+        name: 'PeopleInfo',
+        component: PeopleInfo
       }
     ]
   }

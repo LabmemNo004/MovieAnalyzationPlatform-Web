@@ -103,7 +103,7 @@ export default {
 }
 
 .personalinfo .line{
-  width:1020px;
+  /*width:1020px;*/
   height: 2px;
   border-style: dashed none dashed none;
   border-color: #000;
