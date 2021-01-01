@@ -19,7 +19,7 @@
             <el-col :span="4" class="col3" v-for="movie in movieList1" :key="movie.movie_id">
               <div class="movieCard" @click="toMovieInfo()">
                 <el-card :body-style="{ padding: '0px' }">
-                  <img :src="movie.movie_pic" />
+                  <img :src="movie.movie_pic" class="pic"/>
                   <div class="info">
                     <div class="info1">
                       <i class="el-icon-star-on color1"></i>
@@ -40,7 +40,7 @@
             <el-col :span="4" class="col3" v-for="movie in movieList2" :key="movie.movie_id">
               <div class="movieCard"  @click="toMovieInfo()">
                 <el-card :body-style="{ padding: '0px' }">
-              <img :src="movie.movie_pic"/>
+              <img :src="movie.movie_pic" class="pic"/>
               <div class="info"> 
                 <div class="info1">
                   <i class="el-icon-star-on color1"></i>
@@ -61,7 +61,7 @@
             <el-col :span="4" class="col3" v-for="movie in searchMovieList" :key="movie.movie_id">
               <div class="movieCard"  @click="toMovieInfo()">
                 <el-card :body-style="{ padding: '0px' }">
-              <img :src="movie.movie_pic"/>
+              <img :src="movie.movie_pic" class="pic"/>
               <div class="info">
                 <div class="info1">
                   <i class="el-icon-star-on color1"></i>
@@ -283,6 +283,11 @@ export default {
 .home .movieCard{
   width:250px;
   cursor: pointer;
+}
+
+.home .pic{
+  width:250px;
+  height:350px;
 }
 
 .home .movieList1{
