@@ -2,7 +2,7 @@
     <div class="personalhome">
         <div class="head"><!--头像、昵称区域-->
           <div class="l">
-            <img :src="avatar" class="ava_pic"/>
+            <img :src="avatar" class="ava_pic" @click="toPersonalInfo()"/>
           </div>
           <div class="l top2">
             <span class="username">{{username}}</span>
@@ -115,6 +115,9 @@ export default {
     toPeopleCollection(){
       this.$router.push('/PeopleCollection');
     },
+    toPersonalInfo(){
+      this.$router.push('/PersonalInfo');
+    }
   }
 }
 </script>
@@ -135,6 +138,7 @@ export default {
   width: 80px;
   height:80px;
   border-radius: 40px;
+  cursor: pointer;
 }
 
 .personalhome .username{
