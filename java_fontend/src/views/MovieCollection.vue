@@ -14,14 +14,14 @@
           <div class="listinfo">
             <div class="list_title clearfix">
               <div class="list_title_tab">
-                <a href="#" class="tab_active">All</a>
-                <a href="#" class="">Movie</a>
-                <a href="#" class="">Person</a>
+                <a href="#" :class="{'tab_active':seen_person&seen_movie}" @click="click_all()">All</a>
+                <a href="#" :class="{'tab_active':!seen_person&seen_movie}" @click="click_movie">Movie</a>
+                <a href="#" :class="{'tab_active':seen_person&!seen_movie}" @click="click_person">Person</a>
               </div>
             </div>
           </div>
           <div class="collection_con">
-            <div class="mv_cl">
+            <div class="mv_cl" v-if="seen_movie">
               <div class="cl_ex_dt">
                 --Movies--
               </div>
@@ -44,7 +44,7 @@
                 </el-row>
               </div>
             </div>
-            <div class="ps_cl">
+            <div class="ps_cl" v-if="seen_person">
               <div class="cl_ex_dt">
                 --Persons--
               </div>
@@ -109,6 +109,8 @@ export default {
   name: 'MovieCollection',
   data() {
     return {
+      seen_movie:true,
+      seen_person:true,
       movieList:[
         {
           movie_id: 1,
@@ -153,7 +155,20 @@ export default {
         }
       ],
     }
-
+  },
+  methods:{
+    click_all(){
+      this.seen_movie=true;
+      this.seen_person=true;
+    },
+    click_movie(){
+      this.seen_movie=true;
+      this.seen_person=false;
+    },
+    click_person(){
+      this.seen_movie=false;
+      this.seen_person=true;
+    }
   }
 }
 </script>
