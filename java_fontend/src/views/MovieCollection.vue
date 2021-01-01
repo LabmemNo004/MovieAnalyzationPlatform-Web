@@ -110,7 +110,7 @@ export default {
   data() {
     return {
       seen_movie:true,
-      seen_person:true,
+      seen_person:false,
       movieList:[
         {
           movie_id: 1,
