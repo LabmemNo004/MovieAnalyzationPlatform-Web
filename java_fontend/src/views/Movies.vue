@@ -366,6 +366,9 @@ export default {
   text-align: left;
 }
 
+.movies .col3{
+  margin-bottom: 20px;
+}
 
 .movies .movieCard {
   width: 170px;
@@ -397,7 +400,7 @@ export default {
 }
 
 .movies .info1 {
-  font-size: 20px;
+  font-size: 14px;
   text-align: left;
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
@@ -407,7 +410,7 @@ export default {
 }
 
 .movies .info2 {
-  font-size: 22px;
+  font-size: 17px;
   text-align: left;
   margin-top: 10px;
   font-family: 'Times New Roman', Times, serif;
@@ -496,6 +499,9 @@ a.movie_list_load{
   display: inline-block;
   margin: 0 20px 10px 0;
   color: #000000;
+  -webkit-font-smoothing: antialiased;
+  text-align: left;
+  font-size: 16px;
 }
 
 #genre_list a {
@@ -505,13 +511,11 @@ a.movie_list_load{
 
 
 div.movie_screen_hd {
-  font-family: Microsoft YaHei, helvetica, arial;
-  font-size: 14px;
   color: #222222;
   list-style: none outside none;
   margin: 0;
   padding: 0 0 10px;
-  border-bottom: 1px solid #d7d7d7;
+  border-bottom: 3px solid #d7d7d7;
   overflow: hidden;
   /*background-color: black;*/
 }
@@ -538,13 +542,6 @@ div.movie_order > span{
 
 .movie_order_type{
   margin: 10px 20px;
-}
-
-a.movie_list_load{
-  -webkit-font-smoothing: antialiased;
-  text-align: left;
-  list-style: none outside none;
-  font-size: 16px;
 }
 
 #app > div > section > main > div > div.el-row > div.el-col.el-col-2{
