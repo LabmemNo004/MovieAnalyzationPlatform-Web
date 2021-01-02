@@ -5,7 +5,7 @@
         <el-col span="2"></el-col>
         <el-col span="14">
           <div class="starList_con">
-            <div class="starList_info" v-for="person in personList" :key="person.person_id">
+            <div class="starList_info" v-for="person in personList" :key="person.person_id" @click="toPeopleInfo()">
               <div class="star_photos">
                 <a href="#">
                   <img :src="person.person_pic" :alt="person.person_name"/>
@@ -137,6 +137,11 @@ export default {
       ]
     }
 
+  },
+  methods:{
+    toPeopleInfo(){
+      this.$router.push('/PeopleInfo');
+    }
   }
 }
 </script>
