@@ -104,6 +104,15 @@
                         <div class="l username">
                             <span class="span6">{{comment.username}}</span>
                         </div>
+                        <div class="l rate">
+                            <el-rate
+                                v-model="comment.rate"
+                                disabled
+                                show-score
+                                text-color="#ff9900"
+                                score-template="{value}">
+                            </el-rate>
+                        </div>
                         <div class="clear"></div>
                         <div class="comment_content">{{comment.content}}</div>
                     </div>
@@ -157,16 +166,19 @@ export default {
             {
                 avatar:require('../assets/images/avatar0.jpg'),
                 username:'nianwuluo',
+                rate:4.5,
                 content:"It's boring!"
             },
             {
                 avatar:require('../assets/images/avatar0.jpg'),
                 username:'user2',
+                rate:4.8,
                 content:"It's boring!"
             },
             {
                 avatar:require('../assets/images/avatar0.jpg'),
                 username:'user3',
+                rate:3.2,
                 content:"It's boring!"
             }
             
@@ -398,5 +410,9 @@ export default {
 }
 .movieinfo .page .el-pagination .el-pager li:hover{
   color: #6db9ff;
+}
+
+.movieinfo .rate{
+    margin-top:5px;
 }
 </style>

@@ -12,6 +12,7 @@ import MovieCollection from '../views/MovieCollection.vue'
 import PeopleCollection from '../views/PeopleCollection.vue'
 import MovieInfo from '../views/MovieInfo.vue'
 import PeopleInfo from '../views/PeopleInfo.vue'
+import Admin from '../views/Admin.vue'
 
 Vue.use(VueRouter)
 
@@ -80,6 +81,11 @@ const routes = [
         path: '/PeopleInfo',
         name: 'PeopleInfo',
         component: PeopleInfo
+      },
+      {
+        path:'/Admin',
+        name:'Admin',
+        component:Admin
       }
     ]
   }
