@@ -9,7 +9,7 @@
         <router-view />
       </transition>
       <footer class="contentFooter">
-        Amazon Movies Analyze Dashboard - Made by <a href="https://github.com/LabmemNo004" rel="nofollow noopener noreferrer" target="_blank">LabmemNo004</a>
+        Amazon Movies Analyze Dashboard - Designed by <a href="https://github.com/LabmemNo004" rel="nofollow noopener noreferrer" target="_blank">LabmemNo004</a>
       </footer>
     </v-touch>
   </div>
