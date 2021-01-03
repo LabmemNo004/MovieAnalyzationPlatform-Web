@@ -15,12 +15,12 @@
             <div class="title1">Upload<i class="el-icon-upload"/></div>
             <div class="uploadButton">
                 <div class="button1">
-                    <el-button type="primary" round>Upload New Movie Information</el-button>
+                    <el-button type="primary" round @click="movie()">Upload New Movie Information</el-button>
                 </div>
                 <div class="button2">
-                    <el-button type="primary" round>Upload New Person Infomation</el-button>
+                    <el-button type="primary" round @click="person()">Upload New Person Infomation</el-button>
                 </div>
-                <div class="uploadForm1">
+                <div class="uploadForm1" v-if="movieUpload">
                     <div class="title2">Edit Movie Information</div>
                     <div class="picture l">
                         <div class="label1">Poster</div>
@@ -34,8 +34,100 @@
                             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                         </el-upload>
                     </div>
-                    <div class="info l"></div>
+                    <div class="info l">
+                        <el-form :model="movieForm" label-width="120px" label-position="left">
+                            <el-form-item label="Movie Name">
+                                <el-input v-model="movieForm.movie_name" style="width:450px" placeholder="Title"></el-input>
+                            </el-form-item>
+                            <el-form-item label="Director">
+                                <el-input v-model="movieForm.director" style="width:450px" placeholder="Directors"></el-input>
+                            </el-form-item>
+                            <el-form-item label="Main Actors">
+                                <el-input v-model="movieForm.actor" style="width:450px" placeholder="Actors"></el-input>
+                            </el-form-item>
+                            <el-form-item label="Type">
+                                <el-select v-model="movieForm.type" multiple placeholder="To Select" style="width:450px">
+                                    <el-option
+                                    v-for="item in options1"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item label="Area">
+                                <el-input v-model="movieForm.area" style="width:450px" placeholder="Nation and Area"></el-input>
+                            </el-form-item>
+                            <el-form-item label="Publish Time">
+                                <el-date-picker
+                                    v-model="movieForm.time"
+                                    type="date"
+                                    placeholder="Select Date">
+                                </el-date-picker>
+                            </el-form-item>
+                            <el-form-item label="Duration">
+                                <el-input v-model="movieForm.duration" style="width:450px" placeholder="Minutes"></el-input>
+                            </el-form-item>
+                        </el-form>
+                    </div>
                     <div class="clear"></div>
+                    <div class=submitButton1>
+                          <el-button type="success">Submit</el-button>
+                    </div>
+                </div>
+                <div class="uploadForm2" v-if="personUpload">
+                    <div class="title2">Edit Person Information</div>
+                    <div class="picture l">
+                        <div class="label1">Picture</div>
+                        <el-upload
+                            class="avatar-uploader"
+                            action="https://jsonplaceholder.typicode.com/posts/"
+                            :show-file-list="false"
+                            :on-success="handleAvatarSuccess"
+                            :before-upload="beforeAvatarUpload">
+                            <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                        </el-upload>
+                    </div>
+                    <div class="info l">
+                        <el-form :model="personForm" label-width="130px" label-position="left">
+                            <el-form-item label="Person Name">
+                                <el-input v-model="personForm.person_name" style="width:450px" placeholder="Name"></el-input>
+                            </el-form-item>
+                            <el-form-item label="Gender">
+                                <el-radio v-model="personForm.sex" label="0">male</el-radio>
+                                <el-radio v-model="personForm.sex" label="1">female</el-radio>
+                            </el-form-item>
+                            <el-form-item label="Birthday">
+                                <el-date-picker
+                                    v-model="personForm.birthday"
+                                    type="date"
+                                    placeholder="Select Date">
+                                </el-date-picker>
+                            </el-form-item>
+                            <el-form-item label="Area">
+                                <el-input v-model="personForm.area" style="width:450px" placeholder="Nation and Area"></el-input>
+                            </el-form-item>
+                           
+                            <el-form-item label="Profession">
+                                <el-select v-model="personForm.profession" multiple placeholder="To Select" style="width:450px">
+                                    <el-option
+                                    v-for="item in options2"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item label="Movies">
+                                <el-input v-model="personForm.movies" style="width:450px" placeholder="Movies in the cast"></el-input>
+                            </el-form-item>
+                        </el-form>
+                    </div>
+                    <div class="clear"></div>
+                    <div class=submitButton2>
+                          <el-button type="success">Submit</el-button>
+                    </div>
                 </div>
                 
             </div>
@@ -49,7 +141,64 @@ export default {
         return{
             avatar:require('../assets/images/avatar0.jpg'),
             username:'nianwuluo',
-            imageUrl:''
+            imageUrl:'',
+            movieUpload:true,
+            personUpload:false,
+            movieForm:{
+                movie_name:'',
+                director:'',
+                actor:'',
+                type:'',
+                area:'',
+                time:'',
+                duration:''
+
+            },
+            personForm:{
+                person_name:'',
+                sex:'',
+                birthday:'',
+                area:'',
+                profession:'',
+                movies:''
+
+            },
+            options1:[
+                {
+                    value:'Action',
+                    label:'Action'
+                },
+                {
+                    value:'Romantic',
+                    label:'Romantic'
+                },
+                {
+                    value:'Animation',
+                    label:'Animation'
+                },
+                {
+                    value:'Comedy',
+                    label:'Comedy'
+                },
+                {
+                    value:'Fiction',
+                    label:'Fiction'
+                }
+            ],
+            options2:[
+                {
+                    value:'Actor',
+                    label:'Actor'
+                },
+                {
+                    value:'Director',
+                    label:'Director'
+                },
+                {
+                    value:'Producer',
+                    label:'Producer'
+                },
+            ]
 
         }
     },
@@ -71,6 +220,22 @@ export default {
             this.$message.error('上传头像图片大小不能超过 2MB!');
             }
             return isJPG && isLt2M;
+        },
+        movie(){
+            if(this.movieUpload==true){
+                this.movieUpload=false;
+            }
+            else{
+                this.movieUpload=true;
+            }
+        },
+        person(){
+            if(this.personUpload==true){
+                this.personUpload=false;
+            }
+            else{
+                this.personUpload=true;
+            }
         }
     }
 }
@@ -145,13 +310,21 @@ export default {
 }
 
 .admin .uploadForm1{
-    margin:40px 0px;
+    margin:40px 20px;
+    padding-bottom:30px;
+    border-radius: 20px;
+    background-color: #f8f8f8;
+}
+
+.admin .uploadForm2{
+    margin:40px 20px;
+    padding-bottom:30px;
     border-radius: 20px;
     background-color: #f8f8f8;
 }
 
 .admin .picture{
-    padding:30px;
+    padding:30px 30px 0px 50px;
 }
 
 .admin .avatar-uploader .el-upload {
@@ -167,20 +340,48 @@ export default {
 .admin .avatar-uploader-icon {
     font-size: 28px;
     color: #8c939d;
-    width: 150px;
-    height: 210px;
-    line-height: 210px;
+    width: 200px;
+    height: 280px;
+    line-height: 280px;
     text-align: center;
   }
 .admin .avatar {
-    width: 150px;
-    height: 210px;
+    width: 200px;
+    height: 280px;
     display: block;
 }
 
 .admin .label1{
     font-size: 22px;
     font-family: Arial, Helvetica, sans-serif;
-    margin:0px 0px 10px 40px;
+    margin:0px 0px 10px 70px;
+}
+
+.admin .info{
+    margin:15px 20px 20px 40px;
+}
+
+.admin .el-form-item__label{
+    font-size: 22ps;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.admin .submitButton1{
+    margin:10px;
+    text-align: center;
+}
+.admin .submitButton2{
+    margin:10px;
+    text-align: center;
+}
+
+.admin .el-radio__label{
+    font-size: 20px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.admin .el-radio__inner{
+    width:20px;
+    height:20px;
 }
 </style>

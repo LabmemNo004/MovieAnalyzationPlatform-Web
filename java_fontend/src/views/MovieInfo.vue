@@ -7,7 +7,7 @@
             <div class="name">{{movieInfo.movie_name}}</div>
             <div class="information">
                 <div class="info1">
-                    <span class="span1">Direction: </span>
+                    <span class="span1">Director: </span>
                     <span class="span2">{{movieInfo.director}}</span>
                 </div>
                 <div class="info1">
