@@ -9,14 +9,14 @@
           </el-menu>
         </div>
         <div class="box_info">
-          <el-form label-width="70px" :model="LoginForm" :label-position="labelPosition" :rules="LoginFormRules">
+          <el-form label-width="70px" :model="LoginForm" :label-position="labelPosition" :rules="LoginFormRules" ref="LoginForm">
             <el-form-item prop="phone" label="Phone" class="form_item1">
               <el-input prefix-icon="el-icon-mobile-phone" v-model="LoginForm.phone" placeholder="Please input registered mobile phone number." style="width:350px"  clearable></el-input>
             </el-form-item>
             <el-form-item prop="password" label="Password" class="form_item2">
               <el-input prefix-icon="el-icon-unlock" v-model="LoginForm.password" placeholder="Please input registered password." type="password" style="width:350px"  clearable></el-input>
             </el-form-item>
-            <el-button type="primary" class="login_button" @click="Login()">LOG IN</el-button>
+            <el-button type="primary" class="login_button" @click="Login('LoginForm')">LOG IN</el-button>
             </el-form>
         </div>
       </div>
@@ -42,6 +42,7 @@ export default {
       labelPosition: 'right',
       activeIndex: 'Login',
       useRouter: true,
+      validPass:false,
       LoginForm: {
         phone: '',
         password: ''
@@ -55,7 +56,7 @@ export default {
     }
   },
   methods:{
-    async Login(){
+    async Login(form){
       this.$router.push("/Home");
 
     }
