@@ -127,7 +127,15 @@ public class UserController {
         System.out.println("[文件类型] - [{}]"+ file.getContentType());
         System.out.println("[文件名称] - [{}]"+ file.getOriginalFilename());
         System.out.println("[文件大小] - [{}]"+ file.getSize());
-        String fileName="D:/github/MovieAnalyzationPlatform/demo/src/main/resources/static/image/"
+
+        /**
+         * 如果有人要调用这个接口需要写好自己的路径。
+         */
+        String CXW="";
+        String TZY="";
+        String LYF="";
+        String CDY="E:/GitHub/MovieAnalyzationPlatform-Web/demo/src/main/resources/static/image/";
+        String fileName=CDY
                 + file.getOriginalFilename();
         file.transferTo(new File(fileName));
 

@@ -9,7 +9,7 @@
           </el-menu>
         </div>
         <div class="box_info">
-          <el-form label-width="70px" :model="RegisterForm" :label-position="labelPosition"  :rules="RegisterFormRules">
+          <el-form label-width="70px" :model="RegisterForm" :label-position="labelPosition"  :rules="RegisterFormRules" ref="RegisterForm">
             <el-form-item prop="phone" label="Phone" class="form_item3">
               <el-input prefix-icon="el-icon-mobile-phone" v-model="RegisterForm.phone" placeholder="Set registered mobile phone number." style="width:350px"  clearable></el-input>
             </el-form-item>
@@ -19,7 +19,7 @@
             <el-form-item prop="password" label="Password" class="form_item4">
               <el-input prefix-icon="el-icon-lock" v-model="RegisterForm.password" placeholder="Set registered password." type="password" style="width:350px"  clearable show-password></el-input>
             </el-form-item>
-            <el-button type="primary" class="register_button" @click="Register()">REGISTER</el-button>
+            <el-button type="primary" class="register_button" @click="Register('RegisterForm')">REGISTER</el-button>
           </el-form>
           <div class="policy">
             <!--<el-checkbox-group>-->
@@ -50,6 +50,7 @@ export default {
       activeIndex: 'Register',
       useRouter: true,
       checked: true,
+      validPass:false,
       RegisterForm: {
         phone: '',
         username:'',
@@ -68,7 +69,7 @@ export default {
     }
   },
   methods:{
-    async Register(){
+    async Register(form){
       console.log(this.RegisterForm);
       this.$router.push("/");
     }
