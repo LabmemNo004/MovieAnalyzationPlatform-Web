@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import axios from "axios";
 const phoneValidate=function(rule, value, callback){
         var regPhone = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
         if(value!=''&&!regPhone.test(value)){
@@ -57,7 +58,42 @@ export default {
   },
   methods:{
     async Login(form){
-      this.$router.push("/Home");
+      this.$refs[form].validate((valid) => {
+          if (valid) {
+            this.validPass=true;
+          }
+          else {
+            this.validPass=false;
+            this.$message.error('The input data format is incorrect!');
+            this.$refs[form].resetFields();
+            return false;
+          }
+      });
+      if(this.validPass){
+         axios.get("http://localhost:8070/User/login",
+              {
+                params:{
+                  phone: this.LoginForm.phone,
+                  password: this.LoginForm.password
+                }
+               
+              },
+              { withCredentials: true }
+            ).then((response)=>{
+              console.log(response);
+              this.$store.commit("Login", response.data.data.role);
+              this.$store.commit("Setname",response.data.data.username);
+              this.$store.commit("Setid",response.data.data.userId);
+              //将vuex里的信息保存到sessionStorage里
+              sessionStorage.setItem("user", JSON.stringify(this.$store.state));
+              this.$message.success("Login Success!");
+              this.$router.push("/Home");
+            }).catch((error)=>{
+              this.$message.error("The phone number or password is entered incorrectly!");
+              this.$refs['LoginForm'].resetFields();
+            })
+      }
+
 
     }
   }

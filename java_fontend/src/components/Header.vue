@@ -27,7 +27,7 @@
                         <img class="avatar" src="../assets/images/avatar0.jpg"/>
                     </div>
                     <div class="l top2">
-                        <span class="name">nianwuluo
+                        <span class="name">{{this.$store.state.username}}
                             <i class="el-icon-arrow-down el-icon--right"></i>
                         </span>
                     </div>
@@ -66,7 +66,11 @@
             this.$router.push("PersonalInfo");
         },
         Logout(){
-            this.$router.push("/");
+           this.$store.commit("Logout");
+          //将vuex里的信息保存到sessionStorage里
+          sessionStorage.setItem("user", {});
+          this.$message.success("Exit Success!");
+          this.$router.push("/");
         }
     }
   }

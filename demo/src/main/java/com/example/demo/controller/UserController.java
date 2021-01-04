@@ -54,6 +54,8 @@ public class UserController {
         {
             JSONObject b=new JSONObject();
             b.put("userID",temp1);
+            b.put("role",UserService.findUserByIdWeb(temp1).getRole());
+            b.put("username",UserService.findUserByIdWeb(temp1).getProfileName());
             return new JsonResult(b, "登陆成功");
         }
     }
