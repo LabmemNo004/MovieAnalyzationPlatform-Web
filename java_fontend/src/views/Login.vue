@@ -89,7 +89,7 @@ export default {
               this.$message.success("Login Success!");
               this.$router.push("/Home");
             }).catch((error)=>{
-              this.$message.error("The phone number or password is entered incorrectly!");
+              this.$message.error("The username or password is entered incorrectly!");
               this.$refs['LoginForm'].resetFields();
             })
       }

@@ -21,10 +21,7 @@ public class CommentService {
         for(Object[] temp1:temp)
         {
             JSONObject temp3=new JSONObject();
-
-            System.out.println(temp1);
-
-            String[] tag={"title","photo","score"};
+            String[] tag={"movie_name","movie_pic","rate","time","content"};
             for(int i=0;i< temp1.length;i++)
             {
                 System.out.println(temp1[i]);
@@ -32,6 +29,9 @@ public class CommentService {
             }
             b.add(temp3);
         }
+        JSONObject temp3=new JSONObject();
+        temp3.put("total",b.size());
+        b.add(temp3);
         return b;
     }
 }
