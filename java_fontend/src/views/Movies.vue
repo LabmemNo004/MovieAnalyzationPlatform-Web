@@ -13,7 +13,7 @@
     <el-row>
       <el-col :span="2"></el-col>
       <!--left box start-->
-      <el-col :span="14">
+      <el-col :span="20">
         <div class="movie_left_con">
           <div class="movie_main_left">
             <!--movie_sort begin-->
@@ -91,7 +91,7 @@
                   <el-row>
                     <el-col :span="6" class="col3" v-for="movie in movieList1" :key="movie.movie_id">
                       <div class="movieCard">
-                        <el-card :body-style="{ padding: '0px' }">
+                        <el-card :body-style="{ padding: '0px'}">
                           <img :src="movie.movie_pic"/>
                           <div class="info">
                             <div class="info1">
@@ -163,27 +163,27 @@
       </el-col>
       <!--left box end-->
       <!--right box start-->
-      <el-col :span="6">
-        <div class="movie_main_right">
-          <div class="mvr_keywords">
-            <div class="mvr_keywords_age">
-              <h3>Ages</h3>
-              <div class="vrk_list2 right_tag">
-                <a href="#" class="blue movie_list_load keyword_ages_list">all</a>
-                <a href="#" class=" movie_list_load keyword_ages_list">2020</a>
-                <a href="#" class=" movie_list_load keyword_ages_list">2019</a>
-                <a href="#" class=" movie_list_load keyword_ages_list">2010s</a>
-                <a href="#" class=" movie_list_load keyword_ages_list">2000s</a>
-                <a href="#" class=" movie_list_load keyword_ages_list">1990s</a>
-                <a href="#" class=" movie_list_load keyword_ages_list">1980s</a>
-                <a href="#" class=" movie_list_load keyword_ages_list">1970s</a>
-                <a href="#" class=" movie_list_load keyword_ages_list">1960s</a>
-                <a href="#" class=" movie_list_load keyword_ages_list">earlier</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </el-col>
+<!--      <el-col :span="6">-->
+<!--        <div class="movie_main_right">-->
+<!--          <div class="mvr_keywords">-->
+<!--            <div class="mvr_keywords_age">-->
+<!--              <h3>Ages</h3>-->
+<!--              <div class="vrk_list2 right_tag">-->
+<!--                <a href="#" class="blue movie_list_load keyword_ages_list">all</a>-->
+<!--                <a href="#" class=" movie_list_load keyword_ages_list">2020</a>-->
+<!--                <a href="#" class=" movie_list_load keyword_ages_list">2019</a>-->
+<!--                <a href="#" class=" movie_list_load keyword_ages_list">2010s</a>-->
+<!--                <a href="#" class=" movie_list_load keyword_ages_list">2000s</a>-->
+<!--                <a href="#" class=" movie_list_load keyword_ages_list">1990s</a>-->
+<!--                <a href="#" class=" movie_list_load keyword_ages_list">1980s</a>-->
+<!--                <a href="#" class=" movie_list_load keyword_ages_list">1970s</a>-->
+<!--                <a href="#" class=" movie_list_load keyword_ages_list">1960s</a>-->
+<!--                <a href="#" class=" movie_list_load keyword_ages_list">earlier</a>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </el-col>-->
       <!--right box end-->
       <el-col :span="2"></el-col>
     </el-row>
@@ -371,7 +371,8 @@ export default {
 }
 
 .movies .movieCard {
-  width: 170px;
+  /*width: 170px;*/
+  margin: 0px 20px;
 }
 
 .movieCard .el-card__body>img{
@@ -439,11 +440,13 @@ export default {
   color: #6db9ff;
 }
 
-#app > div > section > main > div > div.el-row > div.el-col.el-col-14 > div {
+html body div#app div.main section.el-container.is-vertical main.el-main div.movies div.el-row div.el-col.el-col-20{
+/*#app > div > section > main > div > div.el-row > div.el-col.el-col-14 > div {*/
   background-color: #ffffff;
 }
 
-#app > div > section > main > div > div.el-row > div.el-col.el-col-14 > div > div {
+html body div#app div.main section.el-container.is-vertical main.el-main div.movies div.el-row div.el-col.el-col-20{
+/*#app > div > section > main > div > div.el-row > div.el-col.el-col-14 > div > div {*/
   padding: 30px 20px;
 }
 
@@ -574,6 +577,10 @@ div.movie_order > span{
 
 .keyword_ages_list{
   width: 75px;
+}
+
+.movieList1 > div> div > div.movieCard{
+  /*padding: 10px;*/
 }
 
 </style>

@@ -5,46 +5,23 @@
         <el-col span="2"></el-col>
         <el-col span="14">
           <div class="cl_op">
-            <span class="sonListTitle_l">Collection({{movieList.length+personList.length}})</span>
+            <span class="sonListTitle_l">Collection({{personList.length}})</span>
 <!--            <span class="sonListTitle_r">-->
 <!--              <i class="el-icon-edit">Edit</i>-->
 <!--              <i class="el-icon-delete">Clear All</i>-->
 <!--					  </span>-->
           </div>
-          <div class="listinfo">
-            <div class="list_title clearfix">
-              <div class="list_title_tab">
-                <a href="#" :class="{'tab_active':seen_person&seen_movie}" @click="click_all()">All</a>
-                <a href="#" :class="{'tab_active':!seen_person&seen_movie}" @click="click_movie">Movie</a>
-                <a href="#" :class="{'tab_active':seen_person&!seen_movie}" @click="click_person">Person</a>
-              </div>
-            </div>
-          </div>
+<!--          <div class="listinfo">-->
+<!--            <div class="list_title clearfix">-->
+<!--              <div class="list_title_tab">-->
+<!--                <a href="#" :class="{'tab_active':seen_person&seen_movie}" @click="click_all()">All</a>-->
+<!--                <a href="#" :class="{'tab_active':!seen_person&seen_movie}" @click="click_movie">Movie</a>-->
+<!--                <a href="#" :class="{'tab_active':seen_person&!seen_movie}" @click="click_person">Person</a>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
           <div class="collection_con">
-            <div class="mv_cl" v-if="seen_movie">
-              <div class="cl_ex_dt">
-                --Movies--
-              </div>
-              <div class="mv_info">
-                <el-row>
-                  <el-col :span="6" class="mv_cl_list col3"  v-for="movie in movieList" :key="movie.movie_id">
-                    <div class="mv_cl_card">
-                      <el-card :body-style="{ padding: '0px' }">
-                        <img :src="movie.movie_pic"/>
-                        <div class="info">
-                          <div class="info1">
-                            <i class="el-icon-star-on color1"></i>
-                            <span class="info_rate">{{ movie.movie_rate }}</span>
-                          </div>
-                          <div class="info2">{{ movie.movie_name }}</div>
-                        </div>
-                      </el-card>
-                    </div>
-                  </el-col>
-                </el-row>
-              </div>
-            </div>
-            <div class="ps_cl" v-if="seen_person">
+            <div class="ps_cl">
               <div class="cl_ex_dt">
                 --Persons--
               </div>
@@ -109,28 +86,6 @@ export default {
   name: 'peoplecollection',
   data() {
     return {
-      seen_movie:false,
-      seen_person:true,
-      movieList:[
-        {
-          movie_id: 1,
-          movie_pic: require('../assets/images/1.png'),
-          movie_name: 'The God Father',
-          movie_rate: 4.8
-        },
-        {
-          movie_id: 2,
-          movie_pic: require('../assets/images/2.png'),
-          movie_name: 'Man of Steel',
-          movie_rate: 4.9
-        },
-        {
-          movie_id: 3,
-          movie_pic: require('../assets/images/3.png'),
-          movie_name: 'I am Legend',
-          movie_rate: '4.8'
-        }
-      ],
       personList: [
         {
           person_id: 1,
