@@ -12,9 +12,10 @@ public interface watchlistRepository extends JpaRepository<commentmsg,Integer> {
             "    select userID from user" +
             "    where userID=?1" +
             ")" +
-            "select m.title,m.photo,m.score,commentmsg.time,commentmsg.text " +
-            "from my join commentmsg on my.userID=commentmsg.userID " +
-            "join movie m on m.movieID = commentmsg.movieID",nativeQuery = true)
+            "select m.title,m.photo,m.score " +
+            "from my join watchlist on my.userID=watchlist.userID " +
+            "join movie m on m.movieID = watchlist.movieID " +
+            "ORDER BY m.score DESC ",nativeQuery = true)
     List<Object[]> getCollectMovie(Integer id);
 
 }

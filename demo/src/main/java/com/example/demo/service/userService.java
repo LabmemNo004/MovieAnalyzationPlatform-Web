@@ -56,9 +56,10 @@ public class userService {
     {
         users temp=UserRepository.queryNum(id);
         JSONObject b=new JSONObject();
-        b.put("评论电影数",temp.getCommentNum());
-        b.put("收藏电影数",temp.getMovieCollectNum());
-        b.put("收藏人物数",temp.getPeopleCollectNum());
+        b.put("username",temp.getProfileName());
+        b.put("avatar",temp.getPhoto());
+        b.put("movieCollectNum",temp.getMovieCollectNum());
+        b.put("peopleCollectNum",temp.getPeopleCollectNum());
         return b;
     }
 
