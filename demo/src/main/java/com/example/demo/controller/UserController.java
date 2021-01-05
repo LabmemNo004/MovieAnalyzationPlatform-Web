@@ -103,6 +103,7 @@ public class UserController {
 
     @PostMapping(value = "/ModifyInformation")
     @ApiOperation(value = "修改个人信息", notes = "前端传递修改项")
+    @ResponseBody
     public JsonResult ModifyInformation(
             @RequestParam(value = "userid") Integer userid,
             @RequestParam(value = "username") String username,

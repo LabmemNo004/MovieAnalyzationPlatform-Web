@@ -10,8 +10,8 @@
         </div>
         <div class="box_info">
           <el-form label-width="70px" :model="LoginForm" :label-position="labelPosition" :rules="LoginFormRules" ref="LoginForm">
-            <el-form-item prop="phone" label="Phone" class="form_item1">
-              <el-input prefix-icon="el-icon-mobile-phone" v-model="LoginForm.phone" placeholder="Please input registered mobile phone number." style="width:350px"  clearable></el-input>
+            <el-form-item prop="username" label="Name" class="form_item1">
+              <el-input prefix-icon="el-icon-mobile-phone" v-model="LoginForm.username" placeholder="Please input registered user name." style="width:350px"  clearable></el-input>
             </el-form-item>
             <el-form-item prop="password" label="Password" class="form_item2">
               <el-input prefix-icon="el-icon-unlock" v-model="LoginForm.password" placeholder="Please input registered password." type="password" style="width:350px"  clearable></el-input>
@@ -49,8 +49,8 @@ export default {
         password: ''
       },
       LoginFormRules: {
-        phone: [{ required: true, message: 'Please input phone number.', trigger: 'blur' },
-          {required: true, validator:phoneValidate, trigger: 'blur' }],
+        username: [{ required: true, message: 'Please input user name.', trigger: 'blur' },
+          { min: 3, max: 10, message: 'The length of user name is between 3 and 10 letters.', trigger: 'blur' }],
         password: [{ required: true, message: 'Please input password.', trigger: 'blur' },
           { min: 6, max: 10, message: 'The length of password is between 6 and 10 letters.', trigger: 'blur' }]
       }
@@ -73,7 +73,7 @@ export default {
          axios.get("http://localhost:8070/User/login",
               {
                 params:{
-                  phone: this.LoginForm.phone,
+                  username: this.LoginForm.username,
                   password: this.LoginForm.password
                 }
                

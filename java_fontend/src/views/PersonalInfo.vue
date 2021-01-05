@@ -50,6 +50,12 @@
 <script>
 import axios from "axios";
 import qs from "qs";
+const dateFormat=function(t){
+    let year=new Date(t).getFullYear();
+    let month=new Date(t).getMonth() + 1 < 10? "0" + (new Date(t).getMonth() + 1): new Date(t).getMonth() + 1;
+    let date=new Date(t).getDate() < 10? "0" + new Date(t).getDate(): new Date(t).getDate();
+    return year+"-"+month+"-"+date;
+}
 export default {
   name: 'PersonalInfo',
   data(){
@@ -100,7 +106,8 @@ export default {
     },
     saveInfo(){
       var gender=this.personalForm.sex=='男'?0:1;
-      var data=qs.stringify({
+      var birth=dateFormat(this.personalForm.birthday);
+      /*var data=qs.stringify({
         userid:this.personalForm.user_id,
         username:this.personalForm.username,
         sex:gender,
@@ -108,7 +115,7 @@ export default {
         phone:this.personalForm.phone,
         email:this.personalForm.email,
         signature:this.personalForm.signature
-      });
+      });*/
       /*let params = new FormData();
       params.append('userid', this.personalForm.user_id);
       params.append('username', this.personalForm.username);
@@ -117,13 +124,13 @@ export default {
       params.append('phone',this.personalForm.phone);
       params.append('email',this.personalForm.email);
       params.append('signature',this.personalForm.signature);*/
-      axios.post("http://localhost:8070/User/ModifyInformation",data
+      axios.post("http://localhost:8070/User/ModifyInformation?userid="+this.personalForm.user_id+"&username="+this.personalForm.username+"&sex="+gender+"&birthday="+birth+"&phone="+this.personalForm.phone+"&email="+this.personalForm.email+"&signature="+this.personalForm.signature
             /*{
               
               userid:this.personalForm.user_id,
               username:this.personalForm.username,
               sex:gender,
-              birthday:this.personalForm.birthday,
+              birthday:birth,
               phone:this.personalForm.phone,
               email:this.personalForm.email,
               signature:this.personalForm.signature

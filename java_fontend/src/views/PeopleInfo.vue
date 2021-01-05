@@ -46,6 +46,7 @@
     </div>
 </template>
 <script>
+
 export default {
   name: 'PeopleInfo',
   data(){
