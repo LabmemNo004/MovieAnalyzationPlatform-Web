@@ -40,7 +40,7 @@
 
             <div class="movie1" v-if="seen1">
               <div class=movieList1>
-                <el-row>
+                <el-row :gutter="20">
                   <el-col :span="6" class="col3" v-for="movie in movieList1" :key="movie.movie_id">
                     <div class="movieCard">
                       <el-card :body-style="{ padding: '0px'}">
@@ -279,11 +279,6 @@ export default {
   margin-bottom: 20px;
 }
 
-.movies .movieCard {
-  /*width: 170px;*/
-  margin: 0px 20px;
-}
-
 .movieCard .el-card__body > img {
   width: 100%;
   height: auto;
@@ -361,7 +356,7 @@ export default {
   font-family: Microsoft YaHei, helvetica, arial;
   color: #222222;
   list-style: none outside none;
-  margin: 0;
+  margin: 20px;
   padding: 0;
   font-size: 14px;
 }
@@ -485,10 +480,6 @@ div.movie_order > span {
 
 .keyword_ages_list {
   width: 75px;
-}
-
-.movieList1 > div > div > div.movieCard {
-  /*padding: 10px;*/
 }
 
 #sorted_type, #order_by {
