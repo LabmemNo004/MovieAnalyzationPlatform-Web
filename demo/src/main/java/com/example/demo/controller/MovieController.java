@@ -16,12 +16,12 @@ public class MovieController {
     @ApiOperation(value = "展示主页", notes = "如果登陆返回用户信息")
     public JsonResult MainPage()
     {
-        StopWatch myWatch = new StopWatch("myWatch");
-        myWatch.start("task1");
+        
+        
         int temp1=0;
-        myWatch.stop();
+        
         return new JsonResult(temp1,
-                "成功",myWatch.getLastTaskTimeMillis());
+                "成功");
     }
 
     @GetMapping(value = "/MovieList")
@@ -32,12 +32,12 @@ public class MovieController {
             @RequestParam(value = "area",required = false) String area
     )
     {
-        StopWatch myWatch = new StopWatch("myWatch");
-        myWatch.start("task1");
+        
+        
         int temp1=0;
-        myWatch.stop();
+        
         return new JsonResult(temp1,
-                "成功",myWatch.getLastTaskTimeMillis());
+                "成功");
     }
 
     @GetMapping(value = "/MovieDetails")
@@ -49,12 +49,12 @@ public class MovieController {
             @RequestParam("movieId") Integer movieId
     )
     {
-        StopWatch myWatch = new StopWatch("myWatch");
-        myWatch.start("task1");
+        
+        
         int temp1=0;
-        myWatch.stop();
+        
         return new JsonResult(temp1,
-                "成功",myWatch.getLastTaskTimeMillis());
+                "成功");
     }
 
     @PostMapping(value = "/Comment")
@@ -66,12 +66,12 @@ public class MovieController {
             @RequestParam("movieId") Integer movieId
     )
     {
-        StopWatch myWatch = new StopWatch("myWatch");
-        myWatch.start("task1");
+        
+        
         int temp1=0;
-        myWatch.stop();
+        
         return new JsonResult(temp1,
-                "成功",myWatch.getLastTaskTimeMillis());
+                "成功");
     }
 
     @PostMapping(value = "/Score")
@@ -84,12 +84,12 @@ public class MovieController {
             @RequestParam("score") Float score
     )
     {
-        StopWatch myWatch = new StopWatch("myWatch");
-        myWatch.start("task1");
+        
+        
         int temp1=0;
-        myWatch.stop();
+        
         return new JsonResult(temp1,
-                "成功",myWatch.getLastTaskTimeMillis());
+                "成功");
     }
 
     @PostMapping(value = "/Collection")
@@ -102,12 +102,12 @@ public class MovieController {
             @RequestParam("operations") Integer operations
             )
     {
-        StopWatch myWatch = new StopWatch("myWatch");
-        myWatch.start("task1");
+        
+        
         int temp1=0;
-        myWatch.stop();
+        
         return new JsonResult(temp1,
-                "成功",myWatch.getLastTaskTimeMillis());
+                "成功");
     }
 
 

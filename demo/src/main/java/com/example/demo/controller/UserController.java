@@ -7,6 +7,7 @@ import com.example.demo.JSON.JsonResult;
 import com.example.demo.service.*;
 import com.example.demo.annotation.UserLoginToken;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -38,22 +40,27 @@ public class UserController {
     CollectService collectService;
 
     @GetMapping(value = "/login")
-    @ApiOperation(value = "登陆", notes = "输入手机号，密码登陆")
+    @ApiOperation(value = "登陆", notes = "输入用户名，密码登陆")
     public JsonResult login(
-            @RequestParam("phone") String phone,
+            @RequestParam("userName") String userName,
             @RequestParam("password") String password
     )
     {
 
-        Integer temp1=UserService.VerifyLogin(phone, password);
-        if(temp1==-1)
+        List<Object []> temp1=UserService.VerifyLogin(userName, password);
+        if(temp1.size()==0)
         {
             return new JsonResult(temp1, "输入的用户名或者密码有误");
         }
         else
         {
             JSONObject b=new JSONObject();
-            b.put("userID",temp1);
+            String []tags={"userID","role","username"};
+            Object []temp=temp1.get(0);
+            for(int i=0;i<temp.length;i++)
+            {
+                b.put(tags[i],temp[i]);
+            }
             return new JsonResult(b, "登陆成功");
         }
     }
@@ -68,27 +75,38 @@ public class UserController {
             @RequestParam("username") String username
     )
     {
+        int i=UserService.checkName(username);
+        if(i==1)
+        {
+            return new JsonResult(0,"用户名重复");
+        }
+        else
+        {
+            users u=new users();
 
-        users u=new users();
+            JSONObject thisUser=new JSONObject();
 
-        JSONObject thisUser=new JSONObject();
+            Integer temp=NumberService.getSimpleNumbers().getUserNumadd();
+            thisUser.put("userID",temp);
 
-        Integer temp=NumberService.getSimpleNumbers().getUserNumadd();
-        thisUser.put("userID",temp);
+            u.setUserID(temp);
+            u.setPhone(phone);
+            u.setProfileName(username);
+            u.setPassword(password);
+            u.setRole(0);
+            u.setCommentNum(0);
+            u.setMovieCollectNum(0);
+            u.setPeopleCollectNum(0);
+            UserService.saveUser(u);
+            //在存储表中id自增。
+            //非修改id直接传0
+            NumberService.updataNumber(++temp,0,0);
 
-        u.setUserID(temp);
-        u.setPhone(phone);
-        u.setProfileName(username);
-        u.setPassword(password);
-        u.setRole(0);
-        UserService.saveUser(u);
-        //在存储表中id自增。
-        //非修改id直接传0
-        NumberService.updataNumber(++temp,0,0);
+            String token = tokenService.getToken(temp - 1,password);
+            thisUser.put("token",token);
+            return new JsonResult(thisUser,"注册成功");
+        }
 
-        String token = tokenService.getToken(temp - 1,password);
-        thisUser.put("token",token);
-        return new JsonResult(thisUser,"注册成功");
     }
 
 
@@ -112,9 +130,17 @@ public class UserController {
     )
     {
         int temp1=0;
-        UserService.UpdatePersonalInfor(userid, username,
-                sex, birthday, phone, email, signature);
-        return new JsonResult(temp1, "修改个人信息成功");
+        int i=UserService.checkName(username);
+        if(i==1)
+        {
+            return new JsonResult(0,"用户名已被占用");
+        }
+        else
+        {
+            UserService.UpdatePersonalInfor(userid, username,
+                    sex, birthday, phone, email, signature);
+            return new JsonResult(temp1, "修改个人信息成功");
+        }
     }
 
     @PostMapping(value = "/ModifyAvator")
@@ -131,20 +157,19 @@ public class UserController {
         /**
          * 如果有人要调用这个接口需要写好自己的路径。
          */
-        String CXW="";
-        String TZY="";
-        String LYF="";
-        String CDY="E:/GitHub/MovieAnalyzationPlatform-Web/demo/src/main/resources/static/image/";
-        String fileName=CDY
-                + file.getOriginalFilename();
-        file.transferTo(new File(fileName));
 
-        UserService.UpdateAvator(userid,fileName);
+        String filePathBefor=System.getProperty("user.dir")+"/src/main/resources/static/image/";
+        filePathBefor=filePathBefor.replace('\\','/');
+        String filename= filePathBefor + RandomStringUtils.randomAlphanumeric(10);
+
+        file.transferTo(new File(filename));
+
+        UserService.UpdateAvator(userid,filename);
 
         Map<String, String> result = new HashMap<>(4);
         result.put("contentType", file.getContentType());
         result.put("fileSize", file.getSize() + "");
-        result.put("filepath", fileName);
+        result.put("filepath", filename);
         return new JsonResult(result, "上传头像成功");
     }
 

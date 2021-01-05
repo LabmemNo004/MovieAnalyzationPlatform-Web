@@ -38,11 +38,11 @@ public class userService {
     }
 
 
-    public Integer VerifyLogin(String phone,String password)
+    public List<Object []> VerifyLogin(String userName,String password)
     {
-        int temp=-1;
-        temp=UserRepository.findVerifyLogin(phone,password);
-        return temp;
+        List<Object []> temps=
+                UserRepository.findVerifyLogin(userName,password);
+        return temps;
     }
 
     public void UpdatePersonalInfor(Integer userid,String username,Integer sex,
@@ -61,5 +61,17 @@ public class userService {
         b.put("收藏人物数",temp.getPeopleCollectNum());
         return b;
     }
+
+    public int checkName(String name)
+    {
+        int flag=0;
+        List<String> temp=UserRepository.checkName();
+        if(temp.contains(name))
+        {
+            flag=1;
+        }
+        return flag;
+    }
+
 
 }
