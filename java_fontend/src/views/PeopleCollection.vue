@@ -6,10 +6,10 @@
         <el-col span="14">
           <div class="cl_op">
             <span class="sonListTitle_l">Collection({{movieList.length+personList.length}})</span>
-            <span class="sonListTitle_r">
-              <i class="el-icon-edit">Edit</i>
-              <i class="el-icon-delete">Clear All</i>
-					  </span>
+<!--            <span class="sonListTitle_r">-->
+<!--              <i class="el-icon-edit">Edit</i>-->
+<!--              <i class="el-icon-delete">Clear All</i>-->
+<!--					  </span>-->
           </div>
           <div class="listinfo">
             <div class="list_title clearfix">

@@ -6,10 +6,10 @@
         <el-col span="14">
           <div class="cl_op">
             <span class="sonListTitle_l">Collection({{movieList.length+personList.length}})</span>
-            <span class="sonListTitle_r">
-              <i class="el-icon-edit">Edit</i>
-              <i class="el-icon-delete">Clear All</i>
-					  </span>
+<!--            <span class="sonListTitle_r">-->
+<!--              <i class="el-icon-edit">Edit</i>-->
+<!--              <i class="el-icon-delete">Clear All</i>-->
+<!--					  </span>-->
           </div>
           <div class="listinfo">
             <div class="list_title clearfix">
@@ -251,10 +251,6 @@ export default {
   padding: 0px 20px;
 }
 
-.collection_con>div>div>.el-row>.el-col{
-  padding:10px;
-}
-
 .collection_con>div>div>.el-row>.el-col>div>div>div>img{
   width: 100%;
   height: auto;
@@ -341,5 +337,15 @@ export default {
 
 .userOTit {
   margin: 10px 0 0 0;
+}
+
+#app > div > section > main > div > div > div > div.el-col.el-col-14 > div.collection_con > div > div > div > div> div > div > div.el-card__body div.info{
+/*div.el-card__body div.info {*/
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  /*text-align: center;*/
+  color: #2c3e50;
+  margin: 10px;
+  font-family: 'Times New Roman', Times, serif;
 }
 </style>
