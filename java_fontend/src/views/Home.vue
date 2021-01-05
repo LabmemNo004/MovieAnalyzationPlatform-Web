@@ -237,6 +237,9 @@ export default {
     toMovieInfo(){
       this.$router.push('/MovieInfo');
     }
+  },
+  created(){
+    
   }
 }
 </script>

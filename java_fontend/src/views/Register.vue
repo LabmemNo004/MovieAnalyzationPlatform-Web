@@ -14,7 +14,7 @@
               <el-input prefix-icon="el-icon-mobile-phone" v-model="RegisterForm.phone" placeholder="Set registered mobile phone number." style="width:350px"  clearable></el-input>
             </el-form-item>
             <el-form-item prop="username" label="Name" class="form_item4">
-              <el-input prefix-icon="el-icon-user" v-model="RegisterForm.username" placeholder="Set registered user name." type="password" style="width:350px"  clearable show-password></el-input>
+              <el-input prefix-icon="el-icon-user" v-model="RegisterForm.username" placeholder="Set registered user name." style="width:350px" clearable></el-input>
             </el-form-item>
             <el-form-item prop="password" label="Password" class="form_item4">
               <el-input prefix-icon="el-icon-lock" v-model="RegisterForm.password" placeholder="Set registered password." type="password" style="width:350px"  clearable show-password></el-input>
@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import axios from "axios";
 const phoneValidate=function(rule, value, callback){
         var regPhone = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
         if(value!=''&&!regPhone.test(value)){
@@ -70,8 +71,37 @@ export default {
   },
   methods:{
     async Register(form){
-      console.log(this.RegisterForm);
-      this.$router.push("/");
+      this.$refs[form].validate((valid) => {
+          if (valid) {
+            this.validPass=true;
+          }
+          else {
+            this.validPass=false;
+            this.$message.error('The input data format is incorrect!');
+            this.$refs[form].resetFields();
+            return false;
+          }
+      });
+      if(this.validPass){
+        axios.get("http://localhost:8070/User/register",
+              {
+                params:{
+                  phone: this.RegisterForm.phone,
+                  username:this.RegisterForm.username,
+                  password: this.RegisterForm.password
+                }
+               
+              },
+              { withCredentials: true }
+            ).then((response)=>{
+              console.log(response);
+              this.$message.success("Register success!")
+              this.$router.push("/");
+            }).catch((error)=>{
+              this.$message.error("Register Failed!");
+              this.$refs['RegisterForm'].resetFields();
+            });
+      }
     }
   }
 }

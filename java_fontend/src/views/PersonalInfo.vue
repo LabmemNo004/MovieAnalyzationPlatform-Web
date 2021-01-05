@@ -3,7 +3,7 @@
       <div class="title">Personal Information</div>
       <div class="line"></div>
       <div class="info">
-        <el-form ref="form" :model="personalForm" label-width="130px" label-position="right">
+        <el-form ref="form" :model="personalForm" label-width="130px" label-position="right" v-loading="loading">
           <el-form-item label="User Avatar" class="item0">
             <el-upload
               class="avatar-uploader"
@@ -48,26 +48,103 @@
 </template>
 
 <script>
+import axios from "axios";
+import qs from "qs";
+const dateFormat=function(t){
+    let year=new Date(t).getFullYear();
+    let month=new Date(t).getMonth() + 1 < 10? "0" + (new Date(t).getMonth() + 1): new Date(t).getMonth() + 1;
+    let date=new Date(t).getDate() < 10? "0" + new Date(t).getDate(): new Date(t).getDate();
+    return year+"-"+month+"-"+date;
+}
 export default {
   name: 'PersonalInfo',
   data(){
     return{
+      loading:false,
       personalForm:{
          avatar:require('../assets/images/avatar0.jpg'),
-         user_id:123,
-         username:'nianwuluo',
-         sex:'男',
-         birthday:"1999-12-24",
-         phone:"13819882835",
-         email:"912049502@qq.com",
-         signature:"It's boring."
+         user_id:this.$store.state.id,
+         username:this.$store.state.username,
+         sex:" ",
+         birthday:" ",
+         phone:" ",
+         email:" ",
+         signature:" "
 
       }
     }
     
   },
+  created(){
+    this.getInfo();
+  },
   methods:{
+    async getInfo(){
+      this.loading=true;
+      axios.get("http://localhost:8070/User/GetInformation",
+              {
+                params:{
+                  userid: this.$store.state.id
+                }
+               
+              },
+              { withCredentials: true }
+            ).then((response)=>{
+              console.log(response);
+              var data=response.data.data;
+              this.personalForm.user_id=data.userID;
+              this.personalForm.username=data.username;
+              this.personalForm.sex=data.sex==0?'男':'女';
+              this.personalForm.birthday=data.birthday;
+              this.personalForm.phone=data.phone;
+              this.personalForm.email=data.email;
+              this.personalForm.signature=data.signature;
+              this.loading=false;
+            }).catch((error)=>{
+              this.$message.error("Loading Failed!");
+            })
+    },
     saveInfo(){
+      var gender=this.personalForm.sex=='男'?0:1;
+      var birth=dateFormat(this.personalForm.birthday);
+      /*var data=qs.stringify({
+        userid:this.personalForm.user_id,
+        username:this.personalForm.username,
+        sex:gender,
+        birthday:this.personalForm.birthday,
+        phone:this.personalForm.phone,
+        email:this.personalForm.email,
+        signature:this.personalForm.signature
+      });*/
+      /*let params = new FormData();
+      params.append('userid', this.personalForm.user_id);
+      params.append('username', this.personalForm.username);
+      params.append('sex',gender);
+      params.append('birthday',this.personalForm.birthday);
+      params.append('phone',this.personalForm.phone);
+      params.append('email',this.personalForm.email);
+      params.append('signature',this.personalForm.signature);*/
+      axios.post("http://localhost:8070/User/ModifyInformation?userid="+this.personalForm.user_id+"&username="+this.personalForm.username+"&sex="+gender+"&birthday="+birth+"&phone="+this.personalForm.phone+"&email="+this.personalForm.email+"&signature="+this.personalForm.signature
+            /*{
+              
+              userid:this.personalForm.user_id,
+              username:this.personalForm.username,
+              sex:gender,
+              birthday:birth,
+              phone:this.personalForm.phone,
+              email:this.personalForm.email,
+              signature:this.personalForm.signature
+              
+            }*/
+            ).then((response)=>{
+              console.log(response);
+              this.$store.state.username=this.personalForm.username;
+              sessionStorage.setItem("user", JSON.stringify(this.$store.state));
+              this.getInfo();
+              this.$message.success("Modification Success!")
+            }).catch((error)=>{
+              this.$message.error("Modification Failed!");
+            });
 
     },
     handleAvatarSuccess(res, file) {

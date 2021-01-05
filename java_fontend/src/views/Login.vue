@@ -10,8 +10,8 @@
         </div>
         <div class="box_info">
           <el-form label-width="70px" :model="LoginForm" :label-position="labelPosition" :rules="LoginFormRules" ref="LoginForm">
-            <el-form-item prop="phone" label="Phone" class="form_item1">
-              <el-input prefix-icon="el-icon-mobile-phone" v-model="LoginForm.phone" placeholder="Please input registered mobile phone number." style="width:350px"  clearable></el-input>
+            <el-form-item prop="username" label="Name" class="form_item1">
+              <el-input prefix-icon="el-icon-mobile-phone" v-model="LoginForm.username" placeholder="Please input registered user name." style="width:350px"  clearable></el-input>
             </el-form-item>
             <el-form-item prop="password" label="Password" class="form_item2">
               <el-input prefix-icon="el-icon-unlock" v-model="LoginForm.password" placeholder="Please input registered password." type="password" style="width:350px"  clearable></el-input>
@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import axios from "axios";
 const phoneValidate=function(rule, value, callback){
         var regPhone = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
         if(value!=''&&!regPhone.test(value)){
@@ -48,8 +49,8 @@ export default {
         password: ''
       },
       LoginFormRules: {
-        phone: [{ required: true, message: 'Please input phone number.', trigger: 'blur' },
-          {required: true, validator:phoneValidate, trigger: 'blur' }],
+        username: [{ required: true, message: 'Please input user name.', trigger: 'blur' },
+          { min: 3, max: 10, message: 'The length of user name is between 3 and 10 letters.', trigger: 'blur' }],
         password: [{ required: true, message: 'Please input password.', trigger: 'blur' },
           { min: 6, max: 10, message: 'The length of password is between 6 and 10 letters.', trigger: 'blur' }]
       }
@@ -57,7 +58,42 @@ export default {
   },
   methods:{
     async Login(form){
-      this.$router.push("/Home");
+      this.$refs[form].validate((valid) => {
+          if (valid) {
+            this.validPass=true;
+          }
+          else {
+            this.validPass=false;
+            this.$message.error('The input data format is incorrect!');
+            this.$refs[form].resetFields();
+            return false;
+          }
+      });
+      if(this.validPass){
+         axios.get("http://localhost:8070/User/login",
+              {
+                params:{
+                  username: this.LoginForm.username,
+                  password: this.LoginForm.password
+                }
+               
+              },
+              { withCredentials: true }
+            ).then((response)=>{
+              console.log(response);
+              this.$store.commit("Login", response.data.data.role);
+              this.$store.commit("Setname",response.data.data.username);
+              this.$store.commit("Setid",response.data.data.userID);
+              //将vuex里的信息保存到sessionStorage里
+              sessionStorage.setItem("user", JSON.stringify(this.$store.state));
+              this.$message.success("Login Success!");
+              this.$router.push("/Home");
+            }).catch((error)=>{
+              this.$message.error("The phone number or password is entered incorrectly!");
+              this.$refs['LoginForm'].resetFields();
+            })
+      }
+
 
     }
   }

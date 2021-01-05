@@ -11,6 +11,12 @@ export default {
   name: 'app',
   components: {
 
+  },
+  created(){
+    if (sessionStorage.getItem("user") ) { 
+      this.$store.replaceState(Object.assign({}, this.$store.state,JSON.parse(sessionStorage.getItem("user"))));             
+    } 
+    window.addEventListener("beforeunload",()=>{ sessionStorage.setItem("user",JSON.stringify(this.$store.state))});
   }
 }
 </script>

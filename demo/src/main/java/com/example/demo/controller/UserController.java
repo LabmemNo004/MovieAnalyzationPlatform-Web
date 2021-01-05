@@ -55,6 +55,7 @@ public class UserController {
         else
         {
             JSONObject b=new JSONObject();
+
             String []tags={"userID","role","username"};
             Object []temp=temp1.get(0);
             for(int i=0;i<temp.length;i++)
@@ -119,6 +120,7 @@ public class UserController {
 
     @PostMapping(value = "/ModifyInformation")
     @ApiOperation(value = "修改个人信息", notes = "前端传递修改项")
+    @ResponseBody
     public JsonResult ModifyInformation(
             @RequestParam(value = "userid") Integer userid,
             @RequestParam(value = "username") String username,
@@ -186,14 +188,14 @@ public class UserController {
     {
         users Users=UserService.findUserByIdWeb(userid);
         JSONObject temp1=new JSONObject();
-        temp1.put("用户ID",Users.getUserID());
-        temp1.put("用户名",Users.getProfileName());
-        temp1.put("用户头像地址",Users.getPhoto());
-        temp1.put("用户性别",Users.getSex());
-        temp1.put("用户生日",Users.getBirthday());
-        temp1.put("用户电话号",Users.getPhone());
-        temp1.put("用户邮件地址",Users.getEmail());
-        temp1.put("用户个性签名",Users.getSignature());
+        temp1.put("userID",Users.getUserID());
+        temp1.put("username",Users.getProfileName());
+        temp1.put("avatar",Users.getPhoto());
+        temp1.put("sex",Users.getSex());
+        temp1.put("birthday",Users.getBirthday());
+        temp1.put("phone",Users.getPhone());
+        temp1.put("email",Users.getEmail());
+        temp1.put("signature",Users.getSignature());
         return new JsonResult(temp1, "获取个人信息成功");
     }
 
