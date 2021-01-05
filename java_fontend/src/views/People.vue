@@ -12,7 +12,7 @@
         <el-col span="3"></el-col>
         <el-col span="18">
           <div class="starList_con">
-            <!--movie_sort begin-->
+            <!--star_sort begin-->
             <div class="person_sort">
               <!--年份分类begin-->
               <div class="pr_box">
@@ -23,8 +23,8 @@
               </div>
               <!--年份分类end-->
             </div>
-            <!--movie_sort end-->
-
+            <!--star_sort end-->
+            <!--star info list begin-->
               <div span="12" class="starList_info" v-for="person in personList" :key="person.person_id" @click="toPeopleInfo()">
                 <div class="star_cards">
                   <div class="star_photos">
@@ -33,14 +33,20 @@
                     </a>
                   </div>
                   <div class="person_info">
-                    <p class="blue person_name">{{person.person_name}}</p>
-                    <p class="person_profession">{{person.person_profession}}</p>
-                    <p class="person_movie">{{person.person_movies.join(' / ')}}</p>
+                    <p><span class="person_info_title">Name: </span><span class="person_name">{{person.person_name}}</span></p>
+                    <p><span class="person_info_title">Profession: </span><span class="person_profession">{{person.person_profession}}</span></p>
+                    <p><span class="person_info_title">Star in: </span><span class="person_movie">{{person.person_movies.join(' / ')}}</span></p>
                   </div>
-
                 </div>
               </div>
-
+            <!--star info list end-->
+            <!--分页start-->
+            <el-pagination
+                background
+                layout="prev, pager, next"
+                :total="star_num">
+            </el-pagination>
+            <!--分页end-->
           </div>
         </el-col>
 
@@ -50,11 +56,14 @@
   </div>
 </template>
 <script>
+import axios from "axios";
 export default {
   name: 'person',
   data() {
     return {
       p_radio:'1',
+      star_num:100,
+      star_per_page:10,
       personList: [
         {
           person_id: 1,
@@ -111,17 +120,23 @@ export default {
 </script>
 
 <style>
-.person_name{
-  font-size: 30px;
+.person_info_title{
+  font-weight: bold;
   font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
-.blue{
+.person_profession{
+  color: #999999;
+}
+
+.person_name{
+  font-size: 20px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
   color: #0066c0;
 }
 
 .person_movie{
-  font-size: 18px;
+  font-size: 15px;
 }
 
 .person_info{
@@ -142,7 +157,7 @@ export default {
   text-align: left;
 }
 
-.el-col-3 {
+.person .el-col-3 {
   min-height: 100px;
 }
 
@@ -151,7 +166,7 @@ export default {
   background-color: #ffffff;
 }
 
-.el-col-6 {
+.person .el-col-6 {
   min-height: 100px;
 }
 
@@ -205,7 +220,7 @@ a.person_list_load.keyword_gender_list{
 }
 
 .star_photos{
-  height: 200px;
+  height: 150px;
   float:left;
 }
 
@@ -240,9 +255,17 @@ a.person_list_load.keyword_gender_list{
 
 .star_cards{
   border-top: solid 3px #d7d7d7;
-  height: 200px;
+  height: 150px;
   width: auto;
   padding: 20px;
 }
 
+div.starList_con>div.el-pagination{
+  text-align: center;
+  margin: 50px 0px;
+}
+div.starList_con>div.el-pagination.is-background .el-pager li:not(.disabled).active{
+  background-color: #0066c0;
+  color: white;
+}
 </style>

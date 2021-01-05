@@ -9,13 +9,10 @@
           </div>
           <div class="collection_con">
             <div class="mv_cl">
-              <div class="cl_ex_dt">
-                --Movies--
-              </div>
               <div class="mv_info">
                 <el-row>
                   <el-col :span="6" class="mv_cl_list col3"  v-for="movie in movieList" :key="movie.movie_id">
-                    <div class="mv_cl_card">
+                    <div class="mv_cl_card" @click="toMovieInfo()">
                       <el-card :body-style="{ padding: '0px' }">
                         <img :src="movie.movie_pic"/>
                         <div class="info">
@@ -30,6 +27,13 @@
                   </el-col>
                 </el-row>
               </div>
+              <!--分页start-->
+              <el-pagination
+                  background
+                  layout="prev, pager, next"
+                  :total="movie_collect_num">
+              </el-pagination>
+              <!--分页end-->
             </div>
           </div>
         </el-col>
@@ -76,6 +80,8 @@ export default {
   name: 'MovieCollection',
   data() {
     return {
+      movie_collect_num:3,
+      movie_per_page:10,
       movieList:[
         {
           movie_id: 1,
@@ -278,5 +284,19 @@ export default {
   color: #2c3e50;
   margin: 10px;
   font-family: 'Times New Roman', Times, serif;
+}
+
+.moviecollection .el-col-2{
+  min-height: 100px;
+}
+
+.moviecollection .el-pagination{
+  text-align: center;
+  margin: 50px 0px;
+}
+
+.moviecollection .el-pagination.is-background .el-pager li:not(.disabled).active{
+  background-color: #0066c0;
+  color: white;
 }
 </style>

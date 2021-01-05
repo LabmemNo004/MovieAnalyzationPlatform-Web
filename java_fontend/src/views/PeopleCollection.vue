@@ -6,25 +6,9 @@
         <el-col span="14">
           <div class="cl_op">
             <span class="sonListTitle_l">Collection({{personList.length}})</span>
-<!--            <span class="sonListTitle_r">-->
-<!--              <i class="el-icon-edit">Edit</i>-->
-<!--              <i class="el-icon-delete">Clear All</i>-->
-<!--					  </span>-->
           </div>
-<!--          <div class="listinfo">-->
-<!--            <div class="list_title clearfix">-->
-<!--              <div class="list_title_tab">-->
-<!--                <a href="#" :class="{'tab_active':seen_person&seen_movie}" @click="click_all()">All</a>-->
-<!--                <a href="#" :class="{'tab_active':!seen_person&seen_movie}" @click="click_movie">Movie</a>-->
-<!--                <a href="#" :class="{'tab_active':seen_person&!seen_movie}" @click="click_person">Person</a>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
           <div class="collection_con">
             <div class="ps_cl">
-              <div class="cl_ex_dt">
-                --Persons--
-              </div>
               <div class="ps_info">
                 <el-row>
                   <el-col :span="6" class="ps_cl_list col3"  v-for="person in personList" :key="person.person_id">
@@ -39,8 +23,14 @@
                   </el-col>
                 </el-row>
               </div>
+              <!--分页start-->
+              <el-pagination
+                  background
+                  layout="prev, pager, next"
+                  :total="people_collect_num">
+              </el-pagination>
+              <!--分页end-->
             </div>
-
           </div>
         </el-col>
         <el-col span="6">
@@ -86,6 +76,8 @@ export default {
   name: 'peoplecollection',
   data() {
     return {
+      people_collect_num:3,
+      people_per_page:10,
       personList: [
         {
           person_id: 1,
@@ -296,5 +288,19 @@ export default {
 
 .userOTit {
   margin: 10px 0 0 0;
+}
+
+.peoplecollection .el-col-2{
+  min-height: 100px;
+}
+
+.peoplecollection .el-pagination{
+  text-align: center;
+  margin: 50px 0px;
+}
+
+.peoplecollection .el-pagination.is-background .el-pager li:not(.disabled).active{
+  background-color: #0066c0;
+  color: white;
 }
 </style>

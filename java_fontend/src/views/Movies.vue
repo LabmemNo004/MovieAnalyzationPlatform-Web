@@ -42,7 +42,7 @@
               <div class=movieList1>
                 <el-row :gutter="20">
                   <el-col :span="6" class="col3" v-for="movie in movieList1" :key="movie.movie_id">
-                    <div class="movieCard">
+                    <div class="movieCard" @click="toMovieInfo()">
                       <el-card :body-style="{ padding: '0px'}">
                         <img :src="movie.movie_pic"/>
                         <div class="info">
@@ -57,6 +57,13 @@
                   </el-col>
                 </el-row>
               </div>
+              <!--分页start-->
+              <el-pagination
+                  background
+                  layout="prev, pager, next"
+                  :total="movie_num">
+              </el-pagination>
+              <!--分页end-->
             </div>
 
             <div class="searchMovie" v-if="seen2">
@@ -64,7 +71,7 @@
               <div class="searchMovieList">
                 <el-row>
                   <el-col :span="4" class="col3" v-for="movie in searchMovieList" :key="movie.movie_id">
-                    <div class="movieCard">
+                    <div class="movieCard" @click="toMovieInfo()">
                       <el-card :body-style="{ padding: '0px' }">
                         <img :src="movie.movie_pic"/>
                         <div class="info">
@@ -109,6 +116,8 @@ export default {
       pagenum: 1,
       t_radio: '1',
       o_radio: '1',
+      movie_num:120,
+      movie_per_page:12,
 
       headPictures: [
         {id: 0, source: require('../assets/images/header1.png')},
@@ -234,19 +243,25 @@ export default {
     }
 
   },
-  methods: {
-    searchMovies() {
-      this.seen1 = false;
-      this.seen2 = true;
+  methods:{
+    searchMovies(){
+      this.seen1=false;
+      this.seen2=true;
     },
-    getMovieList() {
+    getMovieList(){
 
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
-      this.pagenum = val;
+      this.pagenum=val;
       this.getMovieList();
     },
+    toMovieInfo(){
+      this.$router.push('/MovieInfo');
+    }
+  },
+  created(){
+
   }
 }
 </script>
@@ -282,6 +297,7 @@ export default {
 .movieCard .el-card__body > img {
   width: 100%;
   height: auto;
+  cursor:pointer;
 }
 
 .movies .movieList1 {
@@ -487,4 +503,13 @@ div.movie_order > span {
   margin-right: 10px;
 }
 
+div.movie1>div.el-pagination{
+  text-align: center;
+  margin: 50px 0px;
+}
+
+div.movie1>div.el-pagination.is-background .el-pager li:not(.disabled).active{
+  background-color: #0066c0;
+  color: white;
+}
 </style>
