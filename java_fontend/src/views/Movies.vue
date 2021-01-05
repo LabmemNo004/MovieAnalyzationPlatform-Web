@@ -11,181 +11,99 @@
 
     <!--主线部分开始-->
     <el-row>
-      <el-col :span="2"></el-col>
+      <el-col :span="3"></el-col>
       <!--left box start-->
-      <el-col :span="20">
+
+      <el-col :span="18">
+
         <div class="movie_left_con">
           <div class="movie_main_left">
             <!--movie_sort begin-->
             <div class="movie_sort">
+              <!--年份分类begin-->
               <div class="mv_box">
-                <div class="mvb_title" style="color:black">format</div>
-                <div class="mvb_main">
-                  <a href="#" class=" movie_list_load blue movie_list_load">All</a>
-                  <a href="#" class=" movie_list_load  movie_list_load">Movies</a>
-                  <a href="#" class=" movie_list_load  movie_list_load">Videos</a>
-                  <a href="#" class=" movie_list_load  movie_list_load">TV Movie</a>
-                  <a href="#" class=" movie_list_load  movie_list_load">TV Episode</a>
-                  <a href="#" class=" movie_list_load  movie_list_load">TV Programs</a>
-                  <a href="#" class=" movie_list_load  movie_list_load">Mini movie</a>
-                  <a href="#" class=" movie_list_load  movie_list_load">Shorts</a>
-                  <a href="#" class=" movie_list_load  movie_list_load">Documentary</a>
-                  <a href="#" class=" movie_list_load  movie_list_load">Video Games</a>
-                </div>
+                <span id="sorted_type">Type: </span>
+                <el-radio v-model="t_radio" label="1">type1</el-radio>
+                <el-radio v-model="t_radio" label="2">type2</el-radio>
+                <el-radio v-model="t_radio" label="3">type3</el-radio>
               </div>
+              <!--年份分类end-->
+              <!--排序依据begin-->
               <div class="mv_box">
-                <div class="mvb_title" style="color:black">type</div>
-                <div class="mvb_main" id="genre_list">
-                  <a href="#" class=" movie_list_load blue movie_list_load">All</a>
-                  <a href="#" class=" movie_list_load  movie_list_load">Action</a>
-                  <a href="#" class=" movie_list_load  movie_list_load">Adventure</a>
-                  <a href="#" class=" movie_list_load  movie_list_load">Animation</a>
-                  <a href="#" class=" movie_list_load  movie_list_load">Biography</a>
-                  <a href="#" class=" movie_list_load  movie_list_load">Crime</a>
-                  <a href="#" class=" movie_list_load  movie_list_load">Comedy</a>
-                  <a href="#" class=" movie_list_load  movie_list_load">Documentary</a>
-                  <a href="#" class=" movie_list_load  movie_list_load">Storyline</a>
-                  <a href="#" class=" movie_list_load  movie_list_load">Family</a>
-                  <a href="#" class=" movie_list_load  movie_list_load">Fantasy</a>
-                  <a href="#" class=" movie_list_load  movie_list_load">Black</a>
-                  <a href="#" class=" movie_list_load  movie_list_load">History</a>
-                  <a href="#" class=" movie_list_load  movie_list_load">Ancient</a>
-                  <a href="#" class=" movie_list_load  movie_list_load">Terror</a>
-                  <a href="#" class=" movie_list_load  movie_list_load">Musicals</a>
-                  <a href="#" class=" movie_list_load  movie_list_load">Suspense</a>
-                  <a href="#" class=" movie_list_load  movie_list_load">Love</a>
-                  <a href="#" class=" movie_list_load  movie_list_load">Scentific</a>
-                  <a href="#" class=" movie_list_load  movie_list_load">Shorts</a>
-                  <a href="#" class=" movie_list_load  movie_list_load">Sports</a>
-                  <a href="#" class=" movie_list_load  movie_list_load">Heros</a>
-                  <a href="#" class=" movie_list_load  movie_list_load">Thrill</a>
-                  <a href="#" class=" movie_list_load  movie_list_load">War</a>
-                  <a href="#" class=" movie_list_load  movie_list_load">Western</a>
-                  <a href="#" class=" movie_list_load  movie_list_load">Talk Show</a>
-                  <a href="#" class=" movie_list_load  movie_list_load">News</a>
-                  <a href="#" class=" movie_list_load  movie_list_load">Games</a>
-                  <a href="#" class=" movie_list_load  movie_list_load">Reality Show</a>
-                  <a href="#" class=" movie_list_load  movie_list_load">Homosexuality</a>
-                </div>
+                <span id="order_by">Ordered By: </span>
+                <el-radio v-model="o_radio" label="1">highest scores</el-radio>
+                <el-radio v-model="o_radio" label="2">comment most</el-radio>
+                <el-radio v-model="o_radio" label="3">collection most</el-radio>
               </div>
+              <!--排序依据end-->
             </div>
             <!--movie_sort end-->
 
-            <!--movie_screen begin-->
-            <div class="movie_screen">
-              <!--排序依据begin-->
-              <div class="movie_screen_hd"></div>
-              <div class="movie_order">
-                <span>sorted by:</span>
-                <span class="movie_order_type">
-                  <a class="blue movie_list_load" href="#">hot</a>
-                  <a class="movie_list_load" href="#">points</a>
-                  <a class="movie_list_load" href="#">time</a>
-                </span>
-              </div>
-              <!--排序依据end-->
+            <div class="movie_screen_hd"></div>
 
-              <div class="movie1" v-if="seen1">
-                <div class="title">---HollyWood Movies of 2019---</div>
-                <div class=movieList1>
-                  <el-row>
-                    <el-col :span="6" class="col3" v-for="movie in movieList1" :key="movie.movie_id">
-                      <div class="movieCard">
-                        <el-card :body-style="{ padding: '0px'}">
-                          <img :src="movie.movie_pic"/>
-                          <div class="info">
-                            <div class="info1">
-                              <i class="el-icon-star-on color1"></i>
-                              <span class="info_rate">{{ movie.movie_rate }}</span>
-                            </div>
-                            <div class="info2">{{ movie.movie_name }}</div>
+            <div class="movie1" v-if="seen1">
+              <div class=movieList1>
+                <el-row :gutter="20">
+                  <el-col :span="6" class="col3" v-for="movie in movieList1" :key="movie.movie_id">
+                    <div class="movieCard" @click="toMovieInfo()">
+                      <el-card :body-style="{ padding: '0px'}">
+                        <img :src="movie.movie_pic"/>
+                        <div class="info">
+                          <div class="info1">
+                            <i class="el-icon-star-on color1"></i>
+                            <span class="info_rate">{{ movie.movie_rate }}</span>
                           </div>
-                        </el-card>
-                      </div>
-                    </el-col>
-                  </el-row>
-                </div>
+                          <div class="info2">{{ movie.movie_name }}</div>
+                        </div>
+                      </el-card>
+                    </div>
+                  </el-col>
+                </el-row>
               </div>
-              <div class="movie2" v-if="seen1">
-                <div class="title">---HollyWood Movies of 2018---</div>
-                <div class="movieList2">
-                  <el-row>
-                    <el-col :span="6" class="col3" v-for="movie in movieList2" :key="movie.movie_id">
-                      <div class="movieCard">
-                        <el-card :body-style="{ padding: '0px' }">
-                          <img :src="movie.movie_pic"/>
-                          <div class="info">
-                            <div class="info1">
-                              <i class="el-icon-star-on color1"></i>
-                              <span class="info_rate">{{ movie.movie_rate }}</span>
-                            </div>
-                            <div class="info2">{{ movie.movie_name }}</div>
+              <!--分页start-->
+              <el-pagination
+                  background
+                  layout="prev, pager, next"
+                  :total="movie_num">
+              </el-pagination>
+              <!--分页end-->
+            </div>
+
+            <div class="searchMovie" v-if="seen2">
+              <div class="title1">Find the results for you as follows:</div>
+              <div class="searchMovieList">
+                <el-row>
+                  <el-col :span="4" class="col3" v-for="movie in searchMovieList" :key="movie.movie_id">
+                    <div class="movieCard" @click="toMovieInfo()">
+                      <el-card :body-style="{ padding: '0px' }">
+                        <img :src="movie.movie_pic"/>
+                        <div class="info">
+                          <div class="info1">
+                            <i class="el-icon-star-on color1"></i>
+                            <span class="info_rate">{{ movie.movie_rate }}</span>
                           </div>
-                        </el-card>
-                      </div>
-                    </el-col>
-                  </el-row>
-                </div>
+                          <div class="info2">{{ movie.movie_name }}</div>
+                        </div>
+                      </el-card>
+                    </div>
+                  </el-col>
+                </el-row>
               </div>
-              <div class="searchMovie" v-if="seen2">
-                <div class="title1">Find the results for you as follows:</div>
-                <div class="searchMovieList">
-                  <el-row>
-                    <el-col :span="4" class="col3" v-for="movie in searchMovieList" :key="movie.movie_id">
-                      <div class="movieCard">
-                        <el-card :body-style="{ padding: '0px' }">
-                          <img :src="movie.movie_pic"/>
-                          <div class="info">
-                            <div class="info1">
-                              <i class="el-icon-star-on color1"></i>
-                              <span class="info_rate">{{ movie.movie_rate }}</span>
-                            </div>
-                            <div class="info2">{{ movie.movie_name }}</div>
-                          </div>
-                        </el-card>
-                      </div>
-                    </el-col>
-                  </el-row>
-                </div>
-                <div class="page">
-                  <el-pagination
-                      @current-change="handleCurrentChange"
-                      :current-page="pagenum"
-                      layout="prev, pager, next"
-                      :total="80">
-                  </el-pagination>
-                </div>
+
+              <div class="page">
+                <el-pagination
+                    @current-change="handleCurrentChange"
+                    :current-page="pagenum"
+                    layout="prev, pager, next"
+                    :total="80">
+                </el-pagination>
               </div>
             </div>
-            <!--movie_screen end-->
           </div>
+          <!--movie_screen end-->
         </div>
       </el-col>
-      <!--left box end-->
-      <!--right box start-->
-<!--      <el-col :span="6">-->
-<!--        <div class="movie_main_right">-->
-<!--          <div class="mvr_keywords">-->
-<!--            <div class="mvr_keywords_age">-->
-<!--              <h3>Ages</h3>-->
-<!--              <div class="vrk_list2 right_tag">-->
-<!--                <a href="#" class="blue movie_list_load keyword_ages_list">all</a>-->
-<!--                <a href="#" class=" movie_list_load keyword_ages_list">2020</a>-->
-<!--                <a href="#" class=" movie_list_load keyword_ages_list">2019</a>-->
-<!--                <a href="#" class=" movie_list_load keyword_ages_list">2010s</a>-->
-<!--                <a href="#" class=" movie_list_load keyword_ages_list">2000s</a>-->
-<!--                <a href="#" class=" movie_list_load keyword_ages_list">1990s</a>-->
-<!--                <a href="#" class=" movie_list_load keyword_ages_list">1980s</a>-->
-<!--                <a href="#" class=" movie_list_load keyword_ages_list">1970s</a>-->
-<!--                <a href="#" class=" movie_list_load keyword_ages_list">1960s</a>-->
-<!--                <a href="#" class=" movie_list_load keyword_ages_list">earlier</a>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </el-col>-->
-      <!--right box end-->
-      <el-col :span="2"></el-col>
+      <el-col :span="3"></el-col>
     </el-row>
     <!--主线部分end-->
   </div>
@@ -200,6 +118,10 @@ export default {
       seen2: false,
       total: 6,
       pagenum: 1,
+      t_radio: '1',
+      o_radio: '1',
+      movie_num:120,
+      movie_per_page:12,
 
       headPictures: [
         {id: 0, source: require('../assets/images/header1.png')},
@@ -325,19 +247,25 @@ export default {
     }
 
   },
-  methods: {
-    searchMovies() {
-      this.seen1 = false;
-      this.seen2 = true;
+  methods:{
+    searchMovies(){
+      this.seen1=false;
+      this.seen2=true;
     },
-    getMovieList() {
+    getMovieList(){
 
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
-      this.pagenum = val;
+      this.pagenum=val;
       this.getMovieList();
     },
+    toMovieInfo(){
+      this.$router.push('/MovieInfo');
+    }
+  },
+  created(){
+
   }
 }
 </script>
@@ -366,18 +294,16 @@ export default {
   text-align: left;
 }
 
-.movies .col3{
+.movies .col3 {
   margin-bottom: 20px;
 }
 
-.movies .movieCard {
-  /*width: 170px;*/
-  margin: 0px 20px;
-}
 
-.movieCard .el-card__body>img{
-  width:100%;
+.movieCard .el-card__body > img {
+  width: 100%;
+
   height: auto;
+  cursor:pointer;
 }
 
 .movies .movieList1 {
@@ -440,13 +366,13 @@ export default {
   color: #6db9ff;
 }
 
-html body div#app div.main section.el-container.is-vertical main.el-main div.movies div.el-row div.el-col.el-col-20{
-/*#app > div > section > main > div > div.el-row > div.el-col.el-col-14 > div {*/
+
+#app > div > section > main > div > div.el-row > div.el-col.el-col-18 > div {
   background-color: #ffffff;
 }
 
-html body div#app div.main section.el-container.is-vertical main.el-main div.movies div.el-row div.el-col.el-col-20{
-/*#app > div > section > main > div > div.el-row > div.el-col.el-col-14 > div > div {*/
+#app > div > section > main > div > div.el-row > div.el-col.el-col-18 > div > div {
+
   padding: 30px 20px;
 }
 
@@ -454,12 +380,13 @@ html body div#app div.main section.el-container.is-vertical main.el-main div.mov
   font-family: Microsoft YaHei, helvetica, arial;
   color: #222222;
   list-style: none outside none;
-  margin: 0;
+  margin: 20px;
   padding: 0;
   font-size: 14px;
 }
 
 .mv_box {
+  margin: 0px 10px 20px;
   overflow: hidden;
   /*display: inline;*/
   text-align: left;
@@ -492,7 +419,7 @@ a.blue {
   color: #0066c0 !important;
 }
 
-a.movie_list_load{
+a.movie_list_load {
   list-style: none outside none;
   font-size: 14px;
   padding: 0;
@@ -516,7 +443,7 @@ a.movie_list_load{
 div.movie_screen_hd {
   color: #222222;
   list-style: none outside none;
-  margin: 0;
+  margin: 20px;
   padding: 0 0 10px;
   border-bottom: 3px solid #d7d7d7;
   overflow: hidden;
@@ -534,7 +461,7 @@ div.movie_order {
   text-align: left;
 }
 
-div.movie_order > span{
+div.movie_order > span {
   list-style: none outside none;
   display: block;
   float: left;
@@ -543,44 +470,56 @@ div.movie_order > span{
   margin: 10px 0px;
 }
 
-.movie_order_type{
+.movie_order_type {
   margin: 10px 20px;
 }
 
-#app > div > section > main > div > div.el-row > div.el-col.el-col-2{
+#app > div > section > main > div > div.el-row > div.el-col.el-col-3 {
   min-height: 100px;
   /*background-color: black;*/
 }
 
-#app > div > section > main > div > div.el-row > div.el-col.el-col-6{
+#app > div > section > main > div > div.el-row > div.el-col.el-col-6 {
   height: 100px;
   /*background-color: royalblue;*/
 }
 
-.movie_main_right{
+.movie_main_right {
   margin: 0px 10px;
   background-color: #ffffff;
   min-height: 50px;
   padding: 20px 20px;
 }
 
-.mvr_keywords{
+.mvr_keywords {
   text-align: left;
 }
 
-.mvr_keywords_age{
+.mvr_keywords_age {
   /*margin:30px 0px 0px 0px;*/
   background-color: #ebeef0;
   min-height: 10px;
   padding: 5px 10px;
 }
 
-.keyword_ages_list{
+.keyword_ages_list {
   width: 75px;
 }
 
-.movieList1 > div> div > div.movieCard{
-  /*padding: 10px;*/
+
+#sorted_type, #order_by {
+  font-family: Microsoft YaHei, helvetica, arial;
+  margin-right: 10px;
+}
+
+div.movie1>div.el-pagination{
+  text-align: center;
+  margin: 50px 0px;
+}
+
+div.movie1>div.el-pagination.is-background .el-pager li:not(.disabled).active{
+  background-color: #0066c0;
+  color: white;
 }
 
 </style>
