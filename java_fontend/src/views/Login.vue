@@ -83,7 +83,7 @@ export default {
               console.log(response);
               this.$store.commit("Login", response.data.data.role);
               this.$store.commit("Setname",response.data.data.username);
-              this.$store.commit("Setid",response.data.data.userId);
+              this.$store.commit("Setid",response.data.data.userID);
               //将vuex里的信息保存到sessionStorage里
               sessionStorage.setItem("user", JSON.stringify(this.$store.state));
               this.$message.success("Login Success!");
