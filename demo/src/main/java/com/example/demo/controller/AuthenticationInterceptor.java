@@ -7,7 +7,7 @@ import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.example.demo.annotation.PassToken;
 import com.example.demo.annotation.UserLoginToken;
-import com.example.demo.service.userService;
+import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -22,7 +22,7 @@ import java.util.Map;
 @Component
 public class AuthenticationInterceptor implements HandlerInterceptor {
     @Autowired
-    userService userService;
+    UserService userService;
 
 
     @Override

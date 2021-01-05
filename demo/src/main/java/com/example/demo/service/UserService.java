@@ -5,16 +5,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.demo.Entity.users;
 import com.example.demo.dao.userRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 import java.sql.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Service
-public class userService {
+public class UserService {
 
     @Resource
     private userRepository UserRepository;
@@ -74,5 +72,10 @@ public class userService {
         return flag;
     }
 
+
+    public void AddCollectPeople(Integer id)
+    {
+        UserRepository.AddCollectPeople(id);
+    }
 
 }

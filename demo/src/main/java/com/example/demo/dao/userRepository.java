@@ -46,5 +46,17 @@ public interface userRepository extends JpaRepository<users, Integer>{
     List<String> checkName();
 
 
+    @Modifying
+    @Transactional
+    @Query(value="update user set peopleCollectNum=peopleCollectNum + 1 " +
+            "where user.userID=?1",nativeQuery = true)
+    void AddCollectPeople(Integer id);
+
+
+    @Modifying
+    @Transactional
+    @Query(value="update user set peopleCollectNum=peopleCollectNum - 1 " +
+            "where user.userID=?1",nativeQuery = true)
+    void DeleteCollectPeople(Integer id);
 
 }

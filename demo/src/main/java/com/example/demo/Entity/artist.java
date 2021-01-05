@@ -41,7 +41,16 @@ public class artist {
     @Column(name="picture")
     private String picture;
 
+    @Column(name="collect_num")
+    private Integer collect_num;
 
+    public Integer getCollect_num() {
+        return collect_num;
+    }
+
+    public void setCollect_num(Integer collect_num) {
+        this.collect_num = collect_num;
+    }
 
     public Integer getId() {
         return id;

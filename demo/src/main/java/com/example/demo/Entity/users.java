@@ -3,6 +3,7 @@ package com.example.demo.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -31,8 +32,9 @@ public class users {
     @Column(name="sex")
     private Integer sex;
 
-    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
+
     @Column(name="birthday")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
 
     @Column(name="phone")
