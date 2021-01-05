@@ -14,9 +14,10 @@ public interface commentmsgRepository extends JpaRepository<commentmsg,Integer> 
             "    select userID from user" +
             "    where userID=?1" +
             ")" +
-            "select m.title,m.photo,m.score " +
-            "from my join watchlist on my.userID=watchlist.userID " +
-            "join movie m on m.movieID = watchlist.movieID",nativeQuery = true)
+            "select m.title,m.photo,commentmsg.rate,commentmsg.time,commentmsg.text " +
+            "from my join commentmsg on my.userID=commentmsg.userID " +
+            "join movie m on m.movieID = commentmsg.movieID " +
+            "ORDER BY m.score DESC ",nativeQuery = true)
     List<Object[]> getCommentMovie(Integer id);
 
 }

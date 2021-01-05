@@ -145,11 +145,11 @@ public class UserController {
         }
     }
 
-    @PostMapping(value = "/ModifyAvator")
+    @PostMapping(value = "/ModifyAvator",headers="content-type=multipart/form-data")
     @ApiOperation(value = "修改个人头像", notes = "前端传递图片,注意文件名不要重复")
     public JsonResult ModifyAvator(
             @RequestParam(value = "userid") Integer userid,
-            @RequestParam("file") MultipartFile file
+            @RequestParam(value="file",required = true) MultipartFile file
     ) throws IOException {
 
         System.out.println("[文件类型] - [{}]"+ file.getContentType());
@@ -162,7 +162,19 @@ public class UserController {
 
         String filePathBefor=System.getProperty("user.dir")+"/src/main/resources/static/image/";
         filePathBefor=filePathBefor.replace('\\','/');
-        String filename= filePathBefor + RandomStringUtils.randomAlphanumeric(10);
+
+        String CDY="";
+        String CXW="";
+        String TZY="";
+        String LYF="D:/github/Chen/MovieAnalyzationPlatform-Web/demo/src/main/resources/static/image/";
+//        RandomStringUtils.randomAlphanumeric(10)
+//        String filename= LYF+
+//                file.getOriginalFilename();
+
+        String filename=filePathBefor+
+                RandomStringUtils.randomAlphanumeric(10)+
+                file.getOriginalFilename();
+
 
         file.transferTo(new File(filename));
 
@@ -206,21 +218,35 @@ public class UserController {
             notes = "传递token和id确认身份,要展示评论电影的分页情况，以及评论收藏总数")
     public JsonResult PersonalHomePage(
             @RequestParam(value="token",required = false) String token,
-            @RequestParam("userid") Integer userid
+            @RequestParam("user_id") Integer userid
     )
     {
         JSONArray temp1=new JSONArray();
         JSONObject temp=UserService.queryNum(userid);
-        JSONArray temp2=commentService.getCommentMovie(userid);
         temp1.add(temp);
-        temp1.addAll(temp2);
         return new JsonResult(temp1, "成功");
+    }
+
+    @GetMapping(value = "/CommentMovie")
+    @ApiOperation(value = "展示个人评论过的电影",
+            notes = "传递token和id确认身份,要展示收藏电影的分页情况")
+
+    public JsonResult CommentMovie(
+            @RequestParam(value="token",required = false) String token,
+            @RequestParam("user_id") Integer userid,
+            @RequestParam("pagenum") Integer pagenum,
+            @RequestParam("pagesize") Integer pagesize
+
+    )
+    {
+        JSONArray temp2=commentService.getCommentMovie(userid);
+        return new JsonResult(temp2, "成功");
     }
 
 
 
     @GetMapping(value = "/CollectionMovie")
-    @ApiOperation(value = "展示个人收藏",
+    @ApiOperation(value = "展示个人收藏电影",
             notes = "传递token和id确认身份,要展示收藏电影的分页情况")
     public JsonResult CollectionMovie(
             @RequestParam(value="token",required = false) String token,
@@ -228,6 +254,18 @@ public class UserController {
     )
     {
         JSONArray temp1= collectService.getCollectMovie(userid);
+        return new JsonResult(temp1, "成功");
+    }
+
+    @GetMapping(value = "/CollectionPeople")
+    @ApiOperation(value = "展示个人收藏人物",
+            notes = "传递token和id确认身份,要展示收藏电影的分页情况")
+    public JsonResult CollectionPeople(
+            @RequestParam(value="token",required = false) String token,
+            @RequestParam("userid") Integer userid
+    )
+    {
+        JSONArray temp1= collectService.getCollectPeople(userid);
         return new JsonResult(temp1, "成功");
     }
 
