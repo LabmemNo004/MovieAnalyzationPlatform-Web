@@ -18,8 +18,8 @@ public interface userRepository extends JpaRepository<users, Integer>{
     @Query(value = "select userID,password from user where userID=?1",nativeQuery = true)
     Map<Integer,String> findByUserId(Integer id);
 
-    @Query(value="select userID from user where phone=?1 AND password=?2",nativeQuery = true)
-    Integer findVerifyLogin(String phone,String password);
+    @Query(value="select userID,role,profileName from user where profileName=?1 AND password=?2",nativeQuery = true)
+    List<Object []> findVerifyLogin(String userName,String password);
 
     @Query(value = "select * from user where userID=?1",nativeQuery = true)
     users findByUserIdWeb(Integer id);
@@ -41,5 +41,10 @@ public interface userRepository extends JpaRepository<users, Integer>{
     @Query(value="select * from user where userID=?1",
             nativeQuery = true)
     users queryNum(Integer id);
+
+    @Query(value="select profileName from user;",nativeQuery = true)
+    List<String> checkName();
+
+
 
 }

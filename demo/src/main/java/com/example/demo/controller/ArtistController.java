@@ -20,12 +20,12 @@ public class ArtistController {
             @RequestParam("userid") Integer userid
     )
     {
-        StopWatch myWatch = new StopWatch("myWatch");
-        myWatch.start("task1");
+        
+        
         int temp1=0;
-        myWatch.stop();
+        
         return new JsonResult(temp1,
-                "成功",myWatch.getLastTaskTimeMillis());
+                "成功");
     }
 
     @PostMapping(value = "/Follow")
@@ -38,12 +38,12 @@ public class ArtistController {
             @RequestParam("operations") Integer operations
     )
     {
-        StopWatch myWatch = new StopWatch("myWatch");
-        myWatch.start("task1");
+        
+        
         int temp1=0;
-        myWatch.stop();
+        
         return new JsonResult(temp1,
-                "成功",myWatch.getLastTaskTimeMillis());
+                "成功");
     }
 
     @GetMapping(value = "/ArtistOwnPage")
@@ -56,12 +56,12 @@ public class ArtistController {
             @RequestParam("artistID") Integer artistID
     )
     {
-        StopWatch myWatch = new StopWatch("myWatch");
-        myWatch.start("task1");
+        
+        
         int temp1=0;
-        myWatch.stop();
+        
         return new JsonResult(temp1,
-                "成功",myWatch.getLastTaskTimeMillis());
+                "成功");
     }
 
 
