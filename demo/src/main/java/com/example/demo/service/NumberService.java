@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 
 @Service
-public class numberService {
+public class NumberService {
 
     @Resource
     private numberRepository numberReposiroty;
@@ -18,10 +18,19 @@ public class numberService {
         {
             numberReposiroty.updateNumberById(userID);
         }
+        if(userID==0&&MovieID==0)
+        {
+            numberReposiroty.updateNumberById1(ArtistID);
+        }
+        if(userID==0&ArtistID==0)
+        {
+            numberReposiroty.updateNumberById2(MovieID);
+        }
     }
 
     public numbers getSimpleNumbers()
     {
         return numberReposiroty.getSimpleNumbers();
     }
+
 }

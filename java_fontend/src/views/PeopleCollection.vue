@@ -6,9 +6,20 @@
         <el-col span="14">
           <div class="cl_op">
             <span class="sonListTitle_l">Collection({{personList.length}})</span>
+
           </div>
+<!--          <div class="listinfo">-->
+<!--            <div class="list_title clearfix">-->
+<!--              <div class="list_title_tab">-->
+<!--                <a href="#" :class="{'tab_active':seen_person&seen_movie}" @click="click_all()">All</a>-->
+<!--                <a href="#" :class="{'tab_active':!seen_person&seen_movie}" @click="click_movie">Movie</a>-->
+<!--                <a href="#" :class="{'tab_active':seen_person&!seen_movie}" @click="click_person">Person</a>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
           <div class="collection_con">
             <div class="ps_cl">
+
               <div class="ps_info">
                 <el-row>
                   <el-col :span="6" class="ps_cl_list col3"  v-for="person in personList" :key="person.person_id">
@@ -76,8 +87,10 @@ export default {
   name: 'peoplecollection',
   data() {
     return {
+
       people_collect_num:3,
       people_per_page:10,
+
       personList: [
         {
           person_id: 1,

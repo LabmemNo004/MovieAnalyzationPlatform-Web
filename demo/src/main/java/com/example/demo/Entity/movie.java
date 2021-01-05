@@ -18,24 +18,17 @@ public class movie {
     @Column(name="title")
     private String title;
 
-    @Column(name="productNum")
-    private Integer productNum;
-
-    @Column(name="directorNum")
-    private Integer directorNum;
-
-    @Column(name="actorNum")
-    private Integer actorNum;
 
     @Column(name="score")
     private Float score;
+
+    @Column(name="area")
+    private String area;
 
 
     @Column(name="type")
     private String type;
 
-    @Column(name="price")
-    private Float price;
 
     @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
     @Column(name="publishTime")
@@ -43,6 +36,36 @@ public class movie {
 
     @Column(name="photo")
     private String photo;
+
+    @Column(name="collect_num")
+    private Integer collect_num;
+
+    @Column(name="introduction")
+    private String introduction;
+
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
+    }
+
+    public Integer getCollect_num() {
+        return collect_num;
+    }
+
+    public void setCollect_num(Integer collect_num) {
+        this.collect_num = collect_num;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
 
     public String getPhoto() {
         return photo;
@@ -52,28 +75,14 @@ public class movie {
         this.photo = photo;
     }
 
-    public Float getPrice() {
-        return price;
-    }
 
     public Float getScore() {
         return score;
     }
 
-    public Integer getActorNum() {
-        return actorNum;
-    }
-
-    public Integer getDirectorNum() {
-        return directorNum;
-    }
 
     public Integer getMovieID() {
         return movieID;
-    }
-
-    public Integer getProductNum() {
-        return productNum;
     }
 
 
@@ -89,25 +98,11 @@ public class movie {
         return type;
     }
 
-    public void setActorNum(Integer actorNum) {
-        this.actorNum = actorNum;
-    }
-
-    public void setDirectorNum(Integer directorNum) {
-        this.directorNum = directorNum;
-    }
 
     public void setMovieID(Integer movieID) {
         this.movieID = movieID;
     }
 
-    public void setPrice(Float price) {
-        this.price = price;
-    }
-
-    public void setProductNum(Integer productNum) {
-        this.productNum = productNum;
-    }
 
     public void setPublishTime(Date publishTime) {
         this.publishTime = publishTime;

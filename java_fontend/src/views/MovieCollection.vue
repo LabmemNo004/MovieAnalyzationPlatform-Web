@@ -9,6 +9,7 @@
           </div>
           <div class="collection_con">
             <div class="mv_cl">
+
               <div class="mv_info">
                 <el-row>
                   <el-col :span="6" class="mv_cl_list col3"  v-for="movie in movieList" :key="movie.movie_id">
@@ -80,6 +81,7 @@ export default {
   name: 'MovieCollection',
   data() {
     return {
+
       movie_collect_num:3,
       movie_per_page:10,
       movieList:[
@@ -286,6 +288,7 @@ export default {
   font-family: 'Times New Roman', Times, serif;
 }
 
+
 .moviecollection .el-col-2{
   min-height: 100px;
 }
@@ -299,4 +302,5 @@ export default {
   background-color: #0066c0;
   color: white;
 }
+
 </style>

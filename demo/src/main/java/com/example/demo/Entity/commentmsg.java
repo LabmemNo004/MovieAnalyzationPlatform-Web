@@ -1,7 +1,9 @@
 package com.example.demo.Entity;
 
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -24,8 +26,10 @@ public class commentmsg {
     @Column(name= "rate")
     private Float helpfulness;
 
-    @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
+
     @Column(name="time")
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+//    @Temporal(TemporalType.TIMESTAMP)
     private Date time;
 
     @Column(name="summary")

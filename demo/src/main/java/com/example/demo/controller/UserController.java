@@ -25,10 +25,10 @@ import java.util.Map;
 public class UserController {
 
     @Autowired
-    numberService NumberService;
+    NumberService NumberService;
 
     @Autowired
-    userService UserService;
+    UserService UserService;
 
     @Autowired
     TokenService tokenService;
@@ -191,7 +191,7 @@ public class UserController {
 
 
 
-    @GetMapping(value = "/GetInformation")
+    @PostMapping(value = "/GetInformation")
     @ApiOperation(value = "获取个人信息", notes = "传递token和id确认身份")
     public JsonResult SaveInformation(
             @RequestParam(value="token",required = false) String token,
@@ -250,7 +250,9 @@ public class UserController {
             notes = "传递token和id确认身份,要展示收藏电影的分页情况")
     public JsonResult CollectionMovie(
             @RequestParam(value="token",required = false) String token,
-            @RequestParam("userid") Integer userid
+            @RequestParam("userid") Integer userid,
+            @RequestParam("pagenum") Integer pagenum,
+            @RequestParam("pagesize") Integer pagesize
     )
     {
         JSONArray temp1= collectService.getCollectMovie(userid);
@@ -262,7 +264,9 @@ public class UserController {
             notes = "传递token和id确认身份,要展示收藏电影的分页情况")
     public JsonResult CollectionPeople(
             @RequestParam(value="token",required = false) String token,
-            @RequestParam("userid") Integer userid
+            @RequestParam("userid") Integer userid,
+            @RequestParam("pagenum") Integer pagenum,
+            @RequestParam("pagesize") Integer pagesize
     )
     {
         JSONArray temp1= collectService.getCollectPeople(userid);

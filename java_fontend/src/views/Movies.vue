@@ -13,7 +13,9 @@
     <el-row>
       <el-col :span="3"></el-col>
       <!--left box start-->
+
       <el-col :span="18">
+
         <div class="movie_left_con">
           <div class="movie_main_left">
             <!--movie_sort begin-->
@@ -36,6 +38,7 @@
               <!--排序依据end-->
             </div>
             <!--movie_sort end-->
+
             <div class="movie_screen_hd"></div>
 
             <div class="movie1" v-if="seen1">
@@ -86,6 +89,7 @@
                   </el-col>
                 </el-row>
               </div>
+
               <div class="page">
                 <el-pagination
                     @current-change="handleCurrentChange"
@@ -294,8 +298,10 @@ export default {
   margin-bottom: 20px;
 }
 
+
 .movieCard .el-card__body > img {
   width: 100%;
+
   height: auto;
   cursor:pointer;
 }
@@ -360,11 +366,13 @@ export default {
   color: #6db9ff;
 }
 
+
 #app > div > section > main > div > div.el-row > div.el-col.el-col-18 > div {
   background-color: #ffffff;
 }
 
 #app > div > section > main > div > div.el-row > div.el-col.el-col-18 > div > div {
+
   padding: 30px 20px;
 }
 
@@ -498,6 +506,7 @@ div.movie_order > span {
   width: 75px;
 }
 
+
 #sorted_type, #order_by {
   font-family: Microsoft YaHei, helvetica, arial;
   margin-right: 10px;
@@ -512,4 +521,5 @@ div.movie1>div.el-pagination.is-background .el-pager li:not(.disabled).active{
   background-color: #0066c0;
   color: white;
 }
+
 </style>

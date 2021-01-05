@@ -31,15 +31,17 @@ public class CollectService {
 
             System.out.println(temp1);
 
-            String[] tag={"title","photo","score"};
+            String[] tag={"movie_name","movie_pic","movie_rate"};
             for(int i=0;i< temp1.length;i++)
             {
                 System.out.println(temp1[i]);
                 temp3.put(tag[i],temp1[i]);
             }
             b.add(temp3);
-
         }
+        JSONObject temp3=new JSONObject();
+        temp3.put("total",b.size());
+        b.add(temp3);
         return b;
     }
 
@@ -55,7 +57,7 @@ public class CollectService {
 
             System.out.println(temp1);
 
-            String[] tag={"PersonName","profession","picture"};
+            String[] tag={"person_name","profession","picture"};
             for(int i=0;i< temp1.length;i++)
             {
                 System.out.println(temp1[i]);

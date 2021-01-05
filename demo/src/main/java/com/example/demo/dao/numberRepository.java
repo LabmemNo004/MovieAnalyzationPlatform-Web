@@ -19,4 +19,16 @@ public interface numberRepository extends JpaRepository<numbers, Integer> {
             "where c.N=1")
     int updateNumberById(Integer userID);
 
+    @Modifying
+    @Transactional
+    @Query("update numbers as c set c.movieNumadd=?1 " +
+            "where c.N=1")
+    int updateNumberById1(Integer userID);
+
+    @Modifying
+    @Transactional
+    @Query("update numbers as c set c.artistNumadd=?1 " +
+            "where c.N=1")
+    int updateNumberById2(Integer userID);
+
 }
