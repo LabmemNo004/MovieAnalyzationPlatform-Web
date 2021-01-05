@@ -73,7 +73,7 @@ export default {
          axios.get("http://localhost:8070/User/login",
               {
                 params:{
-                  username: this.LoginForm.username,
+                  userName: this.LoginForm.username,
                   password: this.LoginForm.password
                 }
                
