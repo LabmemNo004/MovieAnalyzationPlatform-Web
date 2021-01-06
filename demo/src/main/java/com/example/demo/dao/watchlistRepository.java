@@ -29,7 +29,16 @@ public interface watchlistRepository extends JpaRepository<commentmsg,Integer> {
     @Query(value="select * from watchlist where movieID=?1",nativeQuery = true)
     List<watchlist> getMovieByCollectedNum(Integer movieID);
 
+    @Modifying
+    @Transactional
+    @Query(value="insert into watchlist values (?1,?2)",nativeQuery = true)
+    void InsertNewWatchlist(Integer userId,Integer movieID);
 
+    @Modifying
+    @Transactional
+    @Query(value="DELETE from watchlist " +
+            "where userID=?1 AND movieID=?2",nativeQuery = true)
+    void DeleteNewWatchlist(Integer userId,Integer movieID);
 
-
+    watchlist findByUserIDAndMovieID(Integer UserID,Integer MovieID);
 }

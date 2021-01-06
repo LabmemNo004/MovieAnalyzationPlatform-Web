@@ -14,6 +14,7 @@ import javax.annotation.Resource;
 import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ArtistService {
@@ -36,7 +37,7 @@ public class ArtistService {
         {
             JSONObject temp3=new JSONObject();
 
-            List<String> temp1=ArtistRepository.getArtistMovie(shabi.getId());
+            List<String> temp1=ArtistRepository.getArtistMovie2(shabi.getId());
 
             temp3.put("person_id",shabi.getId());
             temp3.put("person_name",shabi.getPersonName());
@@ -61,9 +62,21 @@ public class ArtistService {
         b.put("birthday",temp1.getBirthday());
         b.put("area",temp1.getArea());
         b.put("profession",temp1.getProfession());
-        List<String> temp2=ArtistRepository.getArtistMovie(temp1.getId());
 
-        b.put("movies",temp2);
+        List<Map<String,Integer>> temp2=ArtistRepository.getArtistMovie(temp1.getId());
+
+        JSONArray nanshou=new JSONArray();
+
+        for(Map<String,Integer> temp9:temp2)
+        {
+            JSONObject tempMovie=new JSONObject();
+            tempMovie.put("movieName",temp9.get("title"));
+            tempMovie.put("movieID",temp9.get("movieID"));
+            nanshou.add(tempMovie);
+        }
+
+
+        b.put("movies",nanshou);
         b.put("introduction",temp1.getIntroduction());
         b.put("collect_num",temp1.getCollect_num());
 

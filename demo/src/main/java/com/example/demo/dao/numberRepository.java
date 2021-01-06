@@ -31,4 +31,11 @@ public interface numberRepository extends JpaRepository<numbers, Integer> {
             "where c.N=1")
     int updateNumberById2(Integer userID);
 
+    @Modifying
+    @Transactional
+    @Query("update numbers as c set c.CommentMsg=?1 " +
+            "where c.N=1")
+    int updateNumberById3(Integer userID);
+
+
 }

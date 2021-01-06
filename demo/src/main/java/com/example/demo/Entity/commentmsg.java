@@ -28,12 +28,10 @@ public class commentmsg {
 
 
     @Column(name="time")
-    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
-//    @Temporal(TemporalType.TIMESTAMP)
-    private Date time;
 
-    @Column(name="summary")
-    private String summary;
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private Date time;
 
     @Column(name="text")
     private String text;
@@ -76,14 +74,6 @@ public class commentmsg {
 
     public void setTime(Date time) {
         this.time = time;
-    }
-
-    public String getSummary() {
-        return summary;
-    }
-
-    public void setSummary(String summary) {
-        this.summary = summary;
     }
 
     public String getText() {

@@ -26,6 +26,17 @@ public class numbers {
     @Column(name="movieNumadd")
     private Integer movieNumadd;
 
+    @Column(name="CommentMsg")
+    private Integer CommentMsg;
+
+    public Integer getCommentMsg() {
+        return CommentMsg;
+    }
+
+    public void setCommentMsg(Integer commentMsg) {
+        CommentMsg = commentMsg;
+    }
+
     public Integer getN() {
         return N;
     }
