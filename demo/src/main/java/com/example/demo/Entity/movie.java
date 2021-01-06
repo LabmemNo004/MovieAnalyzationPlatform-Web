@@ -2,6 +2,7 @@ package com.example.demo.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -31,6 +32,7 @@ public class movie {
 
 
     @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     @Column(name="publishTime")
     private Date publishTime;
 

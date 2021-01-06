@@ -101,7 +101,7 @@ public class UserController {
             UserService.saveUser(u);
             //在存储表中id自增。
             //非修改id直接传0
-            NumberService.updataNumber(++temp,0,0);
+            NumberService.updataNumber(++temp,0,0,0);
 
             String token = tokenService.getToken(temp - 1,password);
             thisUser.put("token",token);

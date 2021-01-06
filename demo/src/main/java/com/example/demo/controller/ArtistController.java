@@ -70,7 +70,7 @@ public class ArtistController {
 
     @PostMapping(value = "/Follow")
     @ApiOperation(value = "用户收藏或者取消收藏导演或演员",
-            notes = "传递token和id确认身份。身份未确定，返回登陆指示,op为1表示点赞，0为取消")
+            notes = "传递token和id确认身份。身份未确定，返回登陆指示,op为1表示收藏，0为取消")
     public JsonResult Follow(
             @RequestParam(value="token",required = false) String token,
             @RequestParam("userid") Integer userid,
@@ -82,9 +82,15 @@ public class ArtistController {
 
         int temp1=0;
         artistService.AddCollectPeople(userid,artistID,operations);
-
-        return new JsonResult(temp1,
-                "成功关注这个人物");
+        if(operations==1)
+        {
+            return new JsonResult(temp1,
+                    "成功关注这个人物");
+        }
+        else {
+            return new JsonResult(temp1,
+                    "取消关注这个人物");
+        }
     }
 
 }

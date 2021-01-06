@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import javax.transaction.Transactional;
 import java.sql.Date;
 import java.util.List;
+import java.util.Map;
 
 public interface artistRepository extends JpaRepository<artist,Integer> {
 
@@ -30,10 +31,19 @@ public interface artistRepository extends JpaRepository<artist,Integer> {
     @Query(value="with some as (" +
             "    select * from artist" +
             "    where id=?1)" +
+            "select m.title,m.movieID " +
+            "from some s join participate p on s.id = p.artistID " +
+            "join movie m on m.movieID = p.movieID ",nativeQuery = true)
+    List<Map<String,Integer>> getArtistMovie(Integer temp);
+
+
+    @Query(value="with some as (" +
+            "    select * from artist" +
+            "    where id=?1)" +
             "select m.title " +
             "from some s join participate p on s.id = p.artistID " +
             "join movie m on m.movieID = p.movieID ",nativeQuery = true)
-    List<String> getArtistMovie(Integer temp);
+    List<String> getArtistMovie2(Integer temp);
 
 
     @Query(value="select * from artist where id=?1",nativeQuery = true)

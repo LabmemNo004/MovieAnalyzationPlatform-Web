@@ -12,8 +12,14 @@ public class NumberService {
     @Resource
     private numberRepository numberReposiroty;
 
-    public void updataNumber(Integer userID, Integer ArtistID,Integer MovieID)
+    public void updataNumber(Integer userID, Integer ArtistID,
+                             Integer MovieID,Integer CommentMsg)
     {
+        if(CommentMsg!=0)
+        {
+            numberReposiroty.updateNumberById2(CommentMsg);
+        }
+
         if(ArtistID==0&MovieID==0)
         {
             numberReposiroty.updateNumberById(userID);
