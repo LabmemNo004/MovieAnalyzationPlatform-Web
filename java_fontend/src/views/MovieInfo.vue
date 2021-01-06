@@ -76,7 +76,7 @@
                     <el-button type="primary" round @click="show=true">Edit Rate and Comment</el-button>
                 </div>
                 <div class="form" v-if="show">
-                    <el-form ref="form" :model="Form" label-width="100px" label-position="left">
+                    <el-form ref="form" :model="Form" label-width="100px" label-position="left" :inline="true">
                         <el-form-item label="Rate:" prop="rate">
                             <el-rate
                                 v-model="Form.rate"
@@ -84,11 +84,16 @@
                                 text-color="#ff9900">
                             </el-rate>
                         </el-form-item>
+                        <el-form-item class="markButton">
+                            <el-button type="primary" @click="submitForm1()" round size="small">Marking</el-button>
+                        </el-form-item>
+                    </el-form>
+                    <el-form ref="form" :model="Form" label-width="100px" label-position="left">
                         <el-form-item label="Comment:" prop="comment">
                              <el-input type="textarea" v-model="Form.comment" :rows="4" maxlength="150" show-word-limit></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" @click="submitForm()" round>Submit</el-button>
+                            <el-button type="primary" @click="submitForm2()" round>Submit</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -113,6 +118,7 @@
                                 score-template="{value}">
                             </el-rate>
                         </div>
+                        <div class="l time">{{comment.time}}</div>
                         <div class="clear"></div>
                         <div class="comment_content">{{comment.content}}</div>
                     </div>
@@ -135,6 +141,19 @@
     </div>
 </template>
 <script>
+import axios from "axios";
+const dateFormat=function(t){
+    let year=new Date(t).getFullYear();
+    let month=new Date(t).getMonth() + 1 < 10? "0" + (new Date(t).getMonth() + 1): new Date(t).getMonth() + 1;
+    let date=new Date(t).getDate() < 10? "0" + new Date(t).getDate(): new Date(t).getDate();
+    let hour=new Date(t).getHours() < 10? "0" + new Date(t).getHours(): new Date(t).getHours();
+    let minute=new Date(t).getMinutes() < 10? "0" + new Date(t).getMinutes(): new Date(t).getMinutes();
+    let second=new Date(t).getSeconds() < 10? "0" + new Date(t).getSeconds(): new Date(t).getSeconds();
+    return year+"-"+month+"-"+date+" "+hour+":"+minute+":"+second;
+}
+const dateFormat1=function(t){
+    
+}
 export default {
   name: 'MovieInfo',
   data(){
@@ -160,11 +179,11 @@ export default {
             
         },
         Form:{
-            rate:3,
+            rate:'',
             comment:''
         },
         commentList:[
-            {
+            /*{
                 avatar:require('../assets/images/avatar0.jpg'),
                 username:'nianwuluo',
                 rate:4.5,
@@ -181,7 +200,7 @@ export default {
                 username:'user3',
                 rate:3.2,
                 content:"It's boring!"
-            }
+            }*/
             
         ]
         
@@ -193,7 +212,7 @@ export default {
            let img = event.srcElement;   
            img.src = this.defaultImg;   
            img.onerror = null; //防止闪图
-      },
+       },
         collect(){
             if(this.movieInfo.is_collect==false){
                 this.movieInfo.is_collect=true;
@@ -204,15 +223,89 @@ export default {
                 this.movieInfo.collect_num--;
             }
         },
-        getCommentList(){
+        async getMovieInfo(){
+            var movieid=sessionStorage.getItem("movie_id");
+            console.log(movieid);
+            axios.get("http://localhost:8070/Movie/MovieDetails",{
+                params:{
+                  movie_id:movieid,
+                  user_id:this.$store.state.id
+                }
+            }).then((response)=>{
+                console.log(response);
+            }).catch((error)=>{
+                this.$message.error("Get Movie's Details Failed!");
+            })
+        },
+        async getCommentList(){
+            var movieid=sessionStorage.getItem("movie_id");
+            console.log(movieid);
+            await axios.get("http://localhost:8070/Movie/MovieComment",{
+                 params:{
+                  movie_id:movieid,
+                  pagenum:this.pagenum,
+                  pagesize:5
+                }
+            }).then((response)=>{
+                console.log(response);
+                this.commentList=response.data.data;
+                var i=0;
+                for(i=0;i<this.commentList.length;i++){
+                    var date=new Date(this.commentList[i].time);
+                    console.log(date);
+                    this.commentList[i].time=dateFormat(date);
+                }
+            }).catch((error)=>{
+                this.$message.error("Get Comment List Failed!");
+            })
 
+        },
+        async submitForm1(){
+            if(this.Form.rate==''){
+                this.$message.error("Marking First!");
+                return;
+            }
+            var movieid=sessionStorage.getItem("movie_id");
+            console.log(movieid);
+            await axios.post("http://localhost:8070/Movie/Score?user_id="+this.$store.state.id+"&movie_id="+movieid+"&rate="+this.Form.rate
+               ).then((response)=>{
+                   console.log(response);
+                   this.$message.success("Marking Success!");
+                   this.movieInfo.my_rate=this.Form.rate;
+               }).catch((error)=>{
+                   this.$message.error("Marking Failed!");
+               });
+        
+        },
+        async submitForm2(){
+            if(this.Form.comment==''){
+                this.$message.error("Write Comment First!");
+                return;
+            }
+            var movieid=sessionStorage.getItem("movie_id");
+            console.log(movieid);
+            var time=new Date().getTime();
+            console.log(time);
+            await axios.post("http://localhost:8070/Movie/Comment?user_id="+this.$store.state.id+"&movie_id="+movieid+"&time="+time+"&content="+this.Form.comment
+               ).then((response)=>{
+                   console.log(response);
+                   this.$message.success("Appraise Success!");
+                   this.movieInfo.my_comment=this.Form.comment;
+               }).catch((error)=>{
+                   this.$message.error("Appraise Failed!");
+            });
+        
         },
         handleCurrentChange(val) {
             console.log(`当前页: ${val}`);
             this.pagenum=val;
             this.getCommentList();
         },
-  }
+    },
+    created(){
+        this.getMovieInfo();
+        this.getCommentList();
+    }
 }
 </script>
 
@@ -352,7 +445,9 @@ export default {
 .movieinfo .el-button{
     font-size: 20px;
 }
-
+.movieinfo .markButton .el-button{
+    font-size:16px;
+}
 .movieinfo .editButton{
     margin-bottom:20px;
 }
@@ -420,5 +515,11 @@ export default {
 
 .movieinfo .rate{
     margin-top:5px;
+}
+
+.movieinfo .time{
+    font-size: 18px;
+    margin-top: 10px;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 </style>

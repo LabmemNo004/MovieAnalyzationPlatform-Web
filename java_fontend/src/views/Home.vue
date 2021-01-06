@@ -17,7 +17,7 @@
         <div class=movieList1>
           <el-row>
             <el-col :span="4" class="col3" v-for="movie in movieList1" :key="movie.movie_id">
-              <div class="movieCard" @click="toMovieInfo()">
+              <div class="movieCard" @click="toMovieInfo(movie.movie_id)">
                 <el-card :body-style="{ padding: '0px' }">
                   <img :src="movie.movie_pic" class="pic" @error="away()"/>
                   <div class="info">
@@ -59,7 +59,7 @@
         <div class="searchMovieList">
           <el-row>
             <el-col :span="4" class="col3" v-for="movie in searchMovieList" :key="movie.movie_id">
-              <div class="movieCard"  @click="toMovieInfo()">
+              <div class="movieCard"  @click="toMovieInfo(movie.movie_id)">
                 <el-card :body-style="{ padding: '0px' }">
               <img :src="movie.movie_pic" class="pic" @error="away()"/>
               <div class="info">
@@ -264,7 +264,8 @@ export default {
       this.pagenum=val;
       this.getMovieList();
     },
-    toMovieInfo(){
+    toMovieInfo(id){
+      sessionStorage.setItem("movie_id",id);
       this.$router.push('/MovieInfo');
     }
   },
