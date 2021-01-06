@@ -13,16 +13,18 @@ import java.util.Map;
 public interface artistRepository extends JpaRepository<artist,Integer> {
 
 
-    @Modifying
-    @Transactional
-    @Query(value="insert into artist values (" +
-            " ?1,?2,?3,?4,?5,?6,?7,?8,?9)",nativeQuery = true)
-    void InsertArtist(Integer id, String name,
-                     Integer sex, Date birthday,String area,
-                     String profession,String intoduction,
-                     Character type,String photo);
+//    @Modifying
+//    @Transactional
+//    @Query(value="insert into artist values (" +
+//            " ?1,?2,?3,?4,?5,?6,?7,?8,?9)",nativeQuery = true)
+//    void InsertArtist(Integer id, String name,
+//                     Integer sex, Date birthday,String area,
+//                     String profession,String intoduction,
+//                     Character type,String photo);
 
 
+    @Override
+    <S extends artist> S save(S s);
 
     @Query(value="select * from artist where type=?1 ",nativeQuery = true)
     List<artist> getArtistID(Character type);
@@ -60,5 +62,11 @@ public interface artistRepository extends JpaRepository<artist,Integer> {
     @Query(value="update artist set collect_num=collect_num - 1 " +
             "where id=?1",nativeQuery = true)
     void DeleteCollectedUser(Integer artistID);
+
+
+    @Modifying
+    @Transactional
+    @Query(value="update artist set picture=?2 where id=?1",nativeQuery = true)
+    void UpdateAvator(Integer id,String filename);
 
 }

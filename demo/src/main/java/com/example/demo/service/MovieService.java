@@ -10,7 +10,6 @@ import com.example.demo.Entity.watchlist;
 import com.example.demo.dao.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -40,26 +39,32 @@ public class MovieService {
     @Resource
     private userRepository UserRepository;
 
-    public void movieRepository(String director,String actors,String type,
-                                String area,String movie_pic,Date publish_time,
-                                Integer duration,Float price)
+//    public void movieRepository(String movieName,String type,
+//                                Date publish_time,String movie_pic,
+//                                Integer duration,String area,String introduction)
+//    {
+//
+//        numbers number=numberService.getSimpleNumbers();
+//
+//        MovieRepository.UpdateAvator(number.getMovieNumadd() + 1, movieName,
+//                type, publish_time,movie_pic, duration,area,introduction);
+//
+//        /**
+//         *
+//         */
+//
+////        ArtistRepository.InsertArtist();
+//        numberService.updataNumber(0,0,
+//                number.getMovieNumadd() + 1,0);
+//
+//
+//    }
+
+    public void saveMovie(movie temp)
     {
-
-        numbers number=numberService.getSimpleNumbers();
-
-        MovieRepository.UpdateAvator(number.getMovieNumadd() + 1, movie_pic,
-                type, price, publish_time, movie_pic, duration);
-
-        /**
-         *
-         */
-
-//        ArtistRepository.InsertArtist();
-        numberService.updataNumber(0,0,
-                number.getMovieNumadd() + 1,0);
-
-
+        MovieRepository.save(temp);
     }
+
 
     public void AddCollectMovie(Integer userid,Integer movieId,Integer operations)
     {
@@ -179,5 +184,31 @@ public class MovieService {
         return a;
     }
 
+
+    public JSONArray getMovieComment(Integer movieID)
+    {
+        //1
+        JSONArray a=new JSONArray();
+
+        List<Object []> temp=
+                CommentmsdRepository.getOtherCommentMovie(movieID);
+
+        for(Object [] temp1:temp)
+        {
+            JSONObject b=new JSONObject();
+            String []tag={  "username", "avatar","rate", "content", "time"};
+            for(int i=0;i<temp1.length;++i)
+            {
+                b.put(tag[i],temp1[i]);
+            }
+            a.add(b);
+        }
+        return a;
+    }
+
+    public void UploadAvatar(Integer movieID,String filename)
+    {
+        MovieRepository.UpdateAvator(movieID, filename);
+    }
 
 }
