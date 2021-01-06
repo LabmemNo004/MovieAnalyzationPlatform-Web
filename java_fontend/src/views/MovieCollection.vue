@@ -2,8 +2,8 @@
   <div class="moviecollection">
     <div class="collection_container">
       <el-row>
-        <el-col span="2"></el-col>
-        <el-col span="14">
+        <el-col :span="2"></el-col>
+        <el-col :span="14">
           <div class="cl_op">
             <span class="sonListTitle_l">Collection({{movieList.length}})</span>
           </div>
@@ -38,7 +38,7 @@
             </div>
           </div>
         </el-col>
-        <el-col span="6">
+        <el-col :span="6">
           <div class="clr cl_navi">
             <div class="cl_navi_tt">Navigate</div>
             <div class="cl_navi_content">
@@ -71,12 +71,13 @@
             </div>
           </div>
         </el-col>
-        <el-col span="2"></el-col>
+        <el-col :span="2"></el-col>
       </el-row>
     </div>
   </div>
 </template>
 <script>
+import axios from "axios";
 export default {
   name: 'MovieCollection',
   data() {
@@ -107,7 +108,27 @@ export default {
     }
   },
   methods:{
+    setCollection(){
 
+    },
+    getCollection(){
+      axios.get("http://localhost:8070/Artist/ArtistList",
+          {
+            params:{
+              profession:this.p_radio==='1'?'Actor':'Director',
+              pagenum:this.pagenum,
+              pagesize:10
+            }
+          },
+          { withCredentials: true }
+      ).then((response)=>{
+        console.log(response);
+        var data=response.data.data;
+        this.setPersonList(data);
+      }).catch((error)=>{
+        this.$message.error("Loading Failed!");
+      })
+    }
   }
 }
 </script>

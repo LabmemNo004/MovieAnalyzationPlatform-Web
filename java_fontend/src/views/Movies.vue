@@ -23,17 +23,18 @@
               <!--年份分类begin-->
               <div class="mv_box">
                 <span id="sorted_type">Type: </span>
-                <el-radio v-model="t_radio" label="1">type1</el-radio>
-                <el-radio v-model="t_radio" label="2">type2</el-radio>
-                <el-radio v-model="t_radio" label="3">type3</el-radio>
+                <el-radio v-model="t_radio" label="100">All</el-radio>
+                <el-radio v-model="t_radio" label="1" @change="getMovieList">Action</el-radio>
+                <el-radio v-model="t_radio" label="2" @change="getMovieList">Fantasy</el-radio>
+                <el-radio v-model="t_radio" label="3" @change="getMovieList">Comedy</el-radio>
               </div>
               <!--年份分类end-->
               <!--排序依据begin-->
               <div class="mv_box">
                 <span id="order_by">Ordered By: </span>
-                <el-radio v-model="o_radio" label="1">highest scores</el-radio>
-                <el-radio v-model="o_radio" label="2">comment most</el-radio>
-                <el-radio v-model="o_radio" label="3">collection most</el-radio>
+                <el-radio v-model="o_radio" label="1" @change="getMovieList">highest scores</el-radio>
+                <el-radio v-model="o_radio" label="2" @change="getMovieList">comment most</el-radio>
+                <el-radio v-model="o_radio" label="3" @change="getMovieList">collection most</el-radio>
               </div>
               <!--排序依据end-->
             </div>
@@ -62,7 +63,8 @@
               </div>
               <!--分页start-->
               <el-pagination
-                  background
+                  @current-change="handleCurrentChange"
+                  :current-page="pagenum"
                   layout="prev, pager, next"
                   :total="movie_num">
               </el-pagination>
@@ -92,8 +94,7 @@
 
               <div class="page">
                 <el-pagination
-                    @current-change="handleCurrentChange"
-                    :current-page="pagenum"
+                    background
                     layout="prev, pager, next"
                     :total="80">
                 </el-pagination>
@@ -109,6 +110,7 @@
   </div>
 </template>
 <script>
+import axios from "axios";
 export default {
   name: 'Movies',
   data() {
@@ -118,10 +120,14 @@ export default {
       seen2: false,
       total: 6,
       pagenum: 1,
-      t_radio: '1',
+      t_radio: '100',
       o_radio: '1',
       movie_num:120,
       movie_per_page:12,
+      movie_type:null,
+      movie_time:null,
+      movie_area:null,
+
 
       headPictures: [
         {id: 0, source: require('../assets/images/header1.png')},
@@ -247,13 +253,78 @@ export default {
     }
 
   },
+  mounted:function(){
+    this.getMovieList();//需要触发的函数
+  },
   methods:{
     searchMovies(){
       this.seen1=false;
       this.seen2=true;
     },
+    setMovies(data){
+      this.movieList1=[];
+      for(let i=0;i<data.length;i++){
+        var movie={};
+        movie.movie_id=data[i].movie_id;
+        movie.movie_pic=data[i].movie_pic;
+        movie.movie_name=data[i].movie_name;
+        movie.movie_rate=data[i].movie_rate;
+        this.movieList1.push(movie);
+      }
+    },
+    getMovieListNormal(){
+      axios.get("http://localhost:8070/Movie/MainPageTenMovie",
+          {
+            params:{
+            }
+          },
+          { withCredentials: true }
+      ).then((response)=>{
+        console.log(response);
+        var data=response.data.data;
+        this.setMovies(data);
+      }).catch((error)=>{
+        this.$message.error("Loading Failed!");
+      })
+    },
+    getMovieListByType(){
+      axios.get("http://localhost:8070/Movie/SearchMovieByType",
+          {
+            params:{
+              type:this.movie_type,
+              order:parseInt(this.o_radio)-1,
+              pagenum:this.pagenum,
+              pagesize:10
+            }
+          },
+          { withCredentials: true }
+      ).then((response)=>{
+        console.log(response);
+        var data=response.data.data;
+        this.setMovies(data);
+      }).catch((error)=>{
+        this.$message.error("Loading Failed!");
+      })
+    },
     getMovieList(){
-
+      console.log("getMovieList");
+      switch (this.t_radio) {
+        case "100":
+          this.getMovieListNormal();
+          return;
+        case "1":
+          this.movie_type = "Action";
+          break;
+        case "2":
+          this.movie_type = "Fantasy";
+          break;
+        case "3":
+          this.movie_type = "Comedy";
+          break;
+        default:
+          this.movie_type = "Action";
+      }
+      this.getMovieListByType();
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);

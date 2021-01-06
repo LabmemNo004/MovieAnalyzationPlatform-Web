@@ -9,23 +9,22 @@
     <!--一serch end-->
     <div class="star_container">
       <el-row>
-        <el-col span="3"></el-col>
-        <el-col span="18">
+        <el-col :span="3"></el-col>
+        <el-col :span="18">
           <div class="starList_con">
             <!--star_sort begin-->
             <div class="person_sort">
               <!--年份分类begin-->
               <div class="pr_box">
                 <span id="sorted_type">Profession: </span>
-                <el-radio v-model="p_radio" label="1">all</el-radio>
-                <el-radio v-model="p_radio" label="2">director</el-radio>
-                <el-radio v-model="p_radio" label="3">actor</el-radio>
+                <el-radio v-model="p_radio" label="1" @change="getPersonList">actor</el-radio>
+                <el-radio v-model="p_radio" label="2" @change="getPersonList">director</el-radio>
               </div>
               <!--年份分类end-->
             </div>
             <!--star_sort end-->
             <!--star info list begin-->
-              <div span="12" class="starList_info" v-for="person in personList" :key="person.person_id" @click="toPeopleInfo()">
+              <div class="starList_info" v-for="person in personList" :key="person.person_id" @click="toPeopleInfo()">
                 <div class="star_cards">
                   <div class="star_photos">
                     <a href="#">
@@ -42,15 +41,16 @@
             <!--star info list end-->
             <!--分页start-->
             <el-pagination
-                background
+                @current-change="handleCurrentChange"
+                :current-page="pagenum"
                 layout="prev, pager, next"
-                :total="star_num">
+                :total="personnum">
             </el-pagination>
             <!--分页end-->
           </div>
         </el-col>
 
-        <el-col span="3"></el-col>
+        <el-col :span="3"></el-col>
       </el-row>
     </div>
   </div>
@@ -61,9 +61,9 @@ export default {
   name: 'person',
   data() {
     return {
+      personnum:80,
+      pagenum:1,
       p_radio:'1',
-      star_num:100,
-      star_per_page:10,
       personList: [
         {
           person_id: 1,
@@ -111,9 +111,48 @@ export default {
     }
 
   },
+  mounted:function(){
+    this.getPersonList();//需要触发的函数
+  },
   methods:{
     toPeopleInfo(){
       this.$router.push('/PeopleInfo');
+    },
+    setPersonList(data){
+      this.personList=[];
+      for (let i=0;i<data.length;i++){
+        var person={};
+        person.person_id=data[i].person_id;
+        person.person_pic=data[i].person_pic;
+        person.person_name=data[i].person_name;
+        person.person_profession=data[i].profession;
+        person.person_movies=data[i].movies;
+        this.personList.push(person);
+      }
+    },
+    getPersonList(){
+      axios.get("http://localhost:8070/Artist/ArtistList",
+          {
+            params:{
+              profession:this.p_radio==='1'?'Actor':'Director',
+              pagenum:this.pagenum,
+              pagesize:10
+            }
+          },
+          { withCredentials: true }
+      ).then((response)=>{
+        console.log(response);
+        var data=response.data.data;
+        this.setPersonList(data);
+      }).catch((error)=>{
+        this.$message.error("Loading Failed!");
+      })
+    },
+    handleCurrentChange(val){
+      console.log(`当前页: ${val}`);
+      this.pagenum=val;
+      this.getPersonList();
+
     }
   }
 }
@@ -260,11 +299,11 @@ a.person_list_load.keyword_gender_list{
   padding: 20px;
 }
 
-div.starList_con>div.el-pagination{
+#app > div > section > main > div > div.star_container > div > div.el-col.el-col-18 > div > div.el-pagination {
   text-align: center;
   margin: 50px 0px;
 }
-div.starList_con>div.el-pagination.is-background .el-pager li:not(.disabled).active{
+#app > div > section > main > div > div.star_container > div > div.el-col.el-col-18 > div > div.el-pagination .is-background .el-pager li:not(.disabled).active{
   background-color: #0066c0;
   color: white;
 }
