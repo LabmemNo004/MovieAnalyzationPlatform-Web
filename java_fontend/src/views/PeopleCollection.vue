@@ -6,20 +6,9 @@
         <el-col :span="14">
           <div class="cl_op">
             <span class="sonListTitle_l">Collection({{personList.length}})</span>
-
           </div>
-<!--          <div class="listinfo">-->
-<!--            <div class="list_title clearfix">-->
-<!--              <div class="list_title_tab">-->
-<!--                <a href="#" :class="{'tab_active':seen_person&seen_movie}" @click="click_all()">All</a>-->
-<!--                <a href="#" :class="{'tab_active':!seen_person&seen_movie}" @click="click_movie">Movie</a>-->
-<!--                <a href="#" :class="{'tab_active':seen_person&!seen_movie}" @click="click_person">Person</a>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
           <div class="collection_con">
             <div class="ps_cl">
-
               <div class="ps_info">
                 <el-row>
                   <el-col :span="6" class="ps_cl_list col3"  v-for="person in personList" :key="person.person_id">
@@ -36,9 +25,10 @@
               </div>
               <!--分页start-->
               <el-pagination
-                  background
+                  @current-change="handleCurrentChange"
+                  :current-page="pagenum"
                   layout="prev, pager, next"
-                  :total="people_collect_num">
+                  :total="80">
               </el-pagination>
               <!--分页end-->
             </div>
@@ -83,51 +73,72 @@
   </div>
 </template>
 <script>
+import axios from "axios";
+
 export default {
   name: 'peoplecollection',
   data() {
     return {
-
+      pagenum:1,
       people_collect_num:3,
       people_per_page:10,
-
       personList: [
         {
           person_id: 1,
           person_pic: require('../assets/images/person1.jpg'),
           person_name: 'Gal Gadot',
-          person_profession:['actor','producer'],
+          person_profession:'actor',
           person_movies:['Batman v Superman: Dawn of Justice','Wonder Woman','Justice League']
         },
         {
           person_id: 2,
           person_pic: require('../assets/images/person2.jpg'),
           person_name: 'Chris Evans',
-          person_profession:['actor','producer'],
+          person_profession:'actor',
           person_movies: ['The Avengers','Avengers: Infinity War','Avengers: Age of Ultron']
         },
         {
           person_id: 3,
           person_pic: require('../assets/images/person3.jpg'),
           person_name: 'Angelina Jolie',
-          person_profession:['actor','producer'],
+          person_profession:'actor',
           person_movies: ['Mr. & Mrs. Smith','Wanted','Maleficent']
         }
       ],
     }
   },
+  mounted:function(){
+    this.getPeopleCollectionList();//需要触发的函数
+  },
   methods:{
-    click_all(){
-      this.seen_movie=true;
-      this.seen_person=true;
+    setPeopleCollection(data){
+      this.personList=[];
+      for(let i=0;i<data.length;i++){
+        var person={};
+        person.person_id=data[i].personID;
+        person.person_name=data[i].person_name;
+        person.person_pic=data[i].picture;
+        person.person_profession=data[i].profession;
+        this.personList.push(person);
+      }
     },
-    click_movie(){
-      this.seen_movie=true;
-      this.seen_person=false;
-    },
-    click_person(){
-      this.seen_movie=false;
-      this.seen_person=true;
+    getPeopleCollectionList(){
+      axios.get("http://localhost:8070/User/CollectionPeople",
+          {
+            params:{
+              userid:1,
+              pagenum:1,
+              pagesize:10
+            }
+          },
+          { withCredentials: true }
+      ).then((response)=>{
+        console.log(response);
+        var data=response.data.data;
+        this.setPeopleCollection(data);
+      }).catch((error)=>{
+        this.$message.error("Loading Failed!");
+      })
     }
   }
 }

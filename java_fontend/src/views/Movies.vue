@@ -23,7 +23,7 @@
               <!--年份分类begin-->
               <div class="mv_box">
                 <span id="sorted_type">Type: </span>
-                <el-radio v-model="t_radio" label="100">All</el-radio>
+                <el-radio v-model="t_radio" label="100" @change="getMovieList">All</el-radio>
                 <el-radio v-model="t_radio" label="1" @change="getMovieList">Action</el-radio>
                 <el-radio v-model="t_radio" label="2" @change="getMovieList">Fantasy</el-radio>
                 <el-radio v-model="t_radio" label="3" @change="getMovieList">Comedy</el-radio>
@@ -272,21 +272,6 @@ export default {
         this.movieList1.push(movie);
       }
     },
-    getMovieListNormal(){
-      axios.get("http://localhost:8070/Movie/MainPageTenMovie",
-          {
-            params:{
-            }
-          },
-          { withCredentials: true }
-      ).then((response)=>{
-        console.log(response);
-        var data=response.data.data;
-        this.setMovies(data);
-      }).catch((error)=>{
-        this.$message.error("Loading Failed!");
-      })
-    },
     getMovieListByType(){
       axios.get("http://localhost:8070/Movie/SearchMovieByType",
           {
@@ -310,8 +295,8 @@ export default {
       console.log("getMovieList");
       switch (this.t_radio) {
         case "100":
-          this.getMovieListNormal();
-          return;
+          this.movie_type="all";
+          break;
         case "1":
           this.movie_type = "Action";
           break;

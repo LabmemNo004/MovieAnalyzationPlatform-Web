@@ -82,7 +82,7 @@ export default {
   name: 'MovieCollection',
   data() {
     return {
-
+      pagenum:1,
       movie_collect_num:3,
       movie_per_page:10,
       movieList:[
@@ -107,15 +107,26 @@ export default {
       ]
     }
   },
+  mounted:function(){
+    this.getMovieCollection();//需要触发的函数
+  },
   methods:{
-    setCollection(){
-
+    setMovieCollection(data){
+      this.movieList=[];
+      for(let i=0;i<data.length;i++){
+        var movie={};
+        movie.movie_id=data[i].movie_id;
+        movie.movie_pic=data[i].movie_pic;
+        movie.movie_name=data[i].movie_name;
+        movie.movie_rate=data[i].movie_rate;
+        this.movieList.push(movie);
+      }
     },
-    getCollection(){
-      axios.get("http://localhost:8070/Artist/ArtistList",
+    getMovieCollection(){
+      axios.get("http://localhost:8070/User/CollectionMovie",
           {
             params:{
-              profession:this.p_radio==='1'?'Actor':'Director',
+              userid:1,
               pagenum:this.pagenum,
               pagesize:10
             }
@@ -124,7 +135,7 @@ export default {
       ).then((response)=>{
         console.log(response);
         var data=response.data.data;
-        this.setPersonList(data);
+        this.setMovieCollection(data);
       }).catch((error)=>{
         this.$message.error("Loading Failed!");
       })
