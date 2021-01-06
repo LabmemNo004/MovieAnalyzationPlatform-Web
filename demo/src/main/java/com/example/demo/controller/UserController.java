@@ -192,8 +192,6 @@ public class UserController {
 
 
 
-
-
     @PostMapping(value = "/GetInformation")
     @ApiOperation(value = "获取个人信息", notes = "传递token和id确认身份")
     public JsonResult SaveInformation(
@@ -213,7 +211,6 @@ public class UserController {
         temp1.put("signature",Users.getSignature());
         return new JsonResult(temp1, "获取个人信息成功");
     }
-
 
 
     @GetMapping(value = "/PersonalHomePage")
@@ -258,7 +255,7 @@ public class UserController {
             @RequestParam("pagesize") Integer pagesize
     )
     {
-        JSONArray temp1= collectService.getCollectMovie(userid);
+        JSONArray temp1= collectService.getCollectMovie(userid,pagenum,pagesize);
         return new JsonResult(temp1, "成功");
     }
 
@@ -272,7 +269,7 @@ public class UserController {
             @RequestParam("pagesize") Integer pagesize
     )
     {
-        JSONArray temp1= collectService.getCollectPeople(userid);
+        JSONArray temp1= collectService.getCollectPeople(userid,pagenum,pagesize);
         return new JsonResult(temp1, "成功");
     }
 
