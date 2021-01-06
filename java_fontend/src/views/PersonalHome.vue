@@ -34,18 +34,18 @@
           <div class="num1">Num: {{commentNum}}</div>
           <div class="comments">
             <el-row>
-              <el-col :span="12" class="col" v-for="comment in commentList" :key="comment.movie_id">
+              <el-col :span="12" class="col" v-for="comment in commentList" :key="comment.movie_name">
                 <div class="l">
-                  <img :src="comment.movie_pic" class="image"/>
+                  <img :src="comment.movie_pic" class="image" @error="away()"/>
                 </div>
                 <div class="l movieInfo">
                   <div class="movie_name">{{comment.movie_name}}</div>
                   <div class="my_rate">
                     <span>My Rate: </span>
                     <i class="el-icon-star-on color1"></i>
-                    <span class="info_rate">{{parseFloat(comment.my_rate).toFixed(1)}}</span>
+                    <span class="info_rate">{{parseFloat(comment.rate).toFixed(1)}}</span>
                   </div>
-                  <div class="my_comment">My Comment: {{comment.my_comment}}</div>
+                  <div class="my_comment">My Comment: {{comment.content}}</div>
                 </div>
                 <div class="clear"></div>
               </el-col>
@@ -64,17 +64,19 @@
     </div>
 </template>
 <script>
+import axios from "axios";
 export default {
   name: 'PersonalHome',
   data(){
     return{
       defaultImg:require('../assets/images/avatar.png'),
+      unload:require('../assets/images/unload.png'),
       movieCollectNum:0,
       peopleCollectNum:0,
       commentNum:10,
       pagenum:1,
       commentList:[
-        {
+        /*{
           movie_id:1,
           movie_pic:require('../assets/images/1.png'),
           movie_name:'The God Father',
@@ -94,7 +96,7 @@ export default {
           movie_name:'I am Legend',
           my_rate:5.0,
           my_comment:"It beats me!"
-        }
+        }*/
       ]
     }
     
@@ -105,8 +107,35 @@ export default {
            img.src = this.defaultImg;   
            img.onerror = null; //防止闪图
     },
-    getCommentList(){
-
+    async getCommentList(){
+       axios.get("http://localhost:8070/User/CommentMovie",
+        {
+          params:{
+                user_id: this.$store.state.id,
+                pagenum: this.pagenum,
+                pagesize:4
+          }
+        }
+          ).then((response)=>{
+               console.log(response);
+               this.commentList=response.data.data;   
+                
+          }).catch((error)=>{
+            this.$message.error("Get Comments Failed!");
+          })
+    },
+    async getHomeInfo(){
+       axios.get("http://localhost:8070/User/PersonalHomePage",{
+         params:{
+                  user_id: this.$store.state.id,
+                }
+       }).then((response)=>{
+         console.log(response);
+         this.movieCollectNum=response.data.data[0].movieCollectNum;
+         this.peopleCollectNum=response.data.data[0].peopleCollectNum;
+       }).catch((error)=>{
+         this.$message.error("Get PersonalHome Information Failed!");
+       })
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
@@ -121,7 +150,20 @@ export default {
     },
     toPersonalInfo(){
       this.$router.push('/PersonalInfo');
-    }
+    },
+    getAvatar(){
+      var url=this.$store.state.avatar;
+      return require('../assets/images/'+url);
+    },
+    away(){
+        let img = event.srcElement;   
+        img.src = this.unload;   
+        img.onerror = null; //防止闪图
+    },
+  },
+  created(){
+     this.getHomeInfo();
+     this.getCommentList();
   }
 }
 </script>

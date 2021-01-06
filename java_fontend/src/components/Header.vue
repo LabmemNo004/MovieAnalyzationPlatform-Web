@@ -57,7 +57,7 @@ import axios from "axios";
   export default {
     data() {
       return {
-          defaultImg:require('../assets/images/avatar.png')
+          defaultImg:require('../assets/images/avatar.png'),
       };
     },
     created(){
@@ -90,6 +90,10 @@ import axios from "axios";
           sessionStorage.setItem("user", {});
           this.$message.success("Exit Success!");
           this.$router.push("/");
+        },
+        getAvatar(){
+            var url=this.$store.state.avatar;
+            return require('../assets/images/'+url);
         }
         
     }
