@@ -26,6 +26,14 @@ public interface commentmsgRepository extends JpaRepository<commentmsg,Integer> 
 
 
 
+    @Query(value="with thismovie as(" +
+            "    select * from movie where movieID=?1" +
+            ")" +
+            "select u.profileName,u.photo,c.rate,c.text,c.time " +
+            "from thismovie join " +
+            "    commentmsg c on c.movieID=thismovie.movieID " +
+            "join user u on u.userID = c.userID",nativeQuery = true)
+    List<Object[]> getOtherCommentMovie(Integer movieID);
 
     @Modifying
     @Transactional

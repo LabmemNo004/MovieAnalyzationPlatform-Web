@@ -23,15 +23,18 @@ public class UserService {
     }
 
     public Map<Integer,String> findUserById(Integer id){
+
         return UserRepository.findByUserId(id);
     }
 
     public users findUserByIdWeb(Integer id){
+
         return UserRepository.findByUserIdWeb(id);
     }
 
     public void UpdateAvator(Integer id,String filename)
     {
+
         UserRepository.UpdateAvator(id, filename);
     }
 

@@ -87,6 +87,20 @@ public class MovieController {
         return new JsonResult(temp,"成功");
     }
 
+    @GetMapping(value = "/MovieComment")
+    @ApiOperation(value = "展示单个电影的所有评论",
+            notes = "展示电影所有情况,身份未确定评论等一些个人信息无法展示")
+    public JsonResult MovieComment(
+            @RequestParam(value="token",required = false) String token,
+            @RequestParam("movie_id") Integer movie_id,
+            @RequestParam("pagenum") Integer pagenum,
+            @RequestParam("pagesize") Integer pagesize
+            )
+    {
+        JSONArray temp=movieService.getMovieComment(movie_id);
+        return new JsonResult(temp,"成功");
+    }
+
 
 
 

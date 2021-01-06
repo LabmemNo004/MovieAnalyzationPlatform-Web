@@ -145,9 +145,9 @@ public class UserController {
         }
     }
 
-    @PostMapping(value = "/ModifyAvator",headers="content-type=multipart/form-data")
+    @PostMapping(value = "/ModifyAvatar",headers="content-type=multipart/form-data")
     @ApiOperation(value = "修改个人头像", notes = "前端传递图片,注意文件名不要重复")
-    public JsonResult ModifyAvator(
+    public JsonResult ModifyAvatar(
             @RequestParam(value = "userid") Integer userid,
             @RequestParam(value="file",required = true) MultipartFile file
     ) throws IOException {
