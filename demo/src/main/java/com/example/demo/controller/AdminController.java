@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 
-import com.alibaba.fastjson.JSONObject;
 import com.example.demo.Entity.artist;
 import com.example.demo.Entity.movie;
 import com.example.demo.Entity.numbers;
@@ -22,7 +21,6 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -50,6 +48,7 @@ public class AdminController {
             @RequestParam("movie_name") String movie_name,
             @RequestParam("type") String type,
             @RequestParam("area") String area,
+            @RequestParam("directors") String directors,
             @RequestParam("movie_pic") MultipartFile file,
             @RequestParam("Introduction") String Introduction,
             @RequestParam("publish_time") Date publish_time,
@@ -59,7 +58,7 @@ public class AdminController {
         int movieID=0;
         movie temp=new movie();
         temp.setArea(area);
-        temp.setCollect_num(0);
+        temp.setCollectnum(0);
         temp.setIntroduction(Introduction);
         numbers number=numberService.getSimpleNumbers();
         temp.setMovieID(number.getMovieNumadd());
@@ -70,6 +69,8 @@ public class AdminController {
         temp.setType(type);
         temp.setTitle(movie_name);
         temp.setDuration(duration);
+        temp.setDirector(directors);
+        temp.setCommentnum(0);
         movieService.saveMovie(temp);
         String movie_pic="";
         /**

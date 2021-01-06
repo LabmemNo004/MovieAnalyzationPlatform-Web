@@ -3,8 +3,12 @@ package com.example.demo.service;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.Entity.commentmsg;
+import com.example.demo.Entity.movie;
 import com.example.demo.dao.commentmsgRepository;
+import com.example.demo.dao.movieRepository;
+import com.example.demo.dao.userRepository;
 import org.springframework.stereotype.Service;
+import com.example.demo.Entity.users;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
@@ -16,6 +20,12 @@ public class CommentService {
 
     @Resource
     private commentmsgRepository CommentRepository;
+
+    @Resource
+    private userRepository UserRepository;
+
+    @Resource
+    private movieRepository MovieRepository;
 
     public JSONArray getCommentMovie(Integer id)
     {
@@ -44,18 +54,24 @@ public class CommentService {
     }
 
 
-
-    public void saveCommentMsg2(commentmsg temp)
-    {
-        CommentRepository.save(temp);
-    }
-
     public void saveCommentMsg(Integer commentID,Integer user_id,Integer movie_id,
         Float rate,Date time,String Content)
     {
 
         CommentRepository.InsertaComment(commentID, user_id,
                 movie_id, rate, time, Content);
+
+        users temp=new users();
+        temp.setUserID(user_id);
+        int temp1=temp.getCommentNum()+ 1;
+        temp.setCommentNum(temp1);
+        UserRepository.save(temp);
+
+        movie temp2=new movie();
+        temp2.setMovieID(movie_id);
+        temp1=temp2.getCommentnum() + 1;
+        temp2.setCommentnum(temp1);
+        MovieRepository.save(temp2);
     }
 
 

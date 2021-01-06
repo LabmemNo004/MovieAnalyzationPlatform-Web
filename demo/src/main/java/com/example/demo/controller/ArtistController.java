@@ -78,8 +78,6 @@ public class ArtistController {
             @RequestParam("operations") Integer operations
     )
     {
-
-
         int temp1=0;
         artistService.AddCollectPeople(userid,artistID,operations);
         if(operations==1)
