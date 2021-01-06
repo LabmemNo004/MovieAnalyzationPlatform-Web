@@ -83,28 +83,9 @@ export default {
   data() {
     return {
       pagenum:1,
-      movie_collect_num:3,
       movie_per_page:10,
-      movieList:[
-        {
-          movie_id: 1,
-          movie_pic: require('../assets/images/1.png'),
-          movie_name: 'The God Father',
-          movie_rate: 4.8
-        },
-        {
-          movie_id: 2,
-          movie_pic: require('../assets/images/2.png'),
-          movie_name: 'Man of Steel',
-          movie_rate: 4.9
-        },
-        {
-          movie_id: 3,
-          movie_pic: require('../assets/images/3.png'),
-          movie_name: 'I am Legend',
-          movie_rate: '4.8'
-        }
-      ]
+      movieList:[],
+      movie_collect_num:0,
     }
   },
   mounted:function(){
@@ -113,14 +94,15 @@ export default {
   methods:{
     setMovieCollection(data){
       this.movieList=[];
-      for(let i=0;i<data.length;i++){
-        var movie={};
-        movie.movie_id=data[i].movie_id;
-        movie.movie_pic=data[i].movie_pic;
-        movie.movie_name=data[i].movie_name;
-        movie.movie_rate=data[i].movie_rate;
+      for(let i=0;i<data.length;i++) {
+        var movie = {};
+        movie.movie_id = data[i].movie_id;
+        movie.movie_pic = data[i].movie_pic;
+        movie.movie_name = data[i].movie_name;
+        movie.movie_rate = data[i].movie_rate;
         this.movieList.push(movie);
       }
+      this.movie_collect_num=this.movieList.length;
     },
     getMovieCollection(){
       axios.get("http://localhost:8070/User/CollectionMovie",

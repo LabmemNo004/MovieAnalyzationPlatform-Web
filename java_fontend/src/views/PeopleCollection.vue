@@ -80,37 +80,18 @@ export default {
   data() {
     return {
       pagenum:1,
-      people_collect_num:3,
+      people_collect_num:0,
       people_per_page:10,
-      personList: [
-        {
-          person_id: 1,
-          person_pic: require('../assets/images/person1.jpg'),
-          person_name: 'Gal Gadot',
-          person_profession:'actor',
-          person_movies:['Batman v Superman: Dawn of Justice','Wonder Woman','Justice League']
-        },
-        {
-          person_id: 2,
-          person_pic: require('../assets/images/person2.jpg'),
-          person_name: 'Chris Evans',
-          person_profession:'actor',
-          person_movies: ['The Avengers','Avengers: Infinity War','Avengers: Age of Ultron']
-        },
-        {
-          person_id: 3,
-          person_pic: require('../assets/images/person3.jpg'),
-          person_name: 'Angelina Jolie',
-          person_profession:'actor',
-          person_movies: ['Mr. & Mrs. Smith','Wanted','Maleficent']
-        }
-      ],
+      personList: [],
     }
   },
   mounted:function(){
     this.getPeopleCollectionList();//需要触发的函数
   },
   methods:{
+    toPeopleInfo(){
+      this.$router.push('/PeopleInfo');
+    },
     setPeopleCollection(data){
       this.personList=[];
       for(let i=0;i<data.length;i++){
@@ -121,6 +102,7 @@ export default {
         person.person_profession=data[i].profession;
         this.personList.push(person);
       }
+      this.people_collect_num=this.personList.length;
     },
     getPeopleCollectionList(){
       axios.get("http://localhost:8070/User/CollectionPeople",
