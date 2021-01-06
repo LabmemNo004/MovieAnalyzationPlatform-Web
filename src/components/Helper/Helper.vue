@@ -110,6 +110,17 @@
                         Query the movies with at least one positive comment
                     </button>
 
+
+                    <h5 style="margin-top: 30px">Combination Searching</h5>
+                    <button class="btn btn-primary btn-rounded-f btn-block fs-mini" v-on:click="popData('p21')"
+                    >
+                        Query the popular movie types in year "P1"
+                    </button>
+                    <button class="btn btn-primary btn-rounded-f btn-block fs-mini" v-on:click="popData('p22')"
+                    >
+                        Query all "P1" movies directed by "P2" in "P3"
+                    </button>
+
                 </div>
 
 

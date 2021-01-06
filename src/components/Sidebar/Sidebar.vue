@@ -12,14 +12,7 @@
       </header>
       <ul class="nav">
 
-        <NavLink
-            :activeItem="activeItem"
-            header="Dashboard"
-            link="/app/dashboard"
-            iconName="glyphicon glyphicon-signal"
-            index="dashboard"
-            isHeader
-        />
+
         <NavLink
                 :activeItem="activeItem"
                 header="Analysis"
@@ -29,27 +22,8 @@
                 isHeader
 
         />
-        <NavLink
-                :activeItem="activeItem"
-                header="Data Governance"
-                link="/app/dataGovernance"
-                iconName="fa fa-database"
-                index="dataGovernance"
-                isHeader
-        />
-        <NavLink
-                :activeItem="activeItem"
-                header="Components"
-                link="/app/components"
-                iconName="fa fa-cubes"
-                index="components"
-                :childrenLinks="[
-              { header: 'Charts', link: '/app/components/charts' },
-              { header: 'Icons', link: '/app/components/icons' },
-              { header: 'Texts', link: '/app/components/typography' },
-              { header: 'Tables', link: '/app/components/tables' },
-            ]"
-        />
+
+
       </ul>
       <p>
       <h5 class="navTitle">

@@ -13,7 +13,7 @@ export default {
     }*/
 
     if (currentPath === "/" || currentPath === "/app") {
-      this.$router.push("/app/dashboard");
+      this.$router.push("/app/analysis");
     }
   },
 };

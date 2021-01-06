@@ -267,6 +267,38 @@
                     </b-button>
                 </Widget>
 
+                <Widget v-if="queryChoose.p21">
+                    <h6 v-if="localParam.sights.sight0">Before customizing and testing , select a query in the
+                        <span class='fw-semi-bold'>right sidebar</span>
+                    </h6>
+                    <h4 v-if="localParam.sights.sight1" class='fw-semi-bold ' style="margin-left: 10px">Query
+                        <h5 style="margin-left: 73px">Query the popular movie types in year <span class='fw-semi-bold text-primary'>{{localParam.param.year}}</span> .</h5>
+                    </h4>
+                    <h4 v-if="localParam.sights.sight1 && localParam.sights.sight2" class='fw-semi-bold ' style="margin-left: 8px">Param
+                        <b-input v-model="localParam.param.year" style="margin-left: 73px;width:250px"></b-input>
+                    </h4>
+                    <b-button variant="outline-secondary" text="text" style="float: right" v-if="localParam.sights.sight1" @click="setQuery">{{localParam.queryState}}
+                        <b-spinner  small v-if=localParam.sights.state></b-spinner>
+                    </b-button>
+                </Widget>
+
+                <Widget v-if="queryChoose.p22">
+                    <h6 v-if="localParam.sights.sight0">Before customizing and testing , select a query in the
+                        <span class='fw-semi-bold'>right sidebar</span>
+                    </h6>
+                    <h4 v-if="localParam.sights.sight1" class='fw-semi-bold ' style="margin-left: 10px">Query
+                        <h5 style="margin-left: 73px">Query all <span class='fw-semi-bold text-primary'>{{localParam.param.type}}</span> movies directed by <span class='fw-semi-bold text-primary'>{{localParam.param.name}}</span> in <span class='fw-semi-bold text-primary'>{{localParam.param.year}}</span></h5>
+                    </h4>
+                    <h4 v-if="localParam.sights.sight1 && localParam.sights.sight2" class='fw-semi-bold ' style="margin-left: 8px">Param
+                        <b-input v-model="localParam.param.type" style="margin-left: 73px;width:250px"></b-input>
+                        <b-input v-model="localParam.param.name" style="margin-left: 73px;margin-top:30px;width:250px"></b-input>
+                        <b-input v-model="localParam.param.year" style="margin-left: 73px;margin-top:30px;width:250px"></b-input>
+                    </h4>
+                    <b-button variant="outline-secondary" text="text" style="float: right" v-if="localParam.sights.sight1" @click="setQuery">{{localParam.queryState}}
+                        <b-spinner  small v-if=localParam.sights.state></b-spinner>
+                    </b-button>
+                </Widget>
+
 
 
 
@@ -279,7 +311,7 @@
                         </h4>
                         <b-dropdown :text="text" variant="white" size="sm">
                             <b-dropdown-item-button @click="setDatabase('Mysql')" >Mysql</b-dropdown-item-button>
-                            <b-dropdown-item-button @click="setDatabase('Hive')">Hive</b-dropdown-item-button>
+                            <b-dropdown-item-button @click="setDatabase('(HDFS)Hadoop Distributed File System')">HDFS</b-dropdown-item-button>
                             <b-dropdown-item-button @click="setDatabase('Neo4j')">Neo4j</b-dropdown-item-button>
                         </b-dropdown>
                     </div>
@@ -441,12 +473,24 @@
                                 <td>{{row.参与电影数量}}</td>
                             </tr>
 
+                            <tr v-if="queryChoose.p21" v-for="row in localParam.infoShown.data" :key="row">
+                                <td>{{row.N}}</td>
+                                <td>{{row.电影类别}}</td>
+                                <td>{{row.电影数量}}</td>
+                            </tr>
+
+                            <tr v-if="queryChoose.p22" v-for="row in localParam.infoShown.data" :key="row">
+                                <td>{{row.N}}</td>
+                                <td>{{row.电影名称}}</td>
+                                <td>{{row.评分}}</td>
+                            </tr>
+
 
 
                             </tbody>
                         </table>
                     </div>
-                    <h6><span class="fw-normal ml-xs" style="float: right">Cost {{localParam.infoShown.code}} ms</span></h6>
+                    <h6><span class="fw-normal ml-xs" style="float: right">{{localParam.infoShown.totalNum}} Raws in Total | Cost {{localParam.infoShown.code}} ms</span></h6>
                 </Widget>
             </b-col>
         </b-row>
@@ -486,6 +530,7 @@
                     p19:false,
                     p20:false,
                     p21:false,
+                    p22:false,
                 },
                 localParam:{
                     type:"post",
@@ -540,8 +585,8 @@
                     p1:{
                         type:"post",
                         organization:"Searching By Movie",
-                        essentials:"Query all movie products under the movieName .",
-                        pathMysql:":8091/movie/DetailMovie",
+                        essentials:"Query all movie products under the movieName P1.",
+                        pathMysql:":8091/movie/DetailMovieLike",
                         pathHive:":8899/movie/DetailMovie",
                         pathNeo4j:"",
                         param:{
@@ -594,7 +639,7 @@
                         type:"post",
                         organization:"Searching By Movie",
                         essentials:"Query the basic information of the movie P1",
-                        pathMysql:":8091/movie/SimpleMovie",
+                        pathMysql:":8091/movie/SimpleMovieLike",
                         pathHive:":8899/movie/SimpleMovie",
                         pathNeo4j:"",
                         param:{
@@ -706,14 +751,14 @@
                         type:"post",
                         organization:"Searching By Type",
                         essentials:"Query the movies in type P1 ",
-                        pathMysql:":8091/movie/getMovieByType",
-                        pathHive:":8899/movie/getMovieByType",
+                        pathMysql:":8091/score/getMovieByType",
+                        pathHive:":8899/score/getMovieByType",
                         pathNeo4j:"",
                         param:{
-                            type:"love"
+                            type:"Action"
                         },
                         paramCopy:{
-                            type:"love"
+                            type:"Action"
                         },
                         title:["Title","Score"],
                         infoShown:[],
@@ -846,10 +891,10 @@
                         pathHive:":8899/person/getActorWorks",
                         pathNeo4j:"",
                         param:{
-                            name:"a"
+                            name:"Various"
                         },
                         paramCopy:{
-                            name:"a"
+                            name:"Various"
                         },
                         title:["Title","Score"],
                         infoShown:[],
@@ -874,10 +919,10 @@
                         pathHive:":8899/person/getCoactor",
                         pathNeo4j:"",
                         param:{
-                            name:"a"
+                            name:"Various"
                         },
                         paramCopy:{
-                            name:"a"
+                            name:"Various"
                         },
                         title:["Name","CooperationNum"],
                         infoShown:[],
@@ -1077,7 +1122,68 @@
                             sight2:true,
                             sight3:false,
                         }
+                    },
+                    p21:{
+                        type:"post",
+                        organization:"Combination Searching",
+                        essentials:"Query the popular movie types in year P1",
+                        pathMysql:":8091/Combination/getTimePopular",
+                        pathHive:":8899/Combination/getTimePopular",
+                        pathNeo4j:"",
+                        param:{
+                            year:2019
+                        },
+                        paramCopy:{
+                            year:2019
+                        },
+                        title:["Type","MovieNum"],
+                        infoShown:[],
+                        infoMysql:[],
+                        infoHive:[],
+                        infoNeo4j:[],
+                        dataBase:"Mysql",
+                        queryState:"Query",
+                        sights:{
+                            state:false,
+                            sight0:false,
+                            sight1:true,
+                            sight2:true,
+                            sight3:false,
+                        }
+                    },
+                    p22:{
+                        type:"post",
+                        organization:"Combination Searching",
+                        essentials:"Query all P1 movies directed by P2 since P3",
+                        pathMysql:":8091/Combination/getTimeDirectorType",
+                        pathHive:":8899/Combination/getTimeDirectorType",
+                        pathNeo4j:"",
+                        param:{
+                            year:1995,
+                            name:"Phillip Borsos",
+                            type:"Adventure"
+                        },
+                        paramCopy:{
+                            year:1995,
+                            name:"Phillip Borsos",
+                            type:"Adventure"
+                        },
+                        title:["Movie","Score"],
+                        infoShown:[],
+                        infoMysql:[],
+                        infoHive:[],
+                        infoNeo4j:[],
+                        dataBase:"Mysql",
+                        queryState:"Query",
+                        sights:{
+                            state:false,
+                            sight0:false,
+                            sight1:true,
+                            sight2:true,
+                            sight3:false,
+                        }
                     }
+
                 },
 
             };
@@ -1085,7 +1191,7 @@
         methods: {
 
             getData(path,param,log){
-                this.$http.get(this.baseURL+path ,{params: param,emulateJSON:true,_timeout:3000,
+                this.$http.get(this.baseURL+path ,{params: param,emulateJSON:true,_timeout:120000,
                     onTimeout: () => {
                         alert("Get TimeOut")
                     }})
@@ -1098,7 +1204,7 @@
             },
 
             postData(path,param,log){
-                this.$http.post(this.baseURL+path , param,{emulateJSON:true,_timeout:3000,
+                this.$http.post(this.baseURL+path , param,{emulateJSON:true,_timeout:120000,
                     onTimeout: () => {
                         alert("Post TimeOut")
                     }})
@@ -1130,6 +1236,7 @@
                     this.localParam.infoShown=this.localParam.infoMysql;
 
                 }
+                return 1
             },
 
             appFilter(num){//选择新的query
@@ -1156,6 +1263,7 @@
                 this.queryChoose["p19"]=false;
                 this.queryChoose["p20"]=false;
                 this.queryChoose["p21"]=false;
+                this.queryChoose["p22"]=false;
                 this.queryChoose[num]=true;
             },
             reset(){ //重置界面
@@ -1176,7 +1284,7 @@
                 this.localParam.dataBase=str;
                 if(str==="Mysql")
                     this.localParam.infoShown=this.localParam.infoMysql;
-                else if(str==="Hive")
+                else if(str==="(HDFS)Hadoop Distributed File System")
                     this.localParam.infoShown=this.localParam.infoHive;
                 else if(str==="Neo4j")
                     this.localParam.infoShown=this.localParam.infoNeo4j;
@@ -1190,8 +1298,9 @@
                     this.localParam.sights.sight2=false;
                     this.localParam.sights.state=true;
                     this.localParam.queryState="Querying";
-                    this.queryAll();
-                    setTimeout(this.dataReady,500);
+                    var t=this.queryAll();
+                    console.log(t);
+                    setTimeout(this.dataReady,1000);
                 }
                 else
                 {
