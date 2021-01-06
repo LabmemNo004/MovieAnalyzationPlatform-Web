@@ -19,6 +19,9 @@ public class movie {
     @Column(name="title")
     private String title;
 
+    @Column(name="Director")
+    private String Director;
+
 
     @Column(name="score")
     private Float score;
@@ -47,6 +50,14 @@ public class movie {
 
     @Column(name="introduction")
     private String introduction;
+
+    public String getDirector() {
+        return Director;
+    }
+
+    public void setDirector(String director) {
+        Director = director;
+    }
 
     public Integer getDuration() {
         return duration;

@@ -31,7 +31,7 @@ public class CollectService {
 
             System.out.println(temp1);
 
-            String[] tag={"movie_name","movie_pic","movie_rate"};
+            String[] tag={"movie_name","movie_pic","movie_rate","movie_id"};
             for(int i=0;i< temp1.length;i++)
             {
                 System.out.println(temp1[i]);
@@ -57,7 +57,7 @@ public class CollectService {
 
             System.out.println(temp1);
 
-            String[] tag={"person_name","profession","picture"};
+            String[] tag={"person_name","profession","picture","personID"};
             for(int i=0;i< temp1.length;i++)
             {
                 System.out.println(temp1[i]);

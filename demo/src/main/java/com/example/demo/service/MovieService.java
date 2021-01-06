@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -129,7 +130,15 @@ public class MovieService {
         JSONArray a=new JSONArray();
         if(order==0)
         {
-            List<movie> temp=MovieRepository.findByTypeOrderByScoreDesc(type);
+            List<movie> temp;
+            if(type!="all")
+            {
+                temp=MovieRepository.findByTypeOrderByScoreDesc(type);
+            }
+            else
+            {
+                temp=MovieRepository.findMoviesAllType();
+            }
             for(movie temp2:temp)
             {
                 JSONObject b=new JSONObject();
