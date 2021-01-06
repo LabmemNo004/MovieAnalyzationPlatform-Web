@@ -72,8 +72,6 @@ public class MovieController {
     }
 
 
-
-
     @GetMapping(value = "/MovieDetails")
     @ApiOperation(value = "展示单个电影信息页",
             notes = "展示电影所有情况,身份未确定评论等一些个人信息无法展示")
@@ -100,11 +98,6 @@ public class MovieController {
         JSONArray temp=movieService.getMovieComment(movie_id);
         return new JsonResult(temp,"成功");
     }
-
-
-
-
-
 
 
     @PostMapping(value = "/Comment")
@@ -147,8 +140,6 @@ public class MovieController {
                 commentService.QueryExistMovie(movie_id,user_id);
         if(temp==null)
         {
-
-
             numbers number=numberService.getSimpleNumbers();
 
             SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -180,9 +171,13 @@ public class MovieController {
     {
         int temp1=0;
         movieService.AddCollectMovie(userid, movieId, operations);
-        return new JsonResult(temp1,"成功");
+        if(operations==1)
+        {
+            return new JsonResult(temp1,"收藏电影成功");
+        }
+        else{
+            return new JsonResult(temp1,"取消收藏电影");
+        }
     }
-
-
 
 }

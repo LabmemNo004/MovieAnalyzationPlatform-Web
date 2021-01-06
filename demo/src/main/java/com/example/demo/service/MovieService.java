@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.Entity.commentmsg;
 import com.example.demo.Entity.movie;
-import com.example.demo.Entity.numbers;
 import com.example.demo.Entity.watchlist;
 import com.example.demo.dao.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,26 +127,48 @@ public class MovieService {
     public JSONArray getMovieByType(String type,Integer order)
     {
         JSONArray a=new JSONArray();
+        List<movie> temp=new ArrayList<>();
         if(order==0)
         {
-            List<movie> temp;
-            if(type!="all")
+            if(!type.equals("all"))
             {
                 temp=MovieRepository.findByTypeOrderByScoreDesc(type);
             }
             else
             {
-                temp=MovieRepository.findMoviesAllType();
+                temp=MovieRepository.findMoviesAllTypeScore();
             }
-            for(movie temp2:temp)
+        }
+        else if(order==1)
+        {
+            if(!type.equals("all"))
             {
-                JSONObject b=new JSONObject();
-                b.put("movie_id",temp2.getMovieID());
-                b.put("movie_name",temp2.getTitle());
-                b.put("movie_rate",temp2.getScore());
-                b.put("movie_pic",temp2.getPhoto());
-                a.add(b);
+                temp=MovieRepository.findByTypeOrderByCommentnumDesc(type);
             }
+            else
+            {
+                temp=MovieRepository.findMoviesAllTypeComment();
+            }
+        }
+        else if(order==2)
+        {
+            if(!type.equals("all"))
+            {
+                temp=MovieRepository.findByTypeOrderByCollectnumDesc(type);
+            }
+            else
+            {
+                temp=MovieRepository.findMoviesAllTypeCollect();
+            }
+        }
+        for(movie temp2:temp)
+        {
+            JSONObject b=new JSONObject();
+            b.put("movie_id",temp2.getMovieID());
+            b.put("movie_name",temp2.getTitle());
+            b.put("movie_rate",temp2.getScore());
+            b.put("movie_pic",temp2.getPhoto());
+            a.add(b);
         }
         return a;
     }
@@ -171,12 +192,10 @@ public class MovieService {
         b.put("pub_time",tempMovie.getPublishTime());
         b.put("duration",tempMovie.getPublishTime());
         b.put("introduction",tempMovie.getIntroduction());
-        b.put("collect_num",tempMovie.getCollect_num());
-
-
+        b.put("collect_num",tempMovie.getCollectnum());
+        b.put("comment_num",tempMovie.getCommentnum());
         commentmsg temp9=
                 CommentmsdRepository.findByMovieIDAndAndUserID(movieID, userID);
-       // b.put("comment_num",tempMovie.getPublishTime());
         b.put("my_rate",temp9.getHelpfulness());
         b.put("my_comment",temp9.getText());
 

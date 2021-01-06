@@ -46,10 +46,21 @@ public class movie {
     private Integer duration;
 
     @Column(name="collect_num")
-    private Integer collect_num;
+    private Integer collectnum;
 
     @Column(name="introduction")
     private String introduction;
+
+    @Column(name="commentnum")
+    private Integer commentnum;
+
+    public Integer getCommentnum() {
+        return commentnum;
+    }
+
+    public void setCommentnum(Integer commentnum) {
+        this.commentnum = commentnum;
+    }
 
     public String getDirector() {
         return Director;
@@ -75,12 +86,12 @@ public class movie {
         this.introduction = introduction;
     }
 
-    public Integer getCollect_num() {
-        return collect_num;
+    public Integer getCollectnum() {
+        return collectnum;
     }
 
-    public void setCollect_num(Integer collect_num) {
-        this.collect_num = collect_num;
+    public void setCollectnum(Integer collect_num) {
+        this.collectnum = collect_num;
     }
 
     public String getArea() {
