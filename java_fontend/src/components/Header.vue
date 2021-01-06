@@ -24,7 +24,7 @@
                 </el-menu>-->
                 <el-dropdown>
                     <div class="l top1">
-                        <img class="avatar" src="../assets/images/avatar0.jpg"/>
+                        <img class="avatar" :src="this.$store.state.avatar" @error="def()"/>
                     </div>
                     <div class="l top2">
                         <span class="name">{{this.$store.state.username}}
@@ -53,12 +53,31 @@
 </template>
 
 <script>
+import axios from "axios";
   export default {
     data() {
       return {
+          defaultImg:require('../assets/images/avatar.png')
       };
     },
+    created(){
+       this.getInformation();
+    },
     methods: {
+        async getInformation(){
+            axios.post("http://localhost:8070/User/GetInformation?userid="+this.$store.state.id
+            ).then((response)=>{
+                this.$store.state.avatar=response.data.data.avatar;
+                sessionStorage.setItem("user", JSON.stringify(this.$store.state));
+            }).catch((error)=>{
+                this.$message.error("Get Information Failed!");
+            });
+        },
+        def(){
+           let img = event.srcElement;   
+           img.src = this.defaultImg;   
+           img.onerror = null; //防止闪图
+        },
         toPersonalHome(){
             this.$router.push("/PersonalHome");
         },
@@ -72,6 +91,7 @@
           this.$message.success("Exit Success!");
           this.$router.push("/");
         }
+        
     }
   }
 </script> 

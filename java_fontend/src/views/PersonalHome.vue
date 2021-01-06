@@ -2,10 +2,10 @@
     <div class="personalhome">
         <div class="head"><!--头像、昵称区域-->
           <div class="l">
-            <img :src="avatar" class="ava_pic" @click="toPersonalInfo()"/>
+            <img :src="this.$store.state.avatar" class="ava_pic" @click="toPersonalInfo()" @error="def()"/>
           </div>
           <div class="l top2">
-            <span class="username">{{username}}</span>
+            <span class="username">{{this.$store.state.username}}</span>
           </div>
           <div class="clear"></div>
         </div>
@@ -68,8 +68,7 @@ export default {
   name: 'PersonalHome',
   data(){
     return{
-      avatar:require('../assets/images/avatar0.jpg'),
-      username:'nianwuluo',
+      defaultImg:require('../assets/images/avatar.png'),
       movieCollectNum:0,
       peopleCollectNum:0,
       commentNum:10,
@@ -101,6 +100,11 @@ export default {
     
   },
   methods:{
+    def(){
+           let img = event.srcElement;   
+           img.src = this.defaultImg;   
+           img.onerror = null; //防止闪图
+    },
     getCommentList(){
 
     },

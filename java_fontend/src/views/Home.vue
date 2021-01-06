@@ -13,13 +13,13 @@
         </el-input>
       </div>
       <div class="movie1" v-if="seen1">
-        <div class="title">---HollyWood Movies of 2019---</div>
+        <div class="title">---Movies---</div>
         <div class=movieList1>
           <el-row>
             <el-col :span="4" class="col3" v-for="movie in movieList1" :key="movie.movie_id">
               <div class="movieCard" @click="toMovieInfo()">
                 <el-card :body-style="{ padding: '0px' }">
-                  <img :src="movie.movie_pic" class="pic"/>
+                  <img :src="movie.movie_pic" class="pic" @error="away()"/>
                   <div class="info">
                     <div class="info1">
                       <i class="el-icon-star-on color1"></i>
@@ -33,7 +33,7 @@
           </el-row>
         </div>
       </div>
-      <div class="movie2" v-if="seen1">
+      <!--<div class="movie2" v-if="seen1">
         <div class="title">---HollyWood Movies of 2018---</div>
         <div class="movieList2">
           <el-row>
@@ -53,7 +53,7 @@
             </el-col>
           </el-row>
         </div>
-      </div>
+      </div>-->
       <div class="searchMovie" v-if="seen2">
         <div class="title1">Find the results for you as follows:</div>
         <div class="searchMovieList">
@@ -61,7 +61,7 @@
             <el-col :span="4" class="col3" v-for="movie in searchMovieList" :key="movie.movie_id">
               <div class="movieCard"  @click="toMovieInfo()">
                 <el-card :body-style="{ padding: '0px' }">
-              <img :src="movie.movie_pic" class="pic"/>
+              <img :src="movie.movie_pic" class="pic" @error="away()"/>
               <div class="info">
                 <div class="info1">
                   <i class="el-icon-star-on color1"></i>
@@ -74,7 +74,7 @@
             </el-col>
           </el-row>
         </div>
-        <div class="page">
+        <div class="page" v-if="total!=0">
           <el-pagination
             @current-change="handleCurrentChange"
             :current-page="pagenum"
@@ -87,6 +87,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: 'Home',
   data(){
@@ -96,7 +97,7 @@ export default {
       seen2:false,
       total:6,
       pagenum:1,
-
+      unload:require('../assets/images/unload.png'),
       headPictures: [
         { id: 0, source: require('../assets/images/header1.png') },
         { id: 1, source: require('../assets/images/header2.png') },
@@ -105,6 +106,44 @@ export default {
         { id: 4, source: require('../assets/images/header5.png') }
       ],
       movieList1: [
+        /*{
+          movie_id:1,
+          movie_pic:require('../assets/images/1.png'),
+          movie_name:'The God Father',
+          movie_rate:4.8
+        },
+        {
+          movie_id:2,
+          movie_pic:require('../assets/images/2.png'),
+          movie_name:'Man of Steel',
+          movie_rate:4.9
+        },
+        {
+          movie_id:3,
+          movie_pic:require('../assets/images/3.png'),
+          movie_name:'I am Legend',
+          movie_rate:'4.8'
+        },
+        {
+          movie_id:4,
+          movie_pic:require('../assets/images/1.png'),
+          movie_name:'The God Father',
+          movie_rate:4.8
+        },
+        {
+          movie_id:5,
+          movie_pic:require('../assets/images/2.png'),
+          movie_name:'Man of Steel',
+          movie_rate:4.9
+        },
+        {
+          movie_id:6,
+          movie_pic:require('../assets/images/3.png'),
+          movie_name:'I am Legend',
+          movie_rate:'4.8'
+        }*/
+      ],
+      /*movieList2: [
         {
           movie_id:1,
           movie_pic:require('../assets/images/1.png'),
@@ -141,47 +180,9 @@ export default {
           movie_name:'I am Legend',
           movie_rate:'4.8'
         }
-      ],
-      movieList2: [
-        {
-          movie_id:1,
-          movie_pic:require('../assets/images/1.png'),
-          movie_name:'The God Father',
-          movie_rate:4.8
-        },
-        {
-          movie_id:2,
-          movie_pic:require('../assets/images/2.png'),
-          movie_name:'Man of Steel',
-          movie_rate:4.9
-        },
-        {
-          movie_id:3,
-          movie_pic:require('../assets/images/3.png'),
-          movie_name:'I am Legend',
-          movie_rate:'4.8'
-        },
-        {
-          movie_id:4,
-          movie_pic:require('../assets/images/1.png'),
-          movie_name:'The God Father',
-          movie_rate:4.8
-        },
-        {
-          movie_id:5,
-          movie_pic:require('../assets/images/2.png'),
-          movie_name:'Man of Steel',
-          movie_rate:4.9
-        },
-        {
-          movie_id:6,
-          movie_pic:require('../assets/images/3.png'),
-          movie_name:'I am Legend',
-          movie_rate:'4.8'
-        }
-      ],
+      ],*/
       searchMovieList:[
-         {
+         /*{
           movie_id:1,
           movie_pic:require('../assets/images/1.png'),
           movie_name:'The God Father',
@@ -216,18 +217,47 @@ export default {
           movie_pic:require('../assets/images/3.png'),
           movie_name:'I am Legend',
           movie_rate:'4.8'
-        }
+        }*/
       ]
     }
     
   },
   methods:{
+    away(){
+        let img = event.srcElement;   
+        img.src = this.unload;   
+        img.onerror = null; //防止闪图
+    },
     searchMovies(){
-      this.seen1=false;
-      this.seen2=true;
+      if(this.keyword==''){
+        this.$message.error("Please input the keyword!");
+      }
+      else{
+        axios.get("http://localhost:8070/Movie/SearchMovieByKey",
+        {
+          params:{
+                  query: this.keyword,
+                  pagenum: this.pagenum,
+                  pagesize:10
+                }
+        }).then((response)=>{
+          console.log(response);
+          this.searchMovieList=response.data.data;
+          this.seen1=false;
+          this.seen2=true;
+        }).catch((error)=>{
+          this.$message.error("Search Failed!");
+        });
+      }
+      
     },
     getMovieList(){
-
+       axios.get("http://localhost:8070/Movie/MainPageTenMovie").then((response)=>{
+         console.log(response);
+         this.movieList1=response.data.data;
+       }).catch((error)=>{
+         this.$message.error("Get Movies List Failed!");
+       })
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
@@ -239,7 +269,7 @@ export default {
     }
   },
   created(){
-    
+    this.getMovieList();
   }
 }
 </script>

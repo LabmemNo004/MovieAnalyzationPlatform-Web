@@ -9,6 +9,7 @@ export default new Vuex.Store({
     role: -1,
     username:'',
     id:-1,
+    avatar:''
   },
   mutations: {
     Login(state,role){
@@ -26,6 +27,9 @@ export default new Vuex.Store({
     Setid(state,id){
       state.id=id;
     },
+    Setavatar(state,avatar){
+      state.avatar=avatar;
+    }
   },
   actions: {
   },

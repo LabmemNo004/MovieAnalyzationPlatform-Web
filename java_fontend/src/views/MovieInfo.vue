@@ -99,7 +99,7 @@
                     <div v-for="comment in commentList" :key="comment.username" >
                         <el-divider></el-divider>
                         <div class="l">
-                            <img :src="comment.avatar"/>
+                            <img :src="comment.avatar" @error="def()"/>
                         </div>
                         <div class="l username">
                             <span class="span6">{{comment.username}}</span>
@@ -141,6 +141,7 @@ export default {
     return{
         show:false,
         pagenum:1,
+        defaultImg:require('../assets/images/avatar.png'),
         movieInfo:{
             movie_pic:require('../assets/images/1.png'),
             movie_name:'The God Father',
@@ -188,6 +189,11 @@ export default {
     
   },
   methods:{
+      def(){
+           let img = event.srcElement;   
+           img.src = this.defaultImg;   
+           img.onerror = null; //防止闪图
+      },
         collect(){
             if(this.movieInfo.is_collect==false){
                 this.movieInfo.is_collect=true;
