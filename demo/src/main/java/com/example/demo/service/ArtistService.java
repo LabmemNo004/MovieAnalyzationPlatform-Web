@@ -109,4 +109,15 @@ public class ArtistService {
         }
     }
 
+
+    public void saveArtist(artist temp)
+    {
+        ArtistRepository.save(temp);
+    }
+
+    public void UploadAvatar(Integer personID,String filename)
+    {
+        ArtistRepository.UpdateAvator(personID, filename);
+    }
+
 }

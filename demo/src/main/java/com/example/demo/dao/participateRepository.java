@@ -16,4 +16,8 @@ public interface participateRepository extends JpaRepository<participate, partic
             "join artist a on a.id = participate.artistID " +
             "where movieID=?1 AND a.profession=?2",nativeQuery = true)
     List<String> GetMoviesPerson(Integer movieID,String type);
+
+
+    @Override
+    <S extends participate> S save(S s);
 }

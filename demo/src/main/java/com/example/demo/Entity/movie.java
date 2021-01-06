@@ -39,11 +39,22 @@ public class movie {
     @Column(name="photo")
     private String photo;
 
+    @Column(name="duration")
+    private Integer duration;
+
     @Column(name="collect_num")
     private Integer collect_num;
 
     @Column(name="introduction")
     private String introduction;
+
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
 
     public String getIntroduction() {
         return introduction;

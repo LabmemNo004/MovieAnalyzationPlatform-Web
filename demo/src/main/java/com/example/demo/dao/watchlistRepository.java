@@ -41,4 +41,8 @@ public interface watchlistRepository extends JpaRepository<commentmsg,Integer> {
     void DeleteNewWatchlist(Integer userId,Integer movieID);
 
     watchlist findByUserIDAndMovieID(Integer UserID,Integer MovieID);
+
+
+
+
 }

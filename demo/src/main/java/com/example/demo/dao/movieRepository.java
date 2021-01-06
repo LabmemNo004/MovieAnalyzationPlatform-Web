@@ -11,12 +11,13 @@ import java.util.List;
 
 public interface movieRepository extends JpaRepository<movie, Integer> {
 
+    @Override
+    <S extends movie> S save(S s);
+
     @Modifying
     @Transactional
-    @Query(value="insert into movie values " +
-            "(?1,?2,0.0,?3,?4,?5,?6,?7) ",nativeQuery = true)
-    void UpdateAvator(Integer id, String title, String type, Float price,
-                      Date publish, String photo,Integer duration);
+    @Query(value="update movie set photo=?2 where movieID=?1",nativeQuery = true)
+    void UpdateAvator(Integer id,String filename);
 
     @Modifying
     @Transactional
