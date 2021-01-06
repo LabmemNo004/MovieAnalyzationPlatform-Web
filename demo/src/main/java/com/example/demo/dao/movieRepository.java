@@ -43,7 +43,8 @@ public interface movieRepository extends JpaRepository<movie, Integer> {
 
     List<movie> findByTypeOrderByScoreDesc(String type);
 
-
+    @Query(value="select * from movie ORDER BY score DESC ",nativeQuery = true)
+    List<movie> findMoviesAllType();
 
     @Query(value="select * from movie where movieID=?1",nativeQuery = true)
     movie getDetailMovie(Integer movieID);

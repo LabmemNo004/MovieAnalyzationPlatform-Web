@@ -114,6 +114,7 @@ public class UserController {
     @UserLoginToken
     @GetMapping("/getMessage")
     public String getMessage(){
+
         return "你已通过验证";
     }
 
@@ -160,25 +161,27 @@ public class UserController {
          * 如果有人要调用这个接口需要写好自己的路径。
          */
 
-        String filePathBefor=System.getProperty("user.dir")+"/src/main/resources/static/image/";
+//        String filePathBefor=System.getProperty("user.dir")+"/src/main/resources/static/image/";
+        String filePathBefor=System.getProperty("user.dir")+"/src/assets/images/";
         filePathBefor=filePathBefor.replace('\\','/');
+        filePathBefor=filePathBefor.replace("demo","java_fontend");
 
         String CDY="";
         String CXW="";
         String TZY="";
-        String LYF="D:/github/Chen/MovieAnalyzationPlatform-Web/demo/src/main/resources/static/image/";
-//        RandomStringUtils.randomAlphanumeric(10)
-//        String filename= LYF+
-//                file.getOriginalFilename();
+        String LYF="D:/github/Chen/MovieAnalyzationPlatform-Web/demo/src/main/resources/static/images/";
 
-        String filename=filePathBefor+
-                RandomStringUtils.randomAlphanumeric(10)+
+
+        String tempfileName=RandomStringUtils.randomAlphanumeric(10)+
                 file.getOriginalFilename();
+        String filename=filePathBefor+tempfileName;
 
 
         file.transferTo(new File(filename));
 
-        UserService.UpdateAvator(userid,filename);
+
+        tempfileName="../assets/images/"+tempfileName;
+        UserService.UpdateAvator(userid,tempfileName);
 
         Map<String, String> result = new HashMap<>(4);
         result.put("contentType", file.getContentType());
