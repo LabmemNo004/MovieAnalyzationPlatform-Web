@@ -50,7 +50,7 @@ public class MovieController {
             @RequestParam(value = "pagesize") Integer pagesize
     )
     {
-        JSONArray temp=movieService.getMovieLike(query);
+        JSONArray temp=movieService.getMovieLike(query,pagenum,pagesize);
         return new JsonResult(temp,
                 "成功");
     }
@@ -66,7 +66,7 @@ public class MovieController {
             @RequestParam(value = "pagesize") Integer pagesize
     )
     {
-        JSONArray temp=movieService.getMovieByType(type,order);
+        JSONArray temp=movieService.getMovieByType(type,order,pagenum,pagesize);
         return new JsonResult(temp,
                 "成功");
     }
@@ -95,7 +95,7 @@ public class MovieController {
             @RequestParam("pagesize") Integer pagesize
             )
     {
-        JSONArray temp=movieService.getMovieComment(movie_id);
+        JSONArray temp=movieService.getMovieComment(movie_id,pagenum,pagesize);
         return new JsonResult(temp,"成功");
     }
 

@@ -21,15 +21,40 @@ public class CollectService {
     followRepository FollowRepository;
 
 
-    public JSONArray getCollectMovie(Integer id)
+    public JSONArray getCollectMovie(Integer id,Integer pagenum,Integer pagesize)
     {
         JSONArray b= new JSONArray();
         List<Object[]> temp=WatchlistRepository.getCollectMovie(id);
+
+        int total=temp.size();
+        int start=0;
+        int end=0;
+        if(total>(pagenum - 1)*pagesize)
+        {
+            start=(pagenum - 1)*pagesize;
+            if(total>pagenum*pagesize)
+            {
+                end=pagenum*pagesize;
+            }
+            else
+            {
+                end=total;
+            }
+        }
+        else
+        {
+            return null;
+        }
+        /**
+         * 自index开始到total/或者本页结尾
+         */
+        int index=0;
         for(Object[] temp1:temp)
         {
+            index++;
+            if(index<=start) continue;
+            if(index>end) break;
             JSONObject temp3=new JSONObject();
-
-            System.out.println(temp1);
 
             String[] tag={"movie_name","movie_pic","movie_rate","movie_id"};
             for(int i=0;i< temp1.length;i++)
@@ -46,13 +71,39 @@ public class CollectService {
     }
 
 
-    public JSONArray getCollectPeople(Integer id)
+    public JSONArray getCollectPeople(Integer id,Integer pagenum,Integer pagesize)
     {
         JSONArray b= new JSONArray();
 
         List<Object[]> temp=FollowRepository.getCollectPeople(id);
+        int total=temp.size();
+        int start=0;
+        int end=0;
+        if(total>(pagenum - 1)*pagesize)
+        {
+            start=(pagenum - 1)*pagesize;
+            if(total>pagenum*pagesize)
+            {
+                end=pagenum*pagesize;
+            }
+            else
+            {
+                end=total;
+            }
+        }
+        else
+        {
+            return null;
+        }
+        /**
+         * 自index开始到total/或者本页结尾
+         */
+        int index=0;
         for(Object[] temp1:temp)
         {
+            index++;
+            if(index<=start) continue;
+            if(index>end) break;
             JSONObject temp3=new JSONObject();
 
             System.out.println(temp1);

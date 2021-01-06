@@ -9,6 +9,7 @@ import com.example.demo.Entity.watchlist;
 import com.example.demo.dao.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -108,12 +109,39 @@ public class MovieService {
         return a;
     }
 
-    public JSONArray getMovieLike(String movieName)
+    public JSONArray getMovieLike(String movieName,Integer pagenum,Integer pagesize)
     {
         JSONArray a=new JSONArray();
         List<movie> temp=MovieRepository.getMovieLike(movieName);
+
+        int total=temp.size();
+        int start=0;
+        int end=0;
+        if(total>(pagenum - 1)*pagesize)
+        {
+            start=(pagenum - 1)*pagesize;
+            if(total>pagenum*pagesize)
+            {
+                end=pagenum*pagesize;
+            }
+            else
+            {
+                end=total;
+            }
+        }
+        else
+        {
+            return null;
+        }
+        /**
+         * 自index开始到total/或者本页结尾
+         */
+        int index=0;
         for(movie temp2:temp)
         {
+            index++;
+            if(index<=start) continue;
+            if(index>end) break;
             JSONObject b=new JSONObject();
             b.put("movie_id",temp2.getMovieID());
             b.put("movie_name",temp2.getTitle());
@@ -124,8 +152,9 @@ public class MovieService {
         return a;
     }
 
-    public JSONArray getMovieByType(String type,Integer order)
+    public JSONArray getMovieByType(String type,Integer order,Integer pagenum,Integer pagesize)
     {
+
         JSONArray a=new JSONArray();
         List<movie> temp=new ArrayList<>();
         if(order==0)
@@ -161,14 +190,41 @@ public class MovieService {
                 temp=MovieRepository.findMoviesAllTypeCollect();
             }
         }
+        int total=temp.size();
+        int start=0;
+        int end=0;
+        if(total>(pagenum - 1)*pagesize)
+        {
+            start=(pagenum - 1)*pagesize;
+            if(total>pagenum*pagesize)
+            {
+                end=pagenum*pagesize;
+            }
+            else
+            {
+                end=total;
+            }
+        }
+        else
+        {
+            return null;
+        }
+        /**
+         * 自index开始到total/或者本页结尾
+         */
+        int index=0;
         for(movie temp2:temp)
         {
+            index++;
+            if(index<=start) continue;
+            if(index>end) break;
             JSONObject b=new JSONObject();
             b.put("movie_id",temp2.getMovieID());
             b.put("movie_name",temp2.getTitle());
             b.put("movie_rate",temp2.getScore());
             b.put("movie_pic",temp2.getPhoto());
             a.add(b);
+
         }
         return a;
     }
@@ -213,16 +269,42 @@ public class MovieService {
     }
 
 
-    public JSONArray getMovieComment(Integer movieID)
+    public JSONArray getMovieComment(Integer movieID,Integer pagenum,Integer pagesize)
     {
         //1
         JSONArray a=new JSONArray();
 
         List<Object []> temp=
                 CommentmsdRepository.getOtherCommentMovie(movieID);
+        int total=temp.size();
+        int start=0;
+        int end=0;
+        if(total>(pagenum - 1)*pagesize)
+        {
+            start=(pagenum - 1)*pagesize;
+            if(total>pagenum*pagesize)
+            {
+                end=pagenum*pagesize;
+            }
+            else
+            {
+                end=total;
+            }
+        }
+        else
+        {
+            return null;
+        }
+        /**
+         * 自index开始到total/或者本页结尾
+         */
+        int index=0;
 
         for(Object [] temp1:temp)
         {
+            index++;
+            if(index<=start) continue;
+            if(index>end) break;
             JSONObject b=new JSONObject();
             String []tag={  "username", "avatar","rate", "content", "time"};
             for(int i=0;i<temp1.length;++i)
