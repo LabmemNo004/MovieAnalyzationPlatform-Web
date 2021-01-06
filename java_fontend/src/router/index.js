@@ -31,6 +31,7 @@ const routes = [
     name: 'Register',
     component: Register
   },
+  
   {
     path: '/Main',
     name: 'Main',
