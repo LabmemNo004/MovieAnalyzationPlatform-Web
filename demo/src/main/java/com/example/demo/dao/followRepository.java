@@ -18,7 +18,7 @@ public interface followRepository extends JpaRepository<follow, followPK> {
             ")" +
             "select a.PersonName,a.profession,a.picture,a.id " +
             "from my join follow on my.userID=follow.userID " +
-            "join artist a on a.id = follow.artistID",nativeQuery = true)
+            "join artist a on a.id = follow.artistID order by a.id ASC ",nativeQuery = true)
     List<Object []> getCollectPeople(Integer userid);
 
     @Query(value="select * from follow where userID=?1 " +

@@ -1,4 +1,4 @@
-package com.example.demo.auth;
+package com.example.demo.JSON;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -6,6 +6,8 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 
+import com.example.demo.auth.PassToken;
+import com.example.demo.auth.UserLoginToken;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,6 +22,7 @@ import java.util.Map;
 
 @Component
 public class AuthenticationInterceptor implements HandlerInterceptor {
+
     @Autowired
     UserService userService;
 
