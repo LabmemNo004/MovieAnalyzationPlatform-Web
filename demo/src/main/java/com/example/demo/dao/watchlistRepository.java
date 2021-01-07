@@ -18,7 +18,7 @@ public interface watchlistRepository extends JpaRepository<watchlist, watchlistP
             "select m.title,m.photo,m.score,m.movieID " +
             "from my join watchlist on my.userID=watchlist.userID " +
             "join movie m on m.movieID = watchlist.movieID " +
-            "ORDER BY m.score DESC ",nativeQuery = true)
+            "ORDER BY m.movieID ASC",nativeQuery = true)
     List<Object[]> getCollectMovie(Integer id);
 
     /**
