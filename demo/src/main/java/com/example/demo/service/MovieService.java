@@ -63,6 +63,7 @@ public class MovieService {
 
     public void saveMovie(movie temp)
     {
+
         MovieRepository.save(temp);
     }
 
@@ -252,7 +253,7 @@ public class MovieService {
         b.put("type",tempMovie.getType());
         b.put("area",tempMovie.getArea());
         b.put("pub_time",tempMovie.getPublishTime());
-        b.put("duration",tempMovie.getPublishTime());
+        b.put("duration",tempMovie.getDuration());
         b.put("introduction",tempMovie.getIntroduction());
         b.put("collect_num",tempMovie.getCollectnum());
         b.put("comment_num",tempMovie.getCommentnum());

@@ -50,11 +50,13 @@ public interface commentmsgRepository extends JpaRepository<commentmsg,Integer> 
     void UpdateComment(Integer movieID,Integer userID,String content);
 
 
-    @Modifying
-    @Transactional
-    @Query(value="insert into commentmsg " +
-            "values (?1,?2,?3,?4,?5,?6)",nativeQuery = true)
-    void InsertaComment(Integer commentID,Integer user_id,Integer movie_id,
-                        Float rate,Date time,String Content);
+//    @Modifying
+//    @Transactional
+//    @Query(value="insert into commentmsg " +
+//            "values (?1,?2,?3,?4,?5,?6)",nativeQuery = true)
+//    void InsertaComment(Integer commentID,Integer user_id,Integer movie_id,
+//                        Float rate,Date time,String Content);
 
+    @Override
+    <S extends commentmsg> S save(S s);
 }
