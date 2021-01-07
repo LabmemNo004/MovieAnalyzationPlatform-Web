@@ -1,7 +1,7 @@
 <template>
     <div class="peopleinfo">
         <div class="person_pic l">
-          <img :src="personInfo.person_pic"/>
+          <img :src="converPic(personInfo.person_pic)"/>
         </div>
         <div class="person_info l">
           <div class="name">{{personInfo.person_name}}</div>
@@ -24,7 +24,7 @@
               </div>
               <div class="info1">
                   <span class="span1">Movies: </span>
-                <span class="span2"><el-link v-for="m in personInfo.movies" :key="m.movieID" @click="toMovieInfo(m.movieID)">{{ m.movieName }}</el-link></span>
+                <span class="span2"><el-link v-for="m in personInfo.movies" :key="m.movieID" @click="toMovieInfo(m.movieID)">{{ m.movieName }} / </el-link></span>
               </div>
               <div class="info1">
                   <span class="span1">Times to be Collected: </span>
@@ -134,6 +134,14 @@ export default {
       }).catch((error)=>{
         this.$message.error("Loading Failed!");
       })
+    },
+    converPic(url){
+      if(url==null||url==''){
+        return require('../assets/images/unload.png');
+      }
+      else{
+        return require('../assets/images/'+url);
+      }
     }
   }
 }
@@ -190,6 +198,7 @@ export default {
 
 .peopleinfo .info1{
     margin-bottom: 20px;
+  width: 600px;
 }
 
 .peopleinfo .collect{

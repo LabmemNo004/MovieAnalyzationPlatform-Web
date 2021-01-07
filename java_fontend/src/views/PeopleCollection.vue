@@ -14,7 +14,7 @@
                   <el-col :span="6" class="ps_cl_list col3"  v-for="person in personList" :key="person.person_id">
                     <div class="mv_cl_card" @click="toPeopleInfo(person.person_id)">
                       <el-card :body-style="{ padding: '0px' }">
-                        <img :src="person.person_pic"/>
+                        <img :src="converPic(person.person_pic)"/>
                         <div class="info">
                           <div class="info2">{{ person.person_name }}</div>
                         </div>
@@ -28,7 +28,7 @@
                   @current-change="handleCurrentChange"
                   :current-page="pagenum"
                   layout="prev, pager, next"
-                  :total="80">
+                  :total="people_collect_num">
               </el-pagination>
               <!--分页end-->
             </div>
@@ -105,15 +105,14 @@ export default {
         person.person_profession=data[i].profession;
         this.personList.push(person);
       }
-      this.people_collect_num=this.personList.length;
     },
     getPeopleCollectionList(){
       axios.get("http://localhost:8070/User/CollectionPeople",
           {
             params:{
-              userid:1,
-              pagenum:1,
-              pagesize:10
+              userid:this.$store.state.id,
+              pagenum:this.pagenum,
+              pagesize:8
             }
           },
           { withCredentials: true }
@@ -121,12 +120,23 @@ export default {
         console.log(response);
         var data=response.data.data;
         this.setPeopleCollection(data);
+        this.people_collect_num=response.data.totalNum;
       }).catch((error)=>{
         this.$message.error("Loading Failed!");
       })
     },
-    handleCurrentChange(){
-
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+      this.pagenum=val;
+      this.getPeopleCollectionList();
+    },
+    converPic(url){
+      if(url==null||url==''){
+        return require('../assets/images/unload.png');
+      }
+      else{
+        return require('../assets/images/'+url);
+      }
     }
   }
 }
@@ -315,4 +325,6 @@ export default {
   background-color: #0066c0;
   color: white;
 }
+
+
 </style>

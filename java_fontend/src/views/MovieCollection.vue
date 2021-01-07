@@ -5,7 +5,7 @@
         <el-col :span="2"></el-col>
         <el-col :span="14">
           <div class="cl_op">
-            <span class="sonListTitle_l">Collection({{movieList.length}})</span>
+            <span class="sonListTitle_l">Collection({{movie_collect_num}})</span>
           </div>
           <div class="collection_con">
             <div class="mv_cl">
@@ -15,7 +15,7 @@
                   <el-col :span="6" class="mv_cl_list col3"  v-for="movie in movieList" :key="movie.movie_id">
                     <div class="mv_cl_card" @click="toMovieInfo(movie.movie_id)">
                       <el-card :body-style="{ padding: '0px' }">
-                        <img :src="movie.movie_pic"/>
+                        <img :src="converPic(movie.movie_pic)"/>
                         <div class="info">
                           <div class="info1">
                             <i class="el-icon-star-on color1"></i>
@@ -30,7 +30,8 @@
               </div>
               <!--分页start-->
               <el-pagination
-                  background
+                  @current-change="handleCurrentChange"
+                  :current-page="pagenum"
                   layout="prev, pager, next"
                   :total="movie_collect_num">
               </el-pagination>
@@ -83,7 +84,6 @@ export default {
   data() {
     return {
       pagenum:1,
-      movie_per_page:10,
       movieList:[],
       movie_collect_num:0,
     }
@@ -106,26 +106,39 @@ export default {
         movie.movie_rate = data[i].movie_rate;
         this.movieList.push(movie);
       }
-      this.movie_collect_num=this.movieList.length;
     },
     getMovieCollection(){
       axios.get("http://localhost:8070/User/CollectionMovie",
           {
             params:{
-              userid:1,
+              userid:this.$store.state.id,
               pagenum:this.pagenum,
-              pagesize:10
+              pagesize:8
             }
           },
           { withCredentials: true }
       ).then((response)=>{
         console.log(response);
+        this.movie_collect_num=response.data.totalNum;
         var data=response.data.data;
         this.setMovieCollection(data);
       }).catch((error)=>{
         this.$message.error("Loading Failed!");
       })
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+      this.pagenum=val;
+      this.getMovieCollection();
+    },
+  converPic(url){
+    if(url==null||url==''){
+      return require('../assets/images/unload.png');
     }
+    else{
+      return require('../assets/images/'+url);
+    }
+  }
   }
 }
 </script>
@@ -206,11 +219,6 @@ export default {
 
 .collection_con{
   padding: 0px 20px;
-}
-
-.collection_con>div>div>.el-row>.el-col>div>div>div>img{
-  width: 100%;
-  height: auto;
 }
 
 .clr{
@@ -321,4 +329,14 @@ export default {
   color: white;
 }
 
+.mv_cl_card .el-card__body{
+  width:100%;
+  height: 350px;
+  cursor:pointer;
+}
+
+.mv_cl_card .el-card__body > img{
+  width: 181.1px;
+  height: 266.68px;
+}
 </style>

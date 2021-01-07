@@ -28,7 +28,7 @@
                 <div class="star_cards">
                   <div class="star_photos">
                     <a href="#">
-                      <img :src="person.person_pic" :alt="person.person_name"/>
+                      <img :src="converPic(person.person_pic)" :alt="person.person_name"/>
                     </a>
                   </div>
                   <div class="person_info">
@@ -92,9 +92,9 @@ export default {
       axios.get("http://localhost:8070/Artist/ArtistList",
           {
             params:{
-              profession:this.p_radio==='1'?'Actor':'Director',
+              profession:this.p_radio==='1'?'演员':'导演',
               pagenum:this.pagenum,
-              pagesize:10
+              pagesize:6
             }
           },
           { withCredentials: true }
@@ -110,46 +110,53 @@ export default {
       console.log(`当前页: ${val}`);
       this.pagenum=val;
       this.getPersonList();
-
+    },
+    converPic(url){
+      if(url==null||url==''){
+        return require('../assets/images/unload.png');
+      }
+      else{
+        return require('../assets/images/'+url);
+      }
     }
   }
 }
 </script>
 
 <style>
-.person_info_title{
+.person .person_info_title{
   font-weight: bold;
   font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
-.person_profession{
+.person .person_profession{
   color: #999999;
 }
 
-.person_name{
+.person .person_name{
   font-size: 20px;
   font-family: Georgia, 'Times New Roman', Times, serif;
   color: #0066c0;
 }
 
-.person_movie{
+.person .person_movie{
   font-size: 15px;
 }
 
-.person_info{
+.person .person_info{
   padding: 20px 30px;
   float: left;
 }
 
-.person_sort{
+.person .person_sort{
   margin: 20px;
 }
 
-.person .search {
+.person .person .search {
   margin: 30px 480px;
 }
 
-.star_container{
+.person .star_container{
   margin:30px 0px;
   text-align: left;
 }
@@ -167,53 +174,10 @@ export default {
   min-height: 100px;
 }
 
-.starList_con{
+.person .starList_con{
   margin: 20px 20px;
   min-height: 100px;
   /*background-color: aquamarine;*/
-}
-
-.person_main_right{
-  text-align: left;
-  margin: 0px 10px;
-  background-color: #ffffff;
-  min-height: 50px;
-  padding: 20px 20px;
-}
-
-.prk{
-  background-color: #ebeef0;
-  min-height: 10px;
-  padding: 5px 10px;
-  margin-bottom: 30px;
-}
-
-a.person_list_load{
-  list-style: none outside none;
-  font-size: 14px;
-  padding: 0;
-  font-family: Microsoft YaHei;
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-block;
-  margin: 0 20px 10px 0;
-  color: #000000;
-}
-
-.keyword_profession_list{
-  width: 100px;
-}
-
-.keyword_age_list{
-  width: 70px;
-}
-
-.keyword_area_list{
-  width: 70px;
-}
-
-a.person_list_load.keyword_gender_list{
-  margin-right: 50px;
 }
 
 .star_photos{

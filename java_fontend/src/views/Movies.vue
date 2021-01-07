@@ -123,49 +123,8 @@ export default {
       t_radio: '100',
       o_radio: '1',
       movie_num:120,
-      movie_per_page:12,
-      movie_type:null,
-      movie_time:null,
-      movie_area:null,
       movieList1: [],
-      searchMovieList: [
-        {
-          movie_id: 1,
-          movie_pic: require('../assets/images/1.png'),
-          movie_name: 'The God Father',
-          movie_rate: 4.8
-        },
-        {
-          movie_id: 2,
-          movie_pic: require('../assets/images/2.png'),
-          movie_name: 'Man of Steel',
-          movie_rate: 4.9
-        },
-        {
-          movie_id: 3,
-          movie_pic: require('../assets/images/3.png'),
-          movie_name: 'I am Legend',
-          movie_rate: '4.8'
-        },
-        {
-          movie_id: 4,
-          movie_pic: require('../assets/images/1.png'),
-          movie_name: 'The God Father',
-          movie_rate: 4.8
-        },
-        {
-          movie_id: 5,
-          movie_pic: require('../assets/images/2.png'),
-          movie_name: 'Man of Steel',
-          movie_rate: 4.9
-        },
-        {
-          movie_id: 6,
-          movie_pic: require('../assets/images/3.png'),
-          movie_name: 'I am Legend',
-          movie_rate: '4.8'
-        }
-      ]
+      searchMovieList: []
     }
 
   },
@@ -195,7 +154,7 @@ export default {
               type:this.movie_type,
               order:parseInt(this.o_radio)-1,
               pagenum:this.pagenum,
-              pagesize:10
+              pagesize:8
             }
           },
           { withCredentials: true }
@@ -203,6 +162,7 @@ export default {
         console.log(response);
         var data=response.data.data;
         this.setMovies(data);
+        this.movie_num=response.data.totalNum;
       }).catch((error)=>{
         this.$message.error("Loading Failed!");
       })
@@ -279,12 +239,15 @@ export default {
   margin-bottom: 20px;
 }
 
-
-.movieCard .el-card__body > img {
-  width: 100%;
-
-  height: auto;
+.movieCard .el-card__body{
+  width:250px;
+  height: 470px;
   cursor:pointer;
+}
+
+.movieCard .el-card__body > img{
+  width: 250px;
+  height: 368.13px;
 }
 
 .movies .movieList1 {
@@ -308,7 +271,7 @@ export default {
 }
 
 .movies .info1 {
-  font-size: 14px;
+  font-size: 20px;
   text-align: left;
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
