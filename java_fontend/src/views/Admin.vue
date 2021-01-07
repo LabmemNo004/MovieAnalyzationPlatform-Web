@@ -21,6 +21,7 @@
                         <el-upload
                             class="avatar-uploader"
                             action
+                            :show-file-list="false"
                             :on-change="uploadMovie"
                             :auto-upload="false"
                             :before-upload="beforeAvatarUpload">
@@ -76,6 +77,7 @@
                         <el-upload
                             class="avatar-uploader"
                             action
+                            :show-file-list="false"
                             :auto-upload="false"
                             :on-change="uploadPicture"
                             :before-upload="beforeAvatarUpload">
@@ -89,8 +91,8 @@
                                 <el-input v-model="personForm.person_name" style="width:450px" placeholder="Name"></el-input>
                             </el-form-item>
                             <el-form-item label="Gender">
-                                <el-radio v-model="personForm.sex" label="0">male</el-radio>
-                                <el-radio v-model="personForm.sex" label="1">female</el-radio>
+                                <el-radio v-model="personForm.sex" label=0>male</el-radio>
+                                <el-radio v-model="personForm.sex" label=1>female</el-radio>
                             </el-form-item>
                             <el-form-item label="Birthday">
                                 <el-date-picker
@@ -268,6 +270,7 @@ export default {
             fd.append('Introduction',this.movieForm.introduction);
             axios.post("http://localhost:8070/Admin/UploadMovie",fd).then((response)=>{
                 console.log(response);
+                sessionStorage.setItem('newMovie',response.data.data);
                 this.$message.success("Upload Movie Success!");
             }).catch((error)=>{
                 this.$message.error("Upload Movie Failed!");
@@ -275,8 +278,21 @@ export default {
         },
         async submit2(){
             let fd = new FormData();
-            fd.append('')
-
+            var movie_id=sessionStorage.getItem('newMovie');
+            fd.append('movieID',movie_id);
+            fd.append('personName',this.personForm.person_name);
+            fd.append('sex',this.personForm.sex);
+            fd.append('birthday',dateFormat1(this.personForm.birthday));
+            fd.append('area',this.personForm.area);
+            fd.append('profession',this.personForm.profession);
+            fd.append('introduction',this.personForm.introduction);
+            fd.append('Avatar',this.person_pic);
+             axios.post("http://localhost:8070/Admin/UploadMoviePerson",fd).then((response)=>{
+                console.log(response);
+                this.$message.success("Upload Person Success!");
+            }).catch((error)=>{
+                this.$message.error("Upload Person Failed!");
+            });
         }
     }
 }
