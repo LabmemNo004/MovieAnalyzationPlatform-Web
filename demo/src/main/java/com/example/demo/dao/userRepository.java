@@ -46,6 +46,19 @@ public interface userRepository extends JpaRepository<users, Integer>{
     List<String> checkName();
 
 
+
+    @Modifying
+    @Transactional
+    @Query(value="update user set commentNum=commentNum + 1 " +
+            "where user.userID=?1",nativeQuery = true)
+    void AddCommentNum(Integer id);
+
+    @Modifying
+    @Transactional
+    @Query(value="update user set commentNum=commentNum - 1 " +
+            "where user.userID=?1",nativeQuery = true)
+    void DeleteCommentNum(Integer id);
+
     @Modifying
     @Transactional
     @Query(value="update user set peopleCollectNum=peopleCollectNum + 1 " +
@@ -70,6 +83,9 @@ public interface userRepository extends JpaRepository<users, Integer>{
     @Query(value="update user set movieCollectNum=movieCollectNum - 1 " +
             "where userID=?1",nativeQuery = true)
     void DeleteCollectMovie(Integer id);
+
+
+
 
 
 }

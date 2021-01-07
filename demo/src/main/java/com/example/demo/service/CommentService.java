@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.Entity.commentmsg;
 import com.example.demo.Entity.movie;
+import com.example.demo.Entity.numbers;
 import com.example.demo.dao.commentmsgRepository;
 import com.example.demo.dao.movieRepository;
 import com.example.demo.dao.userRepository;
@@ -26,6 +27,9 @@ public class CommentService {
 
     @Resource
     private movieRepository MovieRepository;
+
+    @Resource
+    private NumberService numberService;
 
     public JSONArray getCommentMovie(Integer id)
     {
@@ -57,21 +61,18 @@ public class CommentService {
     public void saveCommentMsg(Integer commentID,Integer user_id,Integer movie_id,
         Float rate,Date time,String Content)
     {
+        commentmsg dd=new commentmsg();
+        dd.setMsgID(commentID);
+        dd.setUserID(user_id);
+        dd.setMovieID(movie_id);
+        dd.setHelpfulness(rate);
+        dd.setTime(time);
+        dd.setText(Content);
+        CommentRepository.save(dd);
 
-        CommentRepository.InsertaComment(commentID, user_id,
-                movie_id, rate, time, Content);
+        UserRepository.AddCommentNum(user_id);
 
-        users temp=new users();
-        temp.setUserID(user_id);
-        int temp1=temp.getCommentNum()+ 1;
-        temp.setCommentNum(temp1);
-        UserRepository.save(temp);
-
-        movie temp2=new movie();
-        temp2.setMovieID(movie_id);
-        temp1=temp2.getCommentnum() + 1;
-        temp2.setCommentnum(temp1);
-        MovieRepository.save(temp2);
+        MovieRepository.AddCommentNum(movie_id);
     }
 
 

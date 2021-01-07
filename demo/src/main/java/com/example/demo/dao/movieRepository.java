@@ -21,6 +21,19 @@ public interface movieRepository extends JpaRepository<movie, Integer> {
 
     @Modifying
     @Transactional
+    @Query(value="update movie set commentNum=commentNum + 1 " +
+            "where movieID=?1",nativeQuery = true)
+    void AddCommentNum(Integer id);
+
+    @Modifying
+    @Transactional
+    @Query(value="update movie set commentNum=commentNum - 1 " +
+            "where movieID=?1",nativeQuery = true)
+    void DeleteCommentNum(Integer id);
+
+
+    @Modifying
+    @Transactional
     @Query(value="update movie set collect_num=collect_num + 1 " +
             "where movieID=?1",nativeQuery = true)
     void AddCollectedUser(Integer movieID);
@@ -60,6 +73,7 @@ public interface movieRepository extends JpaRepository<movie, Integer> {
     @Query(value="select * from movie where movieID=?1",nativeQuery = true)
     movie getDetailMovie(Integer movieID);
 
-
+    @Query(value="select * from movie where movieID=?1",nativeQuery = true)
+    movie getOneMovie(Integer movieID);
 
 }
