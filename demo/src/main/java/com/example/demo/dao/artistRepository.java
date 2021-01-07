@@ -13,21 +13,14 @@ import java.util.Map;
 public interface artistRepository extends JpaRepository<artist,Integer> {
 
 
-//    @Modifying
-//    @Transactional
-//    @Query(value="insert into artist values (" +
-//            " ?1,?2,?3,?4,?5,?6,?7,?8,?9)",nativeQuery = true)
-//    void InsertArtist(Integer id, String name,
-//                     Integer sex, Date birthday,String area,
-//                     String profession,String intoduction,
-//                     Character type,String photo);
-
+    @Override
+    List<artist> findAll();
 
     @Override
     <S extends artist> S save(S s);
 
-    @Query(value="select * from artist where type=?1 ",nativeQuery = true)
-    List<artist> getArtistID(Character type);
+    @Query(value="select * from artist where profession=?1 ",nativeQuery = true)
+    List<artist> getArtistID(String profession);
 
 
     @Query(value="with some as (" +
