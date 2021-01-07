@@ -7,12 +7,12 @@
           <el-form-item label="User Avatar" class="item0">
             <el-upload
               class="avatar-uploader"
+              :multiple="false"
               action
               :show-file-list="false"
-              :http-request="changeFile"
-              :on-success="AvatarUploadSuccess"
+              :http-request="upload"
               :before-upload="beforeAvatarUpload">
-              <img v-if="personalForm.avatar" :src="personalForm.avatar" class="avatar" @error="def()">
+              <img v-if="personalForm.avatar" :src="getAvatar()" class="avatar" @error="def()">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
           </el-form-item>
@@ -56,17 +56,6 @@ const dateFormat=function(t){
     let month=new Date(t).getMonth() + 1 < 10? "0" + (new Date(t).getMonth() + 1): new Date(t).getMonth() + 1;
     let date=new Date(t).getDate() < 10? "0" + new Date(t).getDate(): new Date(t).getDate();
     return year+"-"+month+"-"+date;
-}
-export function parsingPictureData (file, id) {
-  return fetch({
-    url: 'http://localhost:8070/User/ModifyAvatar',
-    method: 'post',  // 方式一定是post
-    headers: {
-      'Content-Type': 'multipart/form-data',
-      'userid': id,      //放到formData里后端拿不到，所以放到请求头里了
-      'file':file
-    }
-  })
 }
 
 export default {
@@ -132,27 +121,17 @@ export default {
             });
 
     },
-    AvatarUploadSuccess(res, file){
-      /*console.log("上传");
-      let fd = new FormData(); //参数的格式是formData格式的       
-      fd.append("file", obj.file); //参数
-      axios.post("http://localhost:8070/User/ModifyAvatar?userid="+this.$store.state.id+"&file="+obj.file).then((response)=>{
-         console.log(response);
-         this.$message.success("Upload Success!");
-      }).catch((error)=>{
-        this.$message.error("Upload Failed!");
-      })*/
-    },
-    changeFile(file) {
-      console.log(file);       
-      /*let fd = new FormData();       
-      fd.append('file',file);//传文件          */  
-      parsingPictureData(obj.file,this.$store.state.id).then((response)=>{
+    upload(obj) {
+      console.log(obj);       
+      let fd = new FormData();
+      fd.append('userid',this.$store.state.id);       
+      fd.append('file',obj.file);//传文件 
+      axios.post("http://localhost:8070/User/ModifyAvatar?",fd).then((response)=>{
         console.log(response);
         this.$message.success("Upload Success!");
       }).catch((error)=>{
         this.$message.error("Upload Failed!");
-      }) 
+      })
     },
     beforeAvatarUpload(file) {
       const isJPG = file.type === "image/jpeg";
@@ -167,6 +146,14 @@ export default {
       }
       return (isJPG || isJPG2 || isPNG) && isLt5M;
     },
+   getAvatar(){
+      var url=this.$store.state.avatar;
+      if(url==null||url==''){
+          return require('../assets/images/avatar.png');
+      }
+      return require('../assets/images/'+url);
+   }
+    
   }
 }
 </script>

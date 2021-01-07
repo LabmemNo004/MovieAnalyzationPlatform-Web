@@ -24,7 +24,7 @@
                 </el-menu>-->
                 <el-dropdown>
                     <div class="l top1">
-                        <img class="avatar" :src="this.$store.state.avatar" @error="def()"/>
+                        <img class="avatar" :src="getAvatar()" @error="def()"/>
                     </div>
                     <div class="l top2">
                         <span class="name">{{this.$store.state.username}}
@@ -93,6 +93,9 @@ import axios from "axios";
         },
         getAvatar(){
             var url=this.$store.state.avatar;
+            if(url==null||url==''){
+                return require('../assets/images/avatar.png');
+            }
             return require('../assets/images/'+url);
         }
         

@@ -2,7 +2,7 @@
     <div class="personalhome">
         <div class="head"><!--头像、昵称区域-->
           <div class="l">
-            <img :src="this.$store.state.avatar" class="ava_pic" @click="toPersonalInfo()" @error="def()"/>
+            <img :src="getAvatar()" class="ava_pic" @click="toPersonalInfo()" @error="def()"/>
           </div>
           <div class="l top2">
             <span class="username">{{this.$store.state.username}}</span>
@@ -153,6 +153,9 @@ export default {
     },
     getAvatar(){
       var url=this.$store.state.avatar;
+      if(url==null||url==''){
+          return require('../assets/images/avatar.png');
+      }
       return require('../assets/images/'+url);
     },
     away(){
