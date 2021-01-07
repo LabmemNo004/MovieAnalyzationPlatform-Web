@@ -1,18 +1,18 @@
 <template>
     <div class="movieinfo">
         <div class="movie_pic l">
-            <img :src="movieInfo.movie_pic"/>
+            <img :src="converPic(movieInfo.movie_pic)" @error="away()"/>
         </div>
         <div class="movie_info l">
             <div class="name">{{movieInfo.movie_name}}</div>
             <div class="information">
                 <div class="info1">
                     <span class="span1">Director: </span>
-                    <span class="span2">{{movieInfo.director}}</span>
+                    <span class="span2" v-for="director in movieInfo.director" :key="director">{{director}} / </span>
                 </div>
                 <div class="info1">
                     <span class="span1">Main Actors: </span>
-                    <span class="span2">{{movieInfo.actors}}</span>
+                    <span class="span2" v-for="actor in movieInfo.actors" :key="actor">{{actor}} / </span>
                 </div>
                  <div class="info1">
                     <span class="span1">Type: </span>
@@ -27,7 +27,7 @@
                     <span class="span2">{{movieInfo.pub_time}}</span>
                 </div>
                 <div class="info1">
-                    <span class="span1">Duration: </span>
+                    <span class="span1">Duration(minutes): </span>
                     <span class="span2">{{movieInfo.duration}}</span>
                 </div>
                 <div class="info1">
@@ -46,7 +46,7 @@
             <div class="title l">Introduction</div>
             <div class="line1 l"></div>
             <div class="clear"></div>
-            <div class="content">{{movieInfo.content}}</div>
+            <div class="content">{{movieInfo.introduction}}</div>
         </div>
         <div class="comment">
             <div class="title l">Rate and Comments</div>
@@ -60,9 +60,9 @@
                         disabled
                         show-score
                         text-color="#ff9900"
-                        score-template="{value}" v-if="movieInfo.myrate!=0">
+                        score-template="{value}" v-if="movieInfo.my_rate>0">
                     </el-rate>
-                    <span v-else class="span5">You haven't given rate.</span>
+                    <span v-else class="span5">您还未打分</span>
                 </div>
                 <div class="clear"></div>
             </div>
@@ -76,7 +76,7 @@
                     <el-button type="primary" round @click="show=true">Edit Rate and Comment</el-button>
                 </div>
                 <div class="form" v-if="show">
-                    <el-form ref="form" :model="Form" label-width="100px" label-position="left">
+                    <el-form ref="form" :model="Form" label-width="100px" label-position="left" :inline="true">
                         <el-form-item label="Rate:" prop="rate">
                             <el-rate
                                 v-model="Form.rate"
@@ -84,22 +84,27 @@
                                 text-color="#ff9900">
                             </el-rate>
                         </el-form-item>
+                        <el-form-item class="markButton">
+                            <el-button type="primary" @click="submitForm1()" round size="small">Marking</el-button>
+                        </el-form-item>
+                    </el-form>
+                    <el-form ref="form" :model="Form" label-width="100px" label-position="left">
                         <el-form-item label="Comment:" prop="comment">
                              <el-input type="textarea" v-model="Form.comment" :rows="4" maxlength="150" show-word-limit></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" @click="submitForm()" round>Submit</el-button>
+                            <el-button type="primary" @click="submitForm2()" round>Submit</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
             </div>
             <div class="userComment">
-                <div>User Comments({{movieInfo.comment_num}})</div>
-                <div class=comments v-if="movieInfo.comment_num!=0">
+                <div>User Comments({{this.totalNum}})</div>
+                <div class=comments v-if="this.totalNum!=0">
                     <div v-for="comment in commentList" :key="comment.username" >
                         <el-divider></el-divider>
                         <div class="l">
-                            <img :src="comment.avatar"/>
+                            <img :src="comment.avatar" @error="def()"/>
                         </div>
                         <div class="l username">
                             <span class="span6">{{comment.username}}</span>
@@ -110,9 +115,11 @@
                                 disabled
                                 show-score
                                 text-color="#ff9900"
-                                score-template="{value}">
+                                score-template="{value}" v-if="comment.rate>0">
                             </el-rate>
+                            <span v-else class="span5">未打分</span>
                         </div>
+                        <div class="l time">{{comment.time}}</div>
                         <div class="clear"></div>
                         <div class="comment_content">{{comment.content}}</div>
                     </div>
@@ -122,12 +129,12 @@
                     <div>No Comments.</div>
                 </div>
             </div>
-            <div class="page" v-if="movieInfo.comment_num!=0">
+            <div class="page" v-if="totalNum>0">
                 <el-pagination
                     @current-change="handleCurrentChange"
                     :current-page="pagenum"
                     layout="prev, pager, next"
-                    :total="movieInfo.comment_num"
+                    :total="totalNum"
                     :page-size="5">
                 </el-pagination>
             </div>
@@ -135,14 +142,36 @@
     </div>
 </template>
 <script>
+import axios from "axios";
+const dateFormat=function(t){
+    let year=new Date(t).getFullYear();
+    let month=new Date(t).getMonth() + 1 < 10? "0" + (new Date(t).getMonth() + 1): new Date(t).getMonth() + 1;
+    let date=new Date(t).getDate() < 10? "0" + new Date(t).getDate(): new Date(t).getDate();
+    let hour=new Date(t).getHours() < 10? "0" + new Date(t).getHours(): new Date(t).getHours();
+    let minute=new Date(t).getMinutes() < 10? "0" + new Date(t).getMinutes(): new Date(t).getMinutes();
+    let second=new Date(t).getSeconds() < 10? "0" + new Date(t).getSeconds(): new Date(t).getSeconds();
+    return year+"-"+month+"-"+date+" "+hour+":"+minute+":"+second;
+}
+const dateFormat1=function(t){
+    let year=new Date(t).getFullYear();
+    let month=new Date(t).getMonth() + 1 < 10? "0" + (new Date(t).getMonth() + 1): new Date(t).getMonth() + 1;
+    let date=new Date(t).getDate() < 10? "0" + new Date(t).getDate(): new Date(t).getDate();
+    return year+"-"+month+"-"+date;
+}
+const convert=function(t){
+    return t/3600;
+}
 export default {
   name: 'MovieInfo',
   data(){
     return{
         show:false,
         pagenum:1,
+        defaultImg:require('../assets/images/avatar.png'),
+        unload:require('../assets/images/unload.png'),
+        totalNum:0,
         movieInfo:{
-            movie_pic:require('../assets/images/1.png'),
+           /* movie_pic:require('../assets/images/1.png'),
             movie_name:'The God Father',
             director:'Francis Ford Coppola',
             actors:'Marlon Brando,Al Pacino',
@@ -155,15 +184,15 @@ export default {
             is_collect:false,
             my_rate:4.8,
             my_comment:'',
-            content:"The Godfather is an extraordinary novel which has become a modern day classic. Puzo pulls us inside the violent society of the Mafia and its gang wars.The leader, Vito Corleone, is the Godfather. He is a benevolent despot who stops at nothing to gain and hold power. His command post is a fortress on Long Island from which he presides over a vast underground empire that includes the rackets, gambling, bookmaking, and unions. His influence runs through all levels of American society, from the cop on the beat to the nation's mighty.Mario Puzo, a master storyteller, introduces us to unforgettable characters, and the elements of this world explode to life in this violent and impassioned chronicle."
+            content:"The Godfather is an extraordinary novel which has become a modern day classic. Puzo pulls us inside the violent society of the Mafia and its gang wars.The leader, Vito Corleone, is the Godfather. He is a benevolent despot who stops at nothing to gain and hold power. His command post is a fortress on Long Island from which he presides over a vast underground empire that includes the rackets, gambling, bookmaking, and unions. His influence runs through all levels of American society, from the cop on the beat to the nation's mighty.Mario Puzo, a master storyteller, introduces us to unforgettable characters, and the elements of this world explode to life in this violent and impassioned chronicle."*/
             
         },
         Form:{
-            rate:3,
+            rate:'',
             comment:''
         },
         commentList:[
-            {
+            /*{
                 avatar:require('../assets/images/avatar0.jpg'),
                 username:'nianwuluo',
                 rate:4.5,
@@ -180,7 +209,7 @@ export default {
                 username:'user3',
                 rate:3.2,
                 content:"It's boring!"
-            }
+            }*/
             
         ]
         
@@ -188,25 +217,151 @@ export default {
     
   },
   methods:{
+      away(){
+        let img = event.srcElement;   
+        img.src = this.unload;   
+        img.onerror = null; //防止闪图
+    },
+      def(){
+           let img = event.srcElement;   
+           img.src = this.defaultImg;   
+           img.onerror = null; //防止闪图
+       },
         collect(){
+            var movieid=sessionStorage.getItem("movie_id");
+            console.log(movieid);
             if(this.movieInfo.is_collect==false){
-                this.movieInfo.is_collect=true;
-                this.movieInfo.collect_num++;
+                var op=1;
+                axios.post("http://localhost:8070/Movie/Collection?userid="+this.$store.state.id+"&movieId="+movieid+"&operations="+op).then((response)=>{
+                    console.log(response);
+                    this.$message.success("Collect Succeed!");
+                    this.movieInfo.is_collect=true;
+                    this.movieInfo.collect_num++;
+                }).catch((error)=>{
+                    this.$message.error("Collect Failed!");
+                })
+                
             }
             else{
-                this.movieInfo.is_collect=false;
-                this.movieInfo.collect_num--;
+                var op=0;
+                axios.post("http://localhost:8070/Movie/Collection?userid="+this.$store.state.id+"&movieId="+movieid+"&operations="+op).then((response)=>{
+                    console.log(response);
+                    this.$message.success("Cancel Succeed!");
+                    this.movieInfo.is_collect=false;
+                    this.movieInfo.collect_num--;
+                }).catch((error)=>{
+                    this.$message.error("Cancel Failed!");
+                })
+               
             }
         },
-        getCommentList(){
+        async getMovieInfo(){
+            var movieid=sessionStorage.getItem("movie_id");
+            console.log(movieid);
+            axios.get("http://localhost:8070/Movie/MovieDetails",{
+                params:{
+                  movie_id:movieid,
+                  user_id:this.$store.state.id
+                }
+            }).then((response)=>{
+                console.log(response);
+                this.movieInfo=response.data.data[0];
+                var time=new Date(this.movieInfo.pub_time);
+                this.movieInfo.pub_time=dateFormat1(time);
+                this.movieInfo.collect_num+=1;
+                //this.movieInfo.duration=convert(this.movieInfo.duration);
+            }).catch((error)=>{
+                this.$message.error("Get Movie's Details Failed!");
+            })
+        },
+        async getCommentList(){
+            var movieid=sessionStorage.getItem("movie_id");
+            console.log(movieid);
+            axios.get("http://localhost:8070/Movie/MovieComment",{
+                 params:{
+                  movie_id:movieid,
+                  pagenum:this.pagenum,
+                  pagesize:5
+                }
+            }).then((response)=>{
+                console.log(response);
+                this.commentList=response.data.data;
+                if(response.data.totalNum<0){
+                    this.totalNum=0;
+                }
+                else{
+                    this.totalNum=response.data.totalNum;
+                }
+                
+                
+                var i=0;
+                for(i=0;i<this.commentList.length;i++){
+                    var date=new Date(this.commentList[i].time);
+                    console.log(date);
+                    this.commentList[i].time=dateFormat1(date);
+                    if(this.commentList[i].rate<0){
+                      this.commentList[i].rate=0;
+                    }
+                }
+            }).catch((error)=>{
+                this.$message.error("Get Comment List Failed!");
+            })
 
+        },
+        async submitForm1(){
+            if(this.Form.rate==''){
+                this.$message.error("Marking First!");
+                return;
+            }
+            var movieid=sessionStorage.getItem("movie_id");
+            console.log(movieid);
+            await axios.post("http://localhost:8070/Movie/Score?user_id="+this.$store.state.id+"&movie_id="+movieid+"&rate="+this.Form.rate
+               ).then((response)=>{
+                   console.log(response);
+                   this.$message.success("Marking Success!");
+                   this.movieInfo.my_rate=this.Form.rate;
+               }).catch((error)=>{
+                   this.$message.error("Marking Failed!");
+               });
+        
+        },
+        async submitForm2(){
+            if(this.Form.comment==''){
+                this.$message.error("Write Comment First!");
+                return;
+            }
+            var movieid=sessionStorage.getItem("movie_id");
+            console.log(movieid);
+            var time=dateFormat1(new Date());
+
+            await axios.post("http://localhost:8070/Movie/Comment?user_id="+this.$store.state.id+"&movie_id="+movieid+"&time="+time+"&content="+this.Form.comment
+               ).then((response)=>{
+                   console.log(response);
+                   this.$message.success("Appraise Success!");
+                   this.movieInfo.my_comment=this.Form.comment;
+               }).catch((error)=>{
+                   this.$message.error("Appraise Failed!");
+            });
+        
         },
         handleCurrentChange(val) {
             console.log(`当前页: ${val}`);
             this.pagenum=val;
             this.getCommentList();
         },
-  }
+    converPic(url){
+      if(url==null||url==''){
+        return require('../assets/images/unload.png');
+      }
+      else{
+        return require('../assets/images/'+url);
+      }
+    }
+    },
+    created(){
+        this.getMovieInfo();
+        this.getCommentList();
+    }
 }
 </script>
 
@@ -346,7 +501,9 @@ export default {
 .movieinfo .el-button{
     font-size: 20px;
 }
-
+.movieinfo .markButton .el-button{
+    font-size:16px;
+}
 .movieinfo .editButton{
     margin-bottom:20px;
 }
@@ -414,5 +571,11 @@ export default {
 
 .movieinfo .rate{
     margin-top:5px;
+}
+
+.movieinfo .time{
+    font-size: 18px;
+    margin-top: 10px;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 </style>

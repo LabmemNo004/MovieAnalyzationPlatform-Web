@@ -7,11 +7,12 @@
           <el-form-item label="User Avatar" class="item0">
             <el-upload
               class="avatar-uploader"
-              action="https://jsonplaceholder.typicode.com/posts/"
+              :multiple="false"
+              action
               :show-file-list="false"
-              :on-success="handleAvatarSuccess"
+              :http-request="upload"
               :before-upload="beforeAvatarUpload">
-              <img v-if="personalForm.avatar" :src="personalForm.avatar" class="avatar">
+              <img v-if="personalForm.avatar" :src="getAvatar()" class="avatar" @error="def()">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
           </el-form-item>
@@ -28,7 +29,7 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="Birthday" class="item2">
-            <el-date-picker type="date" placeholder="选择日期" v-model="personalForm.birthday" style="width: 100%;"></el-date-picker>
+            <el-date-picker type="date" placeholder="Select Date" v-model="personalForm.birthday" style="width: 100%;"></el-date-picker>
           </el-form-item>
           <el-form-item label="Phone Number" class="item3">
             <el-input v-model="personalForm.phone" disabled></el-input>
@@ -56,13 +57,15 @@ const dateFormat=function(t){
     let date=new Date(t).getDate() < 10? "0" + new Date(t).getDate(): new Date(t).getDate();
     return year+"-"+month+"-"+date;
 }
+
 export default {
   name: 'PersonalInfo',
   data(){
     return{
       loading:false,
+      defaultImg:require('../assets/images/avatar.png'),
       personalForm:{
-         avatar:require('../assets/images/avatar0.jpg'),
+         avatar:'',
          user_id:this.$store.state.id,
          username:this.$store.state.username,
          sex:" ",
@@ -79,16 +82,14 @@ export default {
     this.getInfo();
   },
   methods:{
+    def(){
+           let img = event.srcElement;   
+           img.src = this.defaultImg;   
+           img.onerror = null; //防止闪图
+    },
     async getInfo(){
       this.loading=true;
-      axios.get("http://localhost:8070/User/GetInformation",
-              {
-                params:{
-                  userid: this.$store.state.id
-                }
-               
-              },
-              { withCredentials: true }
+      axios.post("http://localhost:8070/User/GetInformation?userid="+this.$store.state.id
             ).then((response)=>{
               console.log(response);
               var data=response.data.data;
@@ -99,6 +100,13 @@ export default {
               this.personalForm.phone=data.phone;
               this.personalForm.email=data.email;
               this.personalForm.signature=data.signature;
+              if(data.avatar==null||data.avatar==''){
+                this.personalForm.avatar=require('../assets/images/avatar.png');
+              }
+              else{
+                this.personalForm.avatar=data.avatar;
+              }
+              
               this.loading=false;
             }).catch((error)=>{
               this.$message.error("Loading Failed!");
@@ -107,35 +115,7 @@ export default {
     saveInfo(){
       var gender=this.personalForm.sex=='男'?0:1;
       var birth=dateFormat(this.personalForm.birthday);
-      /*var data=qs.stringify({
-        userid:this.personalForm.user_id,
-        username:this.personalForm.username,
-        sex:gender,
-        birthday:this.personalForm.birthday,
-        phone:this.personalForm.phone,
-        email:this.personalForm.email,
-        signature:this.personalForm.signature
-      });*/
-      /*let params = new FormData();
-      params.append('userid', this.personalForm.user_id);
-      params.append('username', this.personalForm.username);
-      params.append('sex',gender);
-      params.append('birthday',this.personalForm.birthday);
-      params.append('phone',this.personalForm.phone);
-      params.append('email',this.personalForm.email);
-      params.append('signature',this.personalForm.signature);*/
       axios.post("http://localhost:8070/User/ModifyInformation?userid="+this.personalForm.user_id+"&username="+this.personalForm.username+"&sex="+gender+"&birthday="+birth+"&phone="+this.personalForm.phone+"&email="+this.personalForm.email+"&signature="+this.personalForm.signature
-            /*{
-              
-              userid:this.personalForm.user_id,
-              username:this.personalForm.username,
-              sex:gender,
-              birthday:birth,
-              phone:this.personalForm.phone,
-              email:this.personalForm.email,
-              signature:this.personalForm.signature
-              
-            }*/
             ).then((response)=>{
               console.log(response);
               this.$store.state.username=this.personalForm.username;
@@ -147,21 +127,39 @@ export default {
             });
 
     },
-    handleAvatarSuccess(res, file) {
-        this.personalForm.avatar = URL.createObjectURL(file.raw);
+    upload(obj) {
+      console.log(obj);       
+      let fd = new FormData();
+      fd.append('userid',this.$store.state.id);       
+      fd.append('file',obj.file);//传文件 
+      axios.post("http://localhost:8070/User/ModifyAvatar",fd).then((response)=>{
+        console.log(response);
+        this.$message.success("Upload Success!");
+      }).catch((error)=>{
+        this.$message.error("Upload Failed!");
+      })
     },
     beforeAvatarUpload(file) {
-      const isJPG = file.type === 'image/jpeg';
-      const isLt2M = file.size / 1024 / 1024 < 2;
-
-      if (!isJPG) {
-        this.$message.error('上传头像图片只能是 JPG 格式!');
+      const isJPG = file.type === "image/jpeg";
+      const isJPG2 = file.type === "image/jpg";
+      const isPNG = file.type === "image/png";
+      const isLt5M = file.size / 1024 / 1024 < 5;
+      if (!isJPG && !isJPG2 && !isPNG) {
+        this.$message.error("Only jpg or png!");
       }
-      if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!');
+      if (!isLt5M) {
+        this.$message.warning("请上传5MB以内的图片!");
       }
-      return isJPG && isLt2M;
-    }
+      return (isJPG || isJPG2 || isPNG) && isLt5M;
+    },
+   getAvatar(){
+      var url=this.$store.state.avatar;
+      if(url==null||url==''){
+          return require('../assets/images/avatar.png');
+      }
+      return require('../assets/images/'+url);
+   }
+    
   }
 }
 </script>

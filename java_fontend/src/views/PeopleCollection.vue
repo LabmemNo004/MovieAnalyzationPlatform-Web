@@ -2,30 +2,19 @@
   <div class="peoplecollection">
     <div class="collection_container">
       <el-row>
-        <el-col span="2"></el-col>
-        <el-col span="14">
+        <el-col :span="2"></el-col>
+        <el-col :span="14">
           <div class="cl_op">
             <span class="sonListTitle_l">Collection({{personList.length}})</span>
-
           </div>
-<!--          <div class="listinfo">-->
-<!--            <div class="list_title clearfix">-->
-<!--              <div class="list_title_tab">-->
-<!--                <a href="#" :class="{'tab_active':seen_person&seen_movie}" @click="click_all()">All</a>-->
-<!--                <a href="#" :class="{'tab_active':!seen_person&seen_movie}" @click="click_movie">Movie</a>-->
-<!--                <a href="#" :class="{'tab_active':seen_person&!seen_movie}" @click="click_person">Person</a>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
           <div class="collection_con">
             <div class="ps_cl">
-
               <div class="ps_info">
                 <el-row>
                   <el-col :span="6" class="ps_cl_list col3"  v-for="person in personList" :key="person.person_id">
-                    <div class="mv_cl_card">
+                    <div class="mv_cl_card" @click="toPeopleInfo(person.person_id)">
                       <el-card :body-style="{ padding: '0px' }">
-                        <img :src="person.person_pic"/>
+                        <img :src="converPic(person.person_pic)"/>
                         <div class="info">
                           <div class="info2">{{ person.person_name }}</div>
                         </div>
@@ -36,15 +25,17 @@
               </div>
               <!--分页start-->
               <el-pagination
-                  background
+                  @current-change="handleCurrentChange"
+                  :current-page="pagenum"
                   layout="prev, pager, next"
-                  :total="people_collect_num">
+                  :total="people_collect_num"
+                  :page-size="8">
               </el-pagination>
               <!--分页end-->
             </div>
           </div>
         </el-col>
-        <el-col span="6">
+        <el-col :span="6">
           <div class="clr cl_navi">
             <div class="cl_navi_tt">Navigate</div>
             <div class="cl_navi_content">
@@ -77,57 +68,79 @@
             </div>
           </div>
         </el-col>
-        <el-col span="2"></el-col>
+        <el-col :span="2"></el-col>
       </el-row>
     </div>
   </div>
 </template>
 <script>
+import axios from "axios";
+
 export default {
   name: 'peoplecollection',
   data() {
     return {
-
-      people_collect_num:3,
+      pagenum:1,
+      people_collect_num:0,
       people_per_page:10,
-
-      personList: [
-        {
-          person_id: 1,
-          person_pic: require('../assets/images/person1.jpg'),
-          person_name: 'Gal Gadot',
-          person_profession:['actor','producer'],
-          person_movies:['Batman v Superman: Dawn of Justice','Wonder Woman','Justice League']
-        },
-        {
-          person_id: 2,
-          person_pic: require('../assets/images/person2.jpg'),
-          person_name: 'Chris Evans',
-          person_profession:['actor','producer'],
-          person_movies: ['The Avengers','Avengers: Infinity War','Avengers: Age of Ultron']
-        },
-        {
-          person_id: 3,
-          person_pic: require('../assets/images/person3.jpg'),
-          person_name: 'Angelina Jolie',
-          person_profession:['actor','producer'],
-          person_movies: ['Mr. & Mrs. Smith','Wanted','Maleficent']
-        }
-      ],
+      personList: [],
     }
   },
+  mounted:function(id){
+    this.getPeopleCollectionList();//需要触发的函数
+  },
   methods:{
-    click_all(){
-      this.seen_movie=true;
-      this.seen_person=true;
+    toPeopleInfo(id){
+      console.log("toPeopleInfo");
+      console.log("toPeopleInfo,person_id:",id);
+      sessionStorage.setItem("person_id",id);
+      this.$router.push('/PeopleInfo');
     },
-    click_movie(){
-      this.seen_movie=true;
-      this.seen_person=false;
+    setPeopleCollection(data){
+      this.personList=[];
+      for(let i=0;i<data.length;i++){
+        var person={};
+        person.person_id=data[i].personID;
+        person.person_name=data[i].person_name;
+        person.person_pic=data[i].picture;
+        person.person_profession=data[i].profession;
+        this.personList.push(person);
+      }
     },
-    click_person(){
-      this.seen_movie=false;
-      this.seen_person=true;
+    getPeopleCollectionList(){
+      axios.get("http://localhost:8070/User/CollectionPeople",
+          {
+            params:{
+              userid:this.$store.state.id,
+              pagenum:this.pagenum,
+              pagesize:8
+            }
+          },
+          { withCredentials: true }
+      ).then((response)=>{
+        if(response.data.totalNum<0){
+          return ;
+        }
+        console.log(response);
+        var data=response.data.data;
+        this.setPeopleCollection(data);
+        this.people_collect_num=response.data.totalNum;
+      }).catch((error)=>{
+        this.$message.error("Loading Failed!");
+      })
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+      this.pagenum=val;
+      this.getPeopleCollectionList();
+    },
+    converPic(url){
+      if(url==null||url==''){
+        return require('../assets/images/unload.png');
+      }
+      else{
+        return require('../assets/images/'+url);
+      }
     }
   }
 }
@@ -316,4 +329,6 @@ export default {
   background-color: #0066c0;
   color: white;
 }
+
+
 </style>

@@ -1,14 +1,5 @@
 <template>
   <div class="movies">
-    <!--一些头部元素，可能会修改-->
-    <!--一serch start-->
-    <div class="search">
-      <el-input placeholder="Input movie's name to search." v-model="keyword" class="input-with-select">
-        <el-button slot="append" icon="el-icon-search" @click="searchMovies()"></el-button>
-      </el-input>
-    </div>
-    <!--一serch end-->
-
     <!--主线部分开始-->
     <el-row>
       <el-col :span="3"></el-col>
@@ -22,18 +13,16 @@
             <div class="movie_sort">
               <!--年份分类begin-->
               <div class="mv_box">
-                <span id="sorted_type">Type: </span>
-                <el-radio v-model="t_radio" label="1">type1</el-radio>
-                <el-radio v-model="t_radio" label="2">type2</el-radio>
-                <el-radio v-model="t_radio" label="3">type3</el-radio>
+                <span id="sorted_type">Type:</span>
+                <el-radio v-for="t in movieType" :key="t.type_id" v-model="t_radio" :label="t.type_id" @change="getMovieList">{{t.type_name}}</el-radio>
               </div>
               <!--年份分类end-->
               <!--排序依据begin-->
               <div class="mv_box">
                 <span id="order_by">Ordered By: </span>
-                <el-radio v-model="o_radio" label="1">highest scores</el-radio>
-                <el-radio v-model="o_radio" label="2">comment most</el-radio>
-                <el-radio v-model="o_radio" label="3">collection most</el-radio>
+                <el-radio v-model="o_radio" label="1" @change="getMovieList">highest scores</el-radio>
+                <el-radio v-model="o_radio" label="2" @change="getMovieList">comment most</el-radio>
+                <el-radio v-model="o_radio" label="3" @change="getMovieList">collection most</el-radio>
               </div>
               <!--排序依据end-->
             </div>
@@ -45,9 +34,9 @@
               <div class=movieList1>
                 <el-row :gutter="20">
                   <el-col :span="6" class="col3" v-for="movie in movieList1" :key="movie.movie_id">
-                    <div class="movieCard" @click="toMovieInfo()">
+                    <div class="movieCard" @click="toMovieInfo(movie.movie_id)">
                       <el-card :body-style="{ padding: '0px'}">
-                        <img :src="movie.movie_pic"/>
+                        <img :src="converPic(movie.movie_pic)"/>
                         <div class="info">
                           <div class="info1">
                             <i class="el-icon-star-on color1"></i>
@@ -62,42 +51,13 @@
               </div>
               <!--分页start-->
               <el-pagination
-                  background
+                  @current-change="handleCurrentChange"
+                  :current-page="pagenum"
                   layout="prev, pager, next"
-                  :total="movie_num">
+                  :total="movie_num"
+                  :page-size="8">
               </el-pagination>
               <!--分页end-->
-            </div>
-
-            <div class="searchMovie" v-if="seen2">
-              <div class="title1">Find the results for you as follows:</div>
-              <div class="searchMovieList">
-                <el-row>
-                  <el-col :span="4" class="col3" v-for="movie in searchMovieList" :key="movie.movie_id">
-                    <div class="movieCard" @click="toMovieInfo()">
-                      <el-card :body-style="{ padding: '0px' }">
-                        <img :src="movie.movie_pic"/>
-                        <div class="info">
-                          <div class="info1">
-                            <i class="el-icon-star-on color1"></i>
-                            <span class="info_rate">{{ movie.movie_rate }}</span>
-                          </div>
-                          <div class="info2">{{ movie.movie_name }}</div>
-                        </div>
-                      </el-card>
-                    </div>
-                  </el-col>
-                </el-row>
-              </div>
-
-              <div class="page">
-                <el-pagination
-                    @current-change="handleCurrentChange"
-                    :current-page="pagenum"
-                    layout="prev, pager, next"
-                    :total="80">
-                </el-pagination>
-              </div>
             </div>
           </div>
           <!--movie_screen end-->
@@ -109,6 +69,8 @@
   </div>
 </template>
 <script>
+import axios from "axios";
+
 export default {
   name: 'Movies',
   data() {
@@ -118,154 +80,118 @@ export default {
       seen2: false,
       total: 6,
       pagenum: 1,
-      t_radio: '1',
+      t_radio: "1",
       o_radio: '1',
-      movie_num:120,
-      movie_per_page:12,
-
-      headPictures: [
-        {id: 0, source: require('../assets/images/header1.png')},
-        {id: 1, source: require('../assets/images/header2.png')},
-        {id: 2, source: require('../assets/images/header3.png')},
-        {id: 3, source: require('../assets/images/header4.png')},
-        {id: 4, source: require('../assets/images/header5.png')}
-      ],
-      movieList1: [
+      movie_num: 120,
+      movieList1: [],
+      movieType: [
         {
-          movie_id: 1,
-          movie_pic: require('../assets/images/1.png'),
-          movie_name: 'The God Father',
-          movie_rate: 4.8
+          type_id: "1",
+          type_name: "all"
         },
         {
-          movie_id: 2,
-          movie_pic: require('../assets/images/2.png'),
-          movie_name: 'Man of Steel',
-          movie_rate: 4.9
+          type_id: "2",
+          type_name: "动作片"
         },
         {
-          movie_id: 3,
-          movie_pic: require('../assets/images/3.png'),
-          movie_name: 'I am Legend',
-          movie_rate: '4.8'
+          type_id: "3",
+          type_name: "犯罪"
         },
         {
-          movie_id: 4,
-          movie_pic: require('../assets/images/1.png'),
-          movie_name: 'The God Father',
-          movie_rate: 4.8
+          type_id: "4",
+          type_name: "传记"
         },
         {
-          movie_id: 5,
-          movie_pic: require('../assets/images/2.png'),
-          movie_name: 'Man of Steel',
-          movie_rate: 4.9
+          type_id: "5",
+          type_name: "恐怖"
         },
         {
-          movie_id: 6,
-          movie_pic: require('../assets/images/3.png'),
-          movie_name: 'I am Legend',
-          movie_rate: '4.8'
-        }
-      ],
-      movieList2: [
-        {
-          movie_id: 1,
-          movie_pic: require('../assets/images/1.png'),
-          movie_name: 'The God Father',
-          movie_rate: 4.8
+          type_id: "6",
+          type_name: "爱情"
         },
         {
-          movie_id: 2,
-          movie_pic: require('../assets/images/2.png'),
-          movie_name: 'Man of Steel',
-          movie_rate: 4.9
+          type_id: "7",
+          type_name: "喜剧"
         },
         {
-          movie_id: 3,
-          movie_pic: require('../assets/images/3.png'),
-          movie_name: 'I am Legend',
-          movie_rate: '4.8'
+          type_id: "8",
+          type_name: "悬疑"
         },
         {
-          movie_id: 4,
-          movie_pic: require('../assets/images/1.png'),
-          movie_name: 'The God Father',
-          movie_rate: 4.8
+          type_id: "9",
+          type_name: "冒险"
         },
         {
-          movie_id: 5,
-          movie_pic: require('../assets/images/2.png'),
-          movie_name: 'Man of Steel',
-          movie_rate: 4.9
-        },
-        {
-          movie_id: 6,
-          movie_pic: require('../assets/images/3.png'),
-          movie_name: 'I am Legend',
-          movie_rate: '4.8'
-        }
-      ],
-      searchMovieList: [
-        {
-          movie_id: 1,
-          movie_pic: require('../assets/images/1.png'),
-          movie_name: 'The God Father',
-          movie_rate: 4.8
-        },
-        {
-          movie_id: 2,
-          movie_pic: require('../assets/images/2.png'),
-          movie_name: 'Man of Steel',
-          movie_rate: 4.9
-        },
-        {
-          movie_id: 3,
-          movie_pic: require('../assets/images/3.png'),
-          movie_name: 'I am Legend',
-          movie_rate: '4.8'
-        },
-        {
-          movie_id: 4,
-          movie_pic: require('../assets/images/1.png'),
-          movie_name: 'The God Father',
-          movie_rate: 4.8
-        },
-        {
-          movie_id: 5,
-          movie_pic: require('../assets/images/2.png'),
-          movie_name: 'Man of Steel',
-          movie_rate: 4.9
-        },
-        {
-          movie_id: 6,
-          movie_pic: require('../assets/images/3.png'),
-          movie_name: 'I am Legend',
-          movie_rate: '4.8'
+          type_id: "10",
+          type_name: "剧情"
         }
       ]
     }
 
   },
-  methods:{
-    searchMovies(){
-      this.seen1=false;
-      this.seen2=true;
+  methods: {
+    searchMovies() {
+      this.seen1 = false;
+      this.seen2 = true;
     },
-    getMovieList(){
-
+    setMovies(data) {
+      this.movieList1 = [];
+      for (let i = 0; i < data.length; i++) {
+        var movie = {};
+        movie.movie_id = data[i].movie_id;
+        movie.movie_pic = data[i].movie_pic;
+        movie.movie_name = data[i].movie_name;
+        movie.movie_rate = data[i].movie_rate;
+        this.movieList1.push(movie);
+      }
+    },
+    getMovieListByType() {
+      axios.get("http://localhost:8070/Movie/SearchMovieByType",
+          {
+            params: {
+              type: this.movie_type,
+              order: parseInt(this.o_radio) - 1,
+              pagenum: this.pagenum,
+              pagesize: 8
+            }
+          },
+          {withCredentials: true}
+      ).then((response) => {
+        console.log(response);
+        if(response.data.totalNum<0){
+          return ;
+        }
+        var data = response.data.data;
+        this.setMovies(data);
+        this.movie_num = response.data.totalNum;
+      }).catch((error) => {
+        this.$message.error("Loading Failed!");
+      })
+    },
+    getMovieList() {
+      var tx=parseInt(this.t_radio);
+      this.movie_type=this.movieType[tx].type_name;
+      this.getMovieListByType();
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
-      this.pagenum=val;
+      this.pagenum = val;
       this.getMovieList();
     },
-    toMovieInfo(){
+    toMovieInfo(id) {
+      sessionStorage.setItem("movie_id", id);
       this.$router.push('/MovieInfo');
+    },
+    converPic(url) {
+      if (url == null || url == '') {
+        return require('../assets/images/unload.png');
+      } else {
+        return require('../assets/images/' + url);
+      }
     }
   },
-  created(){
-
+  created() {
+    this.getMovieList();//需要触发的函数
   }
 }
 </script>
@@ -298,12 +224,15 @@ export default {
   margin-bottom: 20px;
 }
 
+.movieCard .el-card__body {
+  width: 250px;
+  height: 470px;
+  cursor: pointer;
+}
 
 .movieCard .el-card__body > img {
-  width: 100%;
-
-  height: auto;
-  cursor:pointer;
+  width: 250px;
+  height: 368.13px;
 }
 
 .movies .movieList1 {
@@ -327,7 +256,7 @@ export default {
 }
 
 .movies .info1 {
-  font-size: 14px;
+  font-size: 20px;
   text-align: left;
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
@@ -372,8 +301,8 @@ export default {
 }
 
 #app > div > section > main > div > div.el-row > div.el-col.el-col-18 > div > div {
-
-  padding: 30px 20px;
+  margin-top: 30px;
+  padding: 10px 20px;
 }
 
 .movie_sort {
@@ -512,12 +441,12 @@ div.movie_order > span {
   margin-right: 10px;
 }
 
-div.movie1>div.el-pagination{
+div.movie1 > div.el-pagination {
   text-align: center;
   margin: 50px 0px;
 }
 
-div.movie1>div.el-pagination.is-background .el-pager li:not(.disabled).active{
+div.movie1 > div.el-pagination.is-background .el-pager li:not(.disabled).active {
   background-color: #0066c0;
   color: white;
 }

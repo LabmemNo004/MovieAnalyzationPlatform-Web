@@ -1,35 +1,27 @@
 <template>
   <div class="person">
-    <!--一serch start-->
-    <div class="search">
-      <el-input placeholder="Input movie's name to search." v-model="keyword" class="input-with-select">
-        <el-button slot="append" icon="el-icon-search" @click="searchMovies()"></el-button>
-      </el-input>
-    </div>
-    <!--一serch end-->
     <div class="star_container">
       <el-row>
-        <el-col span="3"></el-col>
-        <el-col span="18">
+        <el-col :span="3"></el-col>
+        <el-col :span="18">
           <div class="starList_con">
             <!--star_sort begin-->
             <div class="person_sort">
               <!--年份分类begin-->
               <div class="pr_box">
                 <span id="sorted_type">Profession: </span>
-                <el-radio v-model="p_radio" label="1">all</el-radio>
-                <el-radio v-model="p_radio" label="2">director</el-radio>
-                <el-radio v-model="p_radio" label="3">actor</el-radio>
+                <el-radio v-model="p_radio" label="1" @change="getPersonList">actor</el-radio>
+                <el-radio v-model="p_radio" label="2" @change="getPersonList">director</el-radio>
               </div>
               <!--年份分类end-->
             </div>
             <!--star_sort end-->
             <!--star info list begin-->
-              <div span="12" class="starList_info" v-for="person in personList" :key="person.person_id" @click="toPeopleInfo()">
+              <div class="starList_info" v-for="person in personList" :key="person.person_id" @click="toPeopleInfo(person.person_id)">
                 <div class="star_cards">
                   <div class="star_photos">
                     <a href="#">
-                      <img :src="person.person_pic" :alt="person.person_name"/>
+                      <img :src="converPic(person.person_pic)" :alt="person.person_name"/>
                     </a>
                   </div>
                   <div class="person_info">
@@ -42,15 +34,17 @@
             <!--star info list end-->
             <!--分页start-->
             <el-pagination
-                background
+                @current-change="handleCurrentChange"
+                :current-page="pagenum"
                 layout="prev, pager, next"
-                :total="star_num">
+                :total="personnum"
+                :page-size="8">
             </el-pagination>
             <!--分页end-->
           </div>
         </el-col>
 
-        <el-col span="3"></el-col>
+        <el-col :span="3"></el-col>
       </el-row>
     </div>
   </div>
@@ -61,98 +55,109 @@ export default {
   name: 'person',
   data() {
     return {
+      personnum:80,
+      pagenum:1,
       p_radio:'1',
-      star_num:100,
-      star_per_page:10,
-      personList: [
-        {
-          person_id: 1,
-          person_pic: require('../assets/images/person1.jpg'),
-          person_name: 'Gal Gadot',
-          person_profession:'actor',
-          person_movies:['Batman v Superman: Dawn of Justice','Wonder Woman','Justice League']
-        },
-        {
-          person_id: 2,
-          person_pic: require('../assets/images/person2.jpg'),
-          person_name: 'Chris Evans',
-          person_profession:'actor',
-          person_movies: ['The Avengers','Avengers: Infinity War','Avengers: Age of Ultron']
-        },
-        {
-          person_id: 3,
-          person_pic: require('../assets/images/person3.jpg'),
-          person_name: 'Angelina Jolie',
-          person_profession:'actor',
-          person_movies: ['Mr. & Mrs. Smith','Wanted','Maleficent']
-        },
-        {
-          person_id: 4,
-          person_pic: require('../assets/images/person1.jpg'),
-          person_name: 'Gal Gadotr',
-          person_profession:'actor',
-          person_movies:['Batman v Superman: Dawn of Justice','Wonder Woman','Justice League']
-        },
-        {
-          person_id: 5,
-          person_pic: require('../assets/images/person2.jpg'),
-          person_name: 'Chris Evans',
-          person_profession:'actor',
-          person_movies: ['The Avengers','Avengers: Infinity War','Avengers: Age of Ultron']
-        },
-        {
-          person_id: 6,
-          person_pic: require('../assets/images/person3.jpg'),
-          person_name: 'Angelina Jolie',
-          person_profession:'actor',
-          person_movies: ['Mr. & Mrs. Smith','Wanted','Maleficent']
-        }
-      ]
+      personList: []
     }
 
   },
   methods:{
-    toPeopleInfo(){
+    toPeopleInfo(id){
+      sessionStorage.setItem("person_id",id);
       this.$router.push('/PeopleInfo');
+    },
+    setPersonList(data){
+      this.personList=[];
+      for (let i=0;i<data.length;i++){
+        var person={};
+        person.person_id=data[i].person_id;
+        person.person_pic=data[i].person_pic;
+        person.person_name=data[i].person_name;
+        person.person_profession=data[i].profession;
+        person.person_movies=data[i].movies;
+        this.personList.push(person);
+      }
+    },
+    getPersonList(){
+      axios.get("http://localhost:8070/Artist/ArtistList",
+          {
+            params:{
+              profession:this.p_radio==='1'?'演员':'导演',
+              pagenum:this.pagenum,
+              pagesize:6
+            }
+          },
+          { withCredentials: true }
+      ).then((response)=>{
+        if(response.data.totalNum<0){
+          return ;
+        }
+        console.log(response);
+        var data=response.data.data;
+        this.setPersonList(data);
+      }).catch((error)=>{
+        this.$message.error("Loading Failed!");
+      })
+    },
+    handleCurrentChange(val){
+      console.log(`当前页: ${val}`);
+      this.pagenum=val;
+      this.getPersonList();
+    },
+    converPic(url){
+      if(url==null||url==''){
+        return require('../assets/images/unload.png');
+      }
+      else{
+        return require('../assets/images/'+url);
+      }
     }
+  },
+  created() {
+    this.getPersonList();//需要触发的函数
   }
 }
 </script>
 
 <style>
-.person_info_title{
+.person .person_info_title{
   font-weight: bold;
   font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
-.person_profession{
+.person .person_profession{
   color: #999999;
 }
 
-.person_name{
+.person .person_name{
   font-size: 20px;
   font-family: Georgia, 'Times New Roman', Times, serif;
   color: #0066c0;
 }
 
-.person_movie{
+.person .person_movie{
   font-size: 15px;
 }
 
-.person_info{
+.person .person_info{
   padding: 20px 30px;
   float: left;
+  width:600px;
+  height: 110px;
+  overflow: hidden;
+  margin:0px;
 }
 
-.person_sort{
+.person .person_sort{
   margin: 20px;
 }
 
-.person .search {
+.person .person .search {
   margin: 30px 480px;
 }
 
-.star_container{
+.person .star_container{
   margin:30px 0px;
   text-align: left;
 }
@@ -170,53 +175,10 @@ export default {
   min-height: 100px;
 }
 
-.starList_con{
+.person .starList_con{
   margin: 20px 20px;
   min-height: 100px;
   /*background-color: aquamarine;*/
-}
-
-.person_main_right{
-  text-align: left;
-  margin: 0px 10px;
-  background-color: #ffffff;
-  min-height: 50px;
-  padding: 20px 20px;
-}
-
-.prk{
-  background-color: #ebeef0;
-  min-height: 10px;
-  padding: 5px 10px;
-  margin-bottom: 30px;
-}
-
-a.person_list_load{
-  list-style: none outside none;
-  font-size: 14px;
-  padding: 0;
-  font-family: Microsoft YaHei;
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-block;
-  margin: 0 20px 10px 0;
-  color: #000000;
-}
-
-.keyword_profession_list{
-  width: 100px;
-}
-
-.keyword_age_list{
-  width: 70px;
-}
-
-.keyword_area_list{
-  width: 70px;
-}
-
-a.person_list_load.keyword_gender_list{
-  margin-right: 50px;
 }
 
 .star_photos{
@@ -230,8 +192,8 @@ a.person_list_load.keyword_gender_list{
 }
 
 .star_photos>a>img{
-  height: 100%;
-  width: auto;
+  height: 150px;
+  width: 100px;
 }
 
 .star_content{
@@ -260,12 +222,16 @@ a.person_list_load.keyword_gender_list{
   padding: 20px;
 }
 
-div.starList_con>div.el-pagination{
+#app > div > section > main > div > div.star_container > div > div.el-col.el-col-18 > div > div.el-pagination {
   text-align: center;
   margin: 50px 0px;
 }
-div.starList_con>div.el-pagination.is-background .el-pager li:not(.disabled).active{
+#app > div > section > main > div > div.star_container > div > div.el-col.el-col-18 > div > div.el-pagination .is-background .el-pager li:not(.disabled).active{
   background-color: #0066c0;
   color: white;
+}
+
+.person_info>p{
+  margin:5px 5px;
 }
 </style>

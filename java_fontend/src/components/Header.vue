@@ -7,7 +7,7 @@
                     <el-menu-item index="/Home">Home</el-menu-item>
                     <el-menu-item index="/Movies">Movies</el-menu-item>
                     <el-menu-item index="/People">People</el-menu-item>
-                    <el-menu-item index="/Rank">Rank</el-menu-item>
+                    <el-menu-item index="/Rank" v-if="this.$store.state.role==1">Rank</el-menu-item>
                 </el-menu>
             </el-col>
             <el-col :span="4" :offset="4" class="col2">
@@ -24,7 +24,7 @@
                 </el-menu>-->
                 <el-dropdown>
                     <div class="l top1">
-                        <img class="avatar" src="../assets/images/avatar0.jpg"/>
+                        <img class="avatar" :src="getAvatar()" @error="def()"/>
                     </div>
                     <div class="l top2">
                         <span class="name">{{this.$store.state.username}}
@@ -53,14 +53,39 @@
 </template>
 
 <script>
+import axios from "axios";
   export default {
     data() {
       return {
+          defaultImg:require('../assets/images/avatar.png'),
       };
     },
+    created(){
+       this.getInformation();
+    },
     methods: {
+        async getInformation(){
+            axios.post("http://localhost:8070/User/GetInformation?userid="+this.$store.state.id
+            ).then((response)=>{
+                this.$store.state.avatar=response.data.data.avatar;
+                sessionStorage.setItem("user", JSON.stringify(this.$store.state));
+            }).catch((error)=>{
+                this.$message.error("Get Information Failed!");
+            });
+        },
+        def(){
+           let img = event.srcElement;   
+           img.src = this.defaultImg;   
+           img.onerror = null; //防止闪图
+        },
         toPersonalHome(){
-            this.$router.push("/PersonalHome");
+            if(this.$store.state.role==0){
+               this.$router.push("/PersonalHome");
+            }
+            else{
+                this.$router.push("/Admin");
+            }
+            
         },
         toPersonalInfo(){
             this.$router.push("PersonalInfo");
@@ -71,7 +96,15 @@
           sessionStorage.setItem("user", {});
           this.$message.success("Exit Success!");
           this.$router.push("/");
+        },
+        getAvatar(){
+            var url=this.$store.state.avatar;
+            if(url==null||url==''){
+                return require('../assets/images/avatar.png');
+            }
+            return require('../assets/images/'+url);
         }
+        
     }
   }
 </script> 

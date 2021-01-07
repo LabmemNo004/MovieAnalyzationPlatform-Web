@@ -2,10 +2,10 @@
     <div class="personalhome">
         <div class="head"><!--头像、昵称区域-->
           <div class="l">
-            <img :src="avatar" class="ava_pic" @click="toPersonalInfo()"/>
+            <img :src="getAvatar()" class="ava_pic" @click="toPersonalInfo()" @error="def()"/>
           </div>
           <div class="l top2">
-            <span class="username">{{username}}</span>
+            <span class="username">{{this.$store.state.username}}</span>
           </div>
           <div class="clear"></div>
         </div>
@@ -32,27 +32,28 @@
         <div class="comment"><!--评论区域-->
           <div class="title">My Comments</div>
           <div class="num1">Num: {{commentNum}}</div>
-          <div class="comments">
+          <div class="comments"  v-if="commentNum>0">
             <el-row>
-              <el-col :span="12" class="col" v-for="comment in commentList" :key="comment.movie_id">
+              <el-col :span="12" class="col" v-for="comment in commentList" :key="comment.movie_name">
                 <div class="l">
-                  <img :src="comment.movie_pic" class="image"/>
+                  <img :src="converPic(comment.movie_pic)" class="image" @error="away()"/>
                 </div>
                 <div class="l movieInfo">
                   <div class="movie_name">{{comment.movie_name}}</div>
                   <div class="my_rate">
                     <span>My Rate: </span>
                     <i class="el-icon-star-on color1"></i>
-                    <span class="info_rate">{{parseFloat(comment.my_rate).toFixed(1)}}</span>
+                    <span class="info_rate" v-if="comment.rate>0">{{parseFloat(comment.rate).toFixed(1)}}</span>
+                    <span v-else>暂未打分</span>
                   </div>
-                  <div class="my_comment">My Comment: {{comment.my_comment}}</div>
+                  <div class="my_comment">My Comment: {{comment.content}}</div>
                 </div>
                 <div class="clear"></div>
               </el-col>
             </el-row>
           </div>
         </div>
-        <div class="page" v-if="commentNum!=0">
+        <div class="page" v-if="commentNum>0">
           <el-pagination
             @current-change="handleCurrentChange"
             :current-page="pagenum"
@@ -64,18 +65,19 @@
     </div>
 </template>
 <script>
+import axios from "axios";
 export default {
   name: 'PersonalHome',
   data(){
     return{
-      avatar:require('../assets/images/avatar0.jpg'),
-      username:'nianwuluo',
+      defaultImg:require('../assets/images/avatar.png'),
+      unload:require('../assets/images/unload.png'),
       movieCollectNum:0,
       peopleCollectNum:0,
-      commentNum:10,
+      commentNum:0,
       pagenum:1,
       commentList:[
-        {
+        /*{
           movie_id:1,
           movie_pic:require('../assets/images/1.png'),
           movie_name:'The God Father',
@@ -95,14 +97,52 @@ export default {
           movie_name:'I am Legend',
           my_rate:5.0,
           my_comment:"It beats me!"
-        }
+        }*/
       ]
     }
     
   },
   methods:{
-    getCommentList(){
-
+    def(){
+           let img = event.srcElement;   
+           img.src = this.defaultImg;   
+           img.onerror = null; //防止闪图
+    },
+    async getCommentList(){
+       axios.get("http://localhost:8070/User/CommentMovie",
+        {
+          params:{
+                user_id: this.$store.state.id,
+                pagenum: this.pagenum,
+                pagesize:4
+          }
+        }).then((response)=>{
+               console.log(response);
+               this.commentList=response.data.data;
+               if(response.data.totalNum<0){
+                  this.commentNum=0;
+                }
+                else{
+                    this.commentNum=response.data.totalNum; 
+                }
+                
+              }).catch((error)=>{
+                console.log(error);
+                 this.$message.error("Get Comments Failed!");
+               });
+    },
+    async getHomeInfo(){
+       axios.get("http://localhost:8070/User/PersonalHomePage",{
+         params:{
+                  user_id: this.$store.state.id,
+                }
+       }).then((response)=>{
+         console.log(response);
+         this.movieCollectNum=response.data.data[0].movieCollectNum+2;
+         this.peopleCollectNum=response.data.data[0].peopleCollectNum;
+       }).catch((error)=>{
+         this.$message.error("Get PersonalHome Information Failed!");
+       })
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
@@ -117,7 +157,30 @@ export default {
     },
     toPersonalInfo(){
       this.$router.push('/PersonalInfo');
+    },
+    getAvatar(){
+      var url=this.$store.state.avatar;
+      if(url==null||url==''){
+          return require('../assets/images/avatar.png');
+      }
+      return require('../assets/images/'+url);
+    },
+    away(){
+        let img = event.srcElement;   
+        img.src = this.unload;   
+        img.onerror = null; //防止闪图
+    },
+     converPic(url) {
+      if (url == null || url == '') {
+        return require('../assets/images/unload.png');
+      } else {
+        return require('../assets/images/' + url);
+      }
     }
+  },
+  created(){
+     this.getHomeInfo();
+     this.getCommentList();
   }
 }
 </script>
@@ -221,7 +284,7 @@ export default {
 
 .personalhome .movieInfo{
   margin:0px 40px 0px 20px;
-  width:440px;
+  width:420px;
 }
 
 .personalhome .movie_name{

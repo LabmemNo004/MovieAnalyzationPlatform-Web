@@ -81,6 +81,10 @@ export default {
               { withCredentials: true }
             ).then((response)=>{
               console.log(response);
+              if(response.data.msg=="输入的用户名或者密码有误"){
+                this.$message.error("The username or password is entered incorrectly!");
+                return;
+              }
               this.$store.commit("Login", response.data.data.role);
               this.$store.commit("Setname",response.data.data.username);
               this.$store.commit("Setid",response.data.data.userID);
