@@ -31,12 +31,39 @@ public class CommentService {
     @Resource
     private NumberService numberService;
 
-    public JSONArray getCommentMovie(Integer id)
+    public JSONArray getCommentMovie(Integer id,Integer pagenum,Integer pagesize)
     {
         JSONArray b= new JSONArray();
         List<Object[]> temp=CommentRepository.getCommentMovie(id);
+
+        int total=temp.size();
+        int start=0;
+        int end=0;
+        if(total>(pagenum - 1)*pagesize)
+        {
+            start=(pagenum - 1)*pagesize;
+            if(total>pagenum*pagesize)
+            {
+                end=pagenum*pagesize;
+            }
+            else
+            {
+                end=total;
+            }
+        }
+        else
+        {
+            return null;
+        }
+        /**
+         * 自index开始到total/或者本页结尾
+         */
+        int index=0;
         for(Object[] temp1:temp)
         {
+            index++;
+            if(index<=start) continue;
+            if(index>end) break;
             JSONObject temp3=new JSONObject();
             String[] tag={"movie_name","movie_pic","rate","time","content"};
             for(int i=0;i< temp1.length;i++)
@@ -47,7 +74,7 @@ public class CommentService {
             b.add(temp3);
         }
         JSONObject temp3=new JSONObject();
-        temp3.put("total",b.size());
+        temp3.put("total",total);
         b.add(temp3);
         return b;
     }
