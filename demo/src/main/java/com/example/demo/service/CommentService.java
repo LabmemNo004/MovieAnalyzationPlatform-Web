@@ -36,6 +36,13 @@ public class CommentService {
         JSONArray b= new JSONArray();
         List<Object[]> temp=CommentRepository.getCommentMovie(id);
 
+        if(temp.isEmpty())
+        {
+            JSONObject temp3=new JSONObject();
+            temp3.put("total",-100);
+            b.add(temp3);
+            return b;
+        }
         int total=temp.size();
         int start=0;
         int end=0;

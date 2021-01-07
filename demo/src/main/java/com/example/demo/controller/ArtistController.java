@@ -31,18 +31,14 @@ public class ArtistController {
     )
     {
         JSONArray temp=new JSONArray();
-        if(profession.equals("Actor"))
+
+        if(profession.equals("all"))
         {
-            temp=artistService.getArtistID('A',pagenum,pagesize);
+            temp=artistService.getArtistID("all",pagenum,pagesize);
         }
-        else if(profession.equals("Director"))
+        else
         {
-            temp=artistService.getArtistID('D',pagenum,pagesize);
-        }
-        else if(profession.equals("all"))
-        {
-            temp=artistService.getArtistID('A',pagenum,pagesize);
-            temp.addAll(artistService.getArtistID('D',pagenum,pagesize));
+            temp=artistService.getArtistID(profession,pagenum,pagesize);
         }
         int i=temp.size()-1;
         Object counts=temp.getJSONObject(i).get("total");

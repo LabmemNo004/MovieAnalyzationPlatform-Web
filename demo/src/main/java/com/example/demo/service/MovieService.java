@@ -40,26 +40,6 @@ public class MovieService {
     @Resource
     private userRepository UserRepository;
 
-//    public void movieRepository(String movieName,String type,
-//                                Date publish_time,String movie_pic,
-//                                Integer duration,String area,String introduction)
-//    {
-//
-//        numbers number=numberService.getSimpleNumbers();
-//
-//        MovieRepository.UpdateAvator(number.getMovieNumadd() + 1, movieName,
-//                type, publish_time,movie_pic, duration,area,introduction);
-//
-//        /**
-//         *
-//         */
-//
-////        ArtistRepository.InsertArtist();
-//        numberService.updataNumber(0,0,
-//                number.getMovieNumadd() + 1,0);
-//
-//
-//    }
 
     public void saveMovie(movie temp)
     {
@@ -82,8 +62,6 @@ public class MovieService {
             UserRepository.DeleteCollectMovie(userid);
             MovieRepository.DeleteCollectedUser(movieId);
         }
-
-
     }
 
     public JSONArray getTenMovie()throws ParseException
@@ -94,10 +72,22 @@ public class MovieService {
         Date end=dateFormat1.parse("2020-12-31");
         Date start1=dateFormat1.parse("2017-01-01");
         Date end1=dateFormat1.parse("2018-12-31");
+        JSONArray a=new JSONArray();
+
         List<movie> temp=MovieRepository.getTenMovie(start,end);
         List<movie> temp1=MovieRepository.getTenMovie(start1,end1);
         temp.addAll(temp1);
-        JSONArray a=new JSONArray();
+        if(temp.isEmpty())
+        {
+            JSONObject temp3=new JSONObject();
+            temp3.put("total",-100);
+            a.add(temp3);
+            return a;
+        }
+
+
+
+
         for(movie temp2:temp)
         {
             JSONObject b=new JSONObject();
@@ -115,6 +105,13 @@ public class MovieService {
         JSONArray a=new JSONArray();
         List<movie> temp=MovieRepository.getMovieLike(movieName);
 
+        if(temp.isEmpty())
+        {
+            JSONObject temp3=new JSONObject();
+            temp3.put("total",-100);
+            a.add(temp3);
+            return a;
+        }
         int total=temp.size();
         int start=0;
         int end=0;
@@ -193,6 +190,14 @@ public class MovieService {
             {
                 temp=MovieRepository.findMoviesAllTypeCollect();
             }
+        }
+
+        if(temp.isEmpty())
+        {
+            JSONObject temp3=new JSONObject();
+            temp3.put("total",-100);
+            a.add(temp3);
+            return a;
         }
         int total=temp.size();
         int start=0;

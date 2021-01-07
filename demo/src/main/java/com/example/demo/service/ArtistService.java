@@ -28,10 +28,18 @@ public class ArtistService {
     @Resource
     private userRepository UserRepository;
 
-    public JSONArray getArtistID(Character type,Integer pagenum,Integer pagesize)
+    public JSONArray getArtistID(String profession,Integer pagenum,Integer pagesize)
     {
         JSONArray temp=new JSONArray();
-        List<artist> some=ArtistRepository.getArtistID(type);
+        List<artist> some=new ArrayList<>();
+        if(profession.equals("all"))
+        {
+            some=ArtistRepository.findAll();
+        }
+        else
+        {
+            some=ArtistRepository.getArtistID(profession);
+        }
         int total=some.size();
         int start=0;
         int end=0;
