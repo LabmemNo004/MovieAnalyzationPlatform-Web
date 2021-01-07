@@ -114,7 +114,7 @@ export default {
       this.personInfo.area = data.area;
       this.personInfo.profession = data.profession;
       this.personInfo.movies = data.movies;
-      this.personInfo.collect_num = data.collect_num + 1;
+      this.personInfo.collect_num = data.collect_num;
       this.personInfo.is_collect = data.is_collect;
       this.personInfo.content = data.introduction;
     },
