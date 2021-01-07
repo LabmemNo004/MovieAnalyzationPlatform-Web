@@ -108,9 +108,9 @@ public class CommentService {
         CommentRepository.UpdateScore(movieID, userID, Score);
     }
 
-    public void UpdateComment(Integer movieID,Integer userID,String content)
+    public void UpdateComment(Integer movieID,Integer userID,String content,Date time)
     {
-        CommentRepository.UpdateComment(movieID, userID, content);
+        CommentRepository.UpdateComment(movieID, userID, content,time);
     }
 
 }

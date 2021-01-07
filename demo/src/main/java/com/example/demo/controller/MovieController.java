@@ -125,19 +125,23 @@ public class MovieController {
             @RequestParam("content") String content
             )
     {
+        commentmsg temp=
+                commentService.QueryExistMovie(movie_id,user_id);
+        if(temp==null) {
             numbers number=numberService.getSimpleNumbers();
-
-            /**
-             * 设置自增长？
-             */
-
             commentService.saveCommentMsg(number.getCommentMsg(),
                     user_id,movie_id,0f,time,content);
             numberService.updataNumber(0,0,
                     0,number.getCommentMsg() + 1);
 
-        return new JsonResult(0,
-                "成功");
+            return new JsonResult(0,"成功添加");
+        }
+        else
+        {
+            commentService.UpdateComment(movie_id,user_id,content,time);
+            return new JsonResult(0,"成功修改评论");
+        }
+
     }
 
     @PostMapping(value = "/Score")
