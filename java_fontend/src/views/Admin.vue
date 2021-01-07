@@ -21,9 +21,8 @@
                         <el-upload
                             class="avatar-uploader"
                             action
-                            :show-file-list="false"
+                            :http-request="uploadMovie"
                             :auto-upload="false"
-                            :on-success="handleAvatarSuccess"
                             :before-upload="beforeAvatarUpload">
                             <img v-if="imageUrl1" :src="imageUrl1" class="avatar">
                             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -67,7 +66,7 @@
                     </div>
                     <div class="clear"></div>
                     <div class=submitButton1>
-                          <el-button type="success">Submit</el-button>
+                          <el-button type="success" @click="submit1()">Submit</el-button>
                     </div>
                 </div>
                 <div class="uploadForm2">
@@ -78,8 +77,7 @@
                             class="avatar-uploader"
                             action
                             :auto-upload="false"
-                            :show-file-list="false"
-                            :on-success="handleAvatarSuccess"
+                            :http-request="uploadPicture"
                             :before-upload="beforeAvatarUpload">
                             <img v-if="imageUrl2" :src="imageUrl2" class="avatar">
                             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -122,7 +120,7 @@
                     </div>
                     <div class="clear"></div>
                     <div class=submitButton2>
-                          <el-button type="success">Submit</el-button>
+                          <el-button type="success" @click="submit2()">Submit</el-button>
                     </div>
                 </div>
                 
@@ -137,9 +135,12 @@ export default {
         return{
             avatar:require('../assets/images/avatar0.jpg'),
             username:'nianwuluo',
-            imageUrl:'',
+            imageUrl1:'',
+            imageUrl2:'',
             movieUpload:true,
             personUpload:false,
+            movie_pic:'',
+            person_pic:'',
             movieForm:{
                 movie_name:'',
                 director:'',
@@ -163,24 +164,24 @@ export default {
             },
             options1:[
                 {
-                    value:'Action',
-                    label:'Action'
+                    value:'动作片',
+                    label:'动作片'
                 },
                 {
-                    value:'Romantic',
-                    label:'Romantic'
+                    value:'剧情',
+                    label:'剧情'
                 },
                 {
-                    value:'Animation',
-                    label:'Animation'
+                    value:'犯罪',
+                    label:'犯罪'
                 },
                 {
-                    value:'Comedy',
-                    label:'Comedy'
+                    value:'喜剧',
+                    label:'喜剧'
                 },
                 {
-                    value:'Fiction',
-                    label:'Fiction'
+                    value:'科幻片',
+                    label:'科幻片'
                 }
             ],
             options2:[
@@ -204,16 +205,17 @@ export default {
         this.imageUrl = URL.createObjectURL(file.raw);
         },
         beforeAvatarUpload(file) {
-            const isJPG = file.type === 'image/jpeg';
-            const isLt2M = file.size / 1024 / 1024 < 2;
-
-            if (!isJPG) {
-            this.$message.error('上传头像图片只能是 JPG 格式!');
+            const isJPG = file.type === "image/jpeg";
+            const isJPG2 = file.type === "image/jpg";
+            const isPNG = file.type === "image/png";
+            const isLt5M = file.size / 1024 / 1024 < 5;
+            if (!isJPG && !isJPG2 && !isPNG) {
+            this.$message.error("Only jpg or png!");
             }
-            if (!isLt2M) {
-            this.$message.error('上传头像图片大小不能超过 2MB!');
+            if (!isLt5M) {
+            this.$message.warning("请上传5MB以内的图片!");
             }
-            return isJPG && isLt2M;
+            return (isJPG || isJPG2 || isPNG) && isLt5M;
         },
         movie(){
             if(this.movieUpload==true){
@@ -237,6 +239,18 @@ export default {
                 return require('../assets/images/avatar.png');
             }
             return require('../assets/images/'+url);
+        },
+        uploadMovie(){
+
+        },
+        uploadPicture(){
+
+        },
+        async submit1(){
+
+        },
+        async submit2(){
+
         }
     }
 }
