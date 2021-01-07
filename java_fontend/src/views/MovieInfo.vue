@@ -60,7 +60,7 @@
                         disabled
                         show-score
                         text-color="#ff9900"
-                        score-template="{value}" v-if="movieInfo.myrate>0">
+                        score-template="{value}" v-if="movieInfo.my_rate>0">
                     </el-rate>
                     <span v-else class="span5">您还未打分</span>
                 </div>
