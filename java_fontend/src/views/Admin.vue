@@ -4,33 +4,28 @@
         <div class="line"></div>
         <div class="head"><!--头像、昵称区域-->
           <div class="l">
-            <img :src="avatar" class="ava_pic" @click="toPersonalInfo()"/>
+            <img :src="getAvatar()" class="ava_pic" @click="toPersonalInfo()"/>
           </div>
           <div class="l top2">
-            <span class="username">{{username}}</span>
+            <span class="username">{{this.$store.state.username}}</span>
           </div>
           <div class="clear"></div>
         </div>
         <div class="upload">
             <div class="title1">Upload<i class="el-icon-upload"/></div>
             <div class="uploadButton">
-                <div class="button1">
-                    <el-button type="primary" round @click="movie()">Upload New Movie Information</el-button>
-                </div>
-                <div class="button2">
-                    <el-button type="primary" round @click="person()">Upload New Person Infomation</el-button>
-                </div>
-                <div class="uploadForm1" v-if="movieUpload">
+                <div class="uploadForm1">
                     <div class="title2">Edit Movie Information</div>
                     <div class="picture l">
                         <div class="label1">Poster</div>
                         <el-upload
                             class="avatar-uploader"
-                            action="https://jsonplaceholder.typicode.com/posts/"
+                            action
                             :show-file-list="false"
+                            :auto-upload="false"
                             :on-success="handleAvatarSuccess"
                             :before-upload="beforeAvatarUpload">
-                            <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                            <img v-if="imageUrl1" :src="imageUrl1" class="avatar">
                             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                         </el-upload>
                     </div>
@@ -40,13 +35,10 @@
                                 <el-input v-model="movieForm.movie_name" style="width:450px" placeholder="Title"></el-input>
                             </el-form-item>
                             <el-form-item label="Director">
-                                <el-input v-model="movieForm.director" style="width:450px" placeholder="Directors"></el-input>
-                            </el-form-item>
-                            <el-form-item label="Main Actors">
-                                <el-input v-model="movieForm.actor" style="width:450px" placeholder="Actors"></el-input>
+                                <el-input v-model="movieForm.area" style="width:450px" placeholder="Director of Movie"></el-input>
                             </el-form-item>
                             <el-form-item label="Type">
-                                <el-select v-model="movieForm.type" multiple placeholder="To Select" style="width:450px">
+                                <el-select v-model="movieForm.type" placeholder="To Select" style="width:450px">
                                     <el-option
                                     v-for="item in options1"
                                     :key="item.value"
@@ -68,6 +60,9 @@
                             <el-form-item label="Duration">
                                 <el-input v-model="movieForm.duration" style="width:450px" placeholder="Minutes"></el-input>
                             </el-form-item>
+                            <el-form-item label="Introduction">
+                                <el-input type="textarea" v-model="movieForm.Introduction" :rows="5" maxlength="500" show-word-limit></el-input>
+                            </el-form-item>
                         </el-form>
                     </div>
                     <div class="clear"></div>
@@ -75,17 +70,18 @@
                           <el-button type="success">Submit</el-button>
                     </div>
                 </div>
-                <div class="uploadForm2" v-if="personUpload">
-                    <div class="title2">Edit Person Information</div>
+                <div class="uploadForm2">
+                    <div class="title2">Edit Relative Person Information</div>
                     <div class="picture l">
                         <div class="label1">Picture</div>
                         <el-upload
                             class="avatar-uploader"
-                            action="https://jsonplaceholder.typicode.com/posts/"
+                            action
+                            :auto-upload="false"
                             :show-file-list="false"
                             :on-success="handleAvatarSuccess"
                             :before-upload="beforeAvatarUpload">
-                            <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                            <img v-if="imageUrl2" :src="imageUrl2" class="avatar">
                             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                         </el-upload>
                     </div>
@@ -110,7 +106,7 @@
                             </el-form-item>
                            
                             <el-form-item label="Profession">
-                                <el-select v-model="personForm.profession" multiple placeholder="To Select" style="width:450px">
+                                <el-select v-model="personForm.profession" placeholder="To Select" style="width:450px">
                                     <el-option
                                     v-for="item in options2"
                                     :key="item.value"
@@ -119,8 +115,8 @@
                                     </el-option>
                                 </el-select>
                             </el-form-item>
-                            <el-form-item label="Movies">
-                                <el-input v-model="personForm.movies" style="width:450px" placeholder="Movies in the cast"></el-input>
+                            <el-form-item label="Introduction">
+                                <el-input type="textarea" v-model="movieForm.Introduction" :rows="5" maxlength="500" show-word-limit></el-input>
                             </el-form-item>
                         </el-form>
                     </div>
@@ -151,7 +147,8 @@ export default {
                 type:'',
                 area:'',
                 time:'',
-                duration:''
+                duration:'',
+                introduction:''
 
             },
             personForm:{
@@ -160,7 +157,8 @@ export default {
                 birthday:'',
                 area:'',
                 profession:'',
-                movies:''
+                movies:'',
+                introduction:''
 
             },
             options1:[
@@ -187,16 +185,12 @@ export default {
             ],
             options2:[
                 {
-                    value:'Actor',
-                    label:'Actor'
+                    value:'演员',
+                    label:'演员'
                 },
                 {
-                    value:'Director',
-                    label:'Director'
-                },
-                {
-                    value:'Producer',
-                    label:'Producer'
+                    value:'导演',
+                    label:'导演'
                 },
             ]
 
@@ -236,6 +230,13 @@ export default {
             else{
                 this.personUpload=true;
             }
+        },
+        getAvatar(){
+            var url=this.$store.state.avatar;
+            if(url==null||url==''){
+                return require('../assets/images/avatar.png');
+            }
+            return require('../assets/images/'+url);
         }
     }
 }

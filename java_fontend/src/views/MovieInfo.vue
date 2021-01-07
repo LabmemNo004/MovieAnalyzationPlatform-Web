@@ -27,7 +27,7 @@
                     <span class="span2">{{movieInfo.pub_time}}</span>
                 </div>
                 <div class="info1">
-                    <span class="span1">Duration: </span>
+                    <span class="span1">Duration(minutes): </span>
                     <span class="span2">{{movieInfo.duration}}</span>
                 </div>
                 <div class="info1">
@@ -60,9 +60,9 @@
                         disabled
                         show-score
                         text-color="#ff9900"
-                        score-template="{value}" v-if="movieInfo.myrate!=0">
+                        score-template="{value}" v-if="movieInfo.myrate>0">
                     </el-rate>
-                    <span v-else class="span5">You haven't given rate.</span>
+                    <span v-else class="span5">您还未打分</span>
                 </div>
                 <div class="clear"></div>
             </div>
@@ -100,7 +100,7 @@
             </div>
             <div class="userComment">
                 <div>User Comments({{this.totalNum}})</div>
-                <div class=comments v-if="movieInfo.comment_num!=0">
+                <div class=comments v-if="this.totalNum!=0">
                     <div v-for="comment in commentList" :key="comment.username" >
                         <el-divider></el-divider>
                         <div class="l">
@@ -115,8 +115,9 @@
                                 disabled
                                 show-score
                                 text-color="#ff9900"
-                                score-template="{value}">
+                                score-template="{value}" v-if="comment.rate>0">
                             </el-rate>
+                            <span v-else class="span5">未打分</span>
                         </div>
                         <div class="l time">{{comment.time}}</div>
                         <div class="clear"></div>
@@ -128,7 +129,7 @@
                     <div>No Comments.</div>
                 </div>
             </div>
-            <div class="page" v-if="totalNum!=0">
+            <div class="page" v-if="totalNum>0">
                 <el-pagination
                     @current-change="handleCurrentChange"
                     :current-page="pagenum"
@@ -284,12 +285,22 @@ export default {
             }).then((response)=>{
                 console.log(response);
                 this.commentList=response.data.data;
-                this.totalNum=response.data.totalNum;
+                if(response.data.totalNum<0){
+                    this.totalNum=0;
+                }
+                else{
+                    this.totalNum=response.data.totalNum;
+                }
+                
+                
                 var i=0;
                 for(i=0;i<this.commentList.length;i++){
                     var date=new Date(this.commentList[i].time);
                     console.log(date);
-                    this.commentList[i].time=dateFormat(date);
+                    this.commentList[i].time=dateFormat1(date);
+                    if(this.commentList[i].rate<0){
+                      this.commentList[i].rate=0;
+                    }
                 }
             }).catch((error)=>{
                 this.$message.error("Get Comment List Failed!");
@@ -320,8 +331,8 @@ export default {
             }
             var movieid=sessionStorage.getItem("movie_id");
             console.log(movieid);
-            var time=new Date().getTime();
-            console.log(time);
+            var time=dateFormat1(new Date());
+
             await axios.post("http://localhost:8070/Movie/Comment?user_id="+this.$store.state.id+"&movie_id="+movieid+"&time="+time+"&content="+this.Form.comment
                ).then((response)=>{
                    console.log(response);

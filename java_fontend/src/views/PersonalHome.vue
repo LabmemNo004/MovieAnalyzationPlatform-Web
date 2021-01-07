@@ -32,7 +32,7 @@
         <div class="comment"><!--评论区域-->
           <div class="title">My Comments</div>
           <div class="num1">Num: {{commentNum}}</div>
-          <div class="comments">
+          <div class="comments"  v-if="commentNum>0">
             <el-row>
               <el-col :span="12" class="col" v-for="comment in commentList" :key="comment.movie_name">
                 <div class="l">
@@ -43,7 +43,8 @@
                   <div class="my_rate">
                     <span>My Rate: </span>
                     <i class="el-icon-star-on color1"></i>
-                    <span class="info_rate">{{parseFloat(comment.rate).toFixed(1)}}</span>
+                    <span class="info_rate" v-if="comment.rate>0">{{parseFloat(comment.rate).toFixed(1)}}</span>
+                    <span v-else>暂未打分</span>
                   </div>
                   <div class="my_comment">My Comment: {{comment.content}}</div>
                 </div>
@@ -52,7 +53,7 @@
             </el-row>
           </div>
         </div>
-        <div class="page" v-if="commentNum!=0">
+        <div class="page" v-if="commentNum>0">
           <el-pagination
             @current-change="handleCurrentChange"
             :current-page="pagenum"
@@ -73,7 +74,7 @@ export default {
       unload:require('../assets/images/unload.png'),
       movieCollectNum:0,
       peopleCollectNum:0,
-      commentNum:10,
+      commentNum:0,
       pagenum:1,
       commentList:[
         /*{
@@ -118,7 +119,16 @@ export default {
         }
           ).then((response)=>{
                console.log(response);
-               this.commentList=response.data.data;   
+               if(response.data.data.length==0){
+                 return;
+               }
+               this.commentList=response.data.data;
+               if(reaponse.data.totalNum<0){
+                 this.commentNum=0;
+               }
+               else{
+                  this.commentNum=response.data.totalNum; 
+               }
                 
           }).catch((error)=>{
             this.$message.error("Get Comments Failed!");
