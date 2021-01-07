@@ -13,11 +13,8 @@
             <div class="movie_sort">
               <!--年份分类begin-->
               <div class="mv_box">
-                <span id="sorted_type">Type: </span>
-                <el-radio v-model="t_radio" label="100" @change="getMovieList">All</el-radio>
-                <el-radio v-model="t_radio" label="1" @change="getMovieList">Action</el-radio>
-                <el-radio v-model="t_radio" label="2" @change="getMovieList">Fantasy</el-radio>
-                <el-radio v-model="t_radio" label="3" @change="getMovieList">Comedy</el-radio>
+                <span id="sorted_type">Type:</span>
+                <el-radio v-for="t in movieType" :key="t.type_id" v-model="t_radio" :label="t.type_id" @change="getMovieList">{{t.type_name}}</el-radio>
               </div>
               <!--年份分类end-->
               <!--排序依据begin-->
@@ -73,6 +70,7 @@
 </template>
 <script>
 import axios from "axios";
+
 export default {
   name: 'Movies',
   data() {
@@ -82,89 +80,117 @@ export default {
       seen2: false,
       total: 6,
       pagenum: 1,
-      t_radio: '100',
+      t_radio: "1",
       o_radio: '1',
-      movie_num:120,
+      movie_num: 120,
       movieList1: [],
-      searchMovieList: []
+      movieType: [
+        {
+          type_id: "1",
+          type_name: "all"
+        },
+        {
+          type_id: "2",
+          type_name: "动作片"
+        },
+        {
+          type_id: "3",
+          type_name: "犯罪"
+        },
+        {
+          type_id: "4",
+          type_name: "传记"
+        },
+        {
+          type_id: "5",
+          type_name: "恐怖"
+        },
+        {
+          type_id: "6",
+          type_name: "爱情"
+        },
+        {
+          type_id: "7",
+          type_name: "喜剧"
+        },
+        {
+          type_id: "8",
+          type_name: "悬疑"
+        },
+        {
+          type_id: "9",
+          type_name: "冒险"
+        },
+        {
+          type_id: "10",
+          type_name: "剧情"
+        }
+      ]
     }
 
   },
-  methods:{
-    searchMovies(){
-      this.seen1=false;
-      this.seen2=true;
+  methods: {
+    searchMovies() {
+      this.seen1 = false;
+      this.seen2 = true;
     },
-    setMovies(data){
-      this.movieList1=[];
-      for(let i=0;i<data.length;i++){
-        var movie={};
-        movie.movie_id=data[i].movie_id;
-        movie.movie_pic=data[i].movie_pic;
-        movie.movie_name=data[i].movie_name;
-        movie.movie_rate=data[i].movie_rate;
+    setMovies(data) {
+      this.movieList1 = [];
+      for (let i = 0; i < data.length; i++) {
+        var movie = {};
+        movie.movie_id = data[i].movie_id;
+        movie.movie_pic = data[i].movie_pic;
+        movie.movie_name = data[i].movie_name;
+        movie.movie_rate = data[i].movie_rate;
         this.movieList1.push(movie);
       }
     },
-    getMovieListByType(){
+    getMovieListByType() {
       axios.get("http://localhost:8070/Movie/SearchMovieByType",
           {
-            params:{
-              type:this.movie_type,
-              order:parseInt(this.o_radio)-1,
-              pagenum:this.pagenum,
-              pagesize:8
+            params: {
+              type: this.movie_type,
+              order: parseInt(this.o_radio) - 1,
+              pagenum: this.pagenum,
+              pagesize: 8
             }
           },
-          { withCredentials: true }
-      ).then((response)=>{
+          {withCredentials: true}
+      ).then((response) => {
         console.log(response);
-        var data=response.data.data;
+        if(response.data.totalNum<0){
+          return ;
+        }
+        var data = response.data.data;
         this.setMovies(data);
-        this.movie_num=response.data.totalNum;
-      }).catch((error)=>{
+        this.movie_num = response.data.totalNum;
+      }).catch((error) => {
         this.$message.error("Loading Failed!");
       })
     },
-    getMovieList(){
-      console.log("getMovieList");
-      switch (this.t_radio) {
-        case "100":
-          this.movie_type="all";
-          break;
-        case "1":
-          this.movie_type = "Action";
-          break;
-        case "2":
-          this.movie_type = "Fantasy";
-          break;
-        case "3":
-          this.movie_type = "Comedy";
-          break;
-        default:
-          this.movie_type = "Action";
-      }
+    getMovieList() {
+      var tx=parseInt(this.t_radio);
+      this.movie_type=this.movieType[tx].type_name;
       this.getMovieListByType();
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
-      this.pagenum=val;
+      this.pagenum = val;
       this.getMovieList();
     },
-    toMovieInfo(id){
-      sessionStorage.setItem("movie_id",id);
+    toMovieInfo(id) {
+      sessionStorage.setItem("movie_id", id);
       this.$router.push('/MovieInfo');
     },
-    converPic(url){
-      if(url==null||url==''){
+    converPic(url) {
+      if (url == null || url == '') {
         return require('../assets/images/unload.png');
-      }
-      else{
-        return require('../assets/images/'+url);
+      } else {
+        return require('../assets/images/' + url);
       }
     }
   },
-  created(){
+  created() {
     this.getMovieList();//需要触发的函数
   }
 }
@@ -198,13 +224,13 @@ export default {
   margin-bottom: 20px;
 }
 
-.movieCard .el-card__body{
-  width:250px;
+.movieCard .el-card__body {
+  width: 250px;
   height: 470px;
-  cursor:pointer;
+  cursor: pointer;
 }
 
-.movieCard .el-card__body > img{
+.movieCard .el-card__body > img {
   width: 250px;
   height: 368.13px;
 }
@@ -415,12 +441,12 @@ div.movie_order > span {
   margin-right: 10px;
 }
 
-div.movie1>div.el-pagination{
+div.movie1 > div.el-pagination {
   text-align: center;
   margin: 50px 0px;
 }
 
-div.movie1>div.el-pagination.is-background .el-pager li:not(.disabled).active{
+div.movie1 > div.el-pagination.is-background .el-pager li:not(.disabled).active {
   background-color: #0066c0;
   color: white;
 }

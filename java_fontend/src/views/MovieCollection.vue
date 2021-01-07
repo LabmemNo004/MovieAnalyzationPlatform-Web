@@ -119,6 +119,9 @@ export default {
           },
           { withCredentials: true }
       ).then((response)=>{
+        if(response.data.totalNum<0){
+          return ;
+        }
         console.log(response);
         this.movie_collect_num=response.data.totalNum;
         var data=response.data.data;

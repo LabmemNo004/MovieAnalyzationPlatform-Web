@@ -118,6 +118,9 @@ export default {
           },
           { withCredentials: true }
       ).then((response)=>{
+        if(response.data.totalNum<0){
+          return ;
+        }
         console.log(response);
         var data=response.data.data;
         this.setPeopleCollection(data);
