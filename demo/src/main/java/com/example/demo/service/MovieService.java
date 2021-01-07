@@ -48,7 +48,7 @@ public class MovieService {
     }
 
 
-    public void AddCollectMovie(Integer userid,Integer movieId,Integer operations)
+    public Integer AddCollectMovie(Integer userid,Integer movieId,Integer operations)
     {
         if(operations==1)
         {
@@ -58,10 +58,16 @@ public class MovieService {
         }
         else
         {
+            watchlist temp=WatchlistRepository.findByUserIDAndMovieID(userid,movieId);
+            if(temp==null)
+            {
+                return 1;
+            }
             WatchlistRepository.DeleteNewWatchlist(userid,movieId);
             UserRepository.DeleteCollectMovie(userid);
             MovieRepository.DeleteCollectedUser(movieId);
         }
+        return 0;
     }
 
     public JSONArray getTenMovie()throws ParseException
