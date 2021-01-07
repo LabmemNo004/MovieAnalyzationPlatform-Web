@@ -239,8 +239,11 @@ public class UserController {
 
     )
     {
-        JSONArray temp2=commentService.getCommentMovie(userid);
-        return new JsonResult(temp2, "成功");
+        JSONArray temp1=commentService.getCommentMovie(userid,pagenum,pagesize);
+        int i=temp1.size()-1;
+        Object counts=temp1.getJSONObject(i).get("total");
+        temp1.fluentRemove(i);
+        return new JsonResult(temp1, "成功",counts);
     }
 
 
