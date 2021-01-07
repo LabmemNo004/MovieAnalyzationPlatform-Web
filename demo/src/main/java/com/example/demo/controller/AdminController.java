@@ -119,9 +119,7 @@ public class AdminController {
         artist temp=new artist();
         numbers number=numberService.getSimpleNumbers();
         temp.setId(number.getArtistNumadd());
-        personID=number.getArtistNumadd() +1;
-        numberService.updataNumber(0,personID,
-                0,0);
+
         temp.setPersonName(personName);
         temp.setSex(sex);
         temp.setBirthday(birthday);
@@ -129,6 +127,7 @@ public class AdminController {
         temp.setProfession(profession);
         temp.setIntroduction(introduction);
         temp.setCollect_num(0);
+        temp.setType('A');
         artistService.saveArtist(temp);
 
         String Artist_pic="";
@@ -153,7 +152,7 @@ public class AdminController {
 
         file.transferTo(new File(filename));
 
-        artistService.UploadAvatar(personID,tempfileName);
+        artistService.UploadAvatar(number.getArtistNumadd(),tempfileName);
 
         Map<String, String> result = new HashMap<>(4);
         result.put("contentType", file.getContentType());
@@ -165,8 +164,12 @@ public class AdminController {
          */
         participate temp10=new participate();
         temp10.setMovieID(movieID);
-        temp10.setArtistID(personID);
+        temp10.setArtistID(number.getArtistNumadd());
         followService.SaveMovieAndArtist(temp10);
+
+        personID=number.getArtistNumadd() +1;
+        numberService.updataNumber(0,personID,
+                0,0);
 
         return new JsonResult(0, "上传成功");
 
