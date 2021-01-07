@@ -24,7 +24,7 @@
               </div>
               <div class="info1">
                   <span class="span1">Movies: </span>
-                  <span class="span2">{{personInfo.movies}}</span>
+                <span class="span2"><el-link v-for="m in personInfo.movies" :key="m.movieID" @click="toMovieInfo(m.movieID)">{{ m.movieName }}</el-link></span>
               </div>
               <div class="info1">
                   <span class="span1">Times to be Collected: </span>
@@ -46,7 +46,7 @@
     </div>
 </template>
 <script>
-
+import axios from "axios";
 export default {
   name: 'PeopleInfo',
   data(){
@@ -58,7 +58,7 @@ export default {
         birthday:'1985-04-30',
         area:'Israel',
         profession:'Actress,Producer',
-        movies:'Fast & Furious,Wonder Woman',
+        movies:[{movieID:1,movieName:'Fast & Furious,Wonder Woman'}],
         collect_num:2,
         is_collect:false,
         content:"Gal Gadot-Varsano is an Israeli actress, producer, and model. At age 18, she was crowned Miss Israel 2004. She then served two years in the Israel Defense Forces as a soldier, after which she began studying at the IDC Herzliya college, while building her modelling and acting careers."
@@ -66,9 +66,12 @@ export default {
     }
     
   },
+  mounted:function(){
+    this.getPersonInfo();//需要触发的函数
+  },
   methods:{
     collect(){
-      if(this.personInfo.is_collect==false){
+      if(this.personInfo.is_collect===false){
           this.personInfo.is_collect=true;
           this.personInfo.collect_num++;
       }
@@ -76,7 +79,62 @@ export default {
           this.personInfo.is_collect=false;
           this.personInfo.collect_num--;
       }
-  },
+      var tag=this.personInfo.is_collect===false?0:1;
+      axios.post("http://localhost:8070/Artist/Follow?" +
+      "userid="+this.$store.state.id+
+      "&artistID="+sessionStorage.getItem("person_id")+
+      "&operations="+tag
+    ).then((response)=>{
+        console.log(response);
+        // var data=response.data.data;
+        // this.setPersonInfo(data);
+      }).catch((error)=>{
+        this.$message.error("Loading Failed!");
+      })
+    },
+    toMovieInfo(id){
+      sessionStorage.setItem("movie_id",id);
+      this.$router.push('/MovieInfo');
+    },
+    setPersonInfo(data){
+      if(data.length>0){
+        data=data[0];
+      }
+      else return;
+      this.personInfo.person_pic=data.person_pic;
+      this.personInfo.person_name=data.person_name;
+      this.personInfo.gender=data.gender===1?"female":"male";
+      var dateType = "";
+      var date = new Date();
+      date.setTime(data.birthday);
+      dateType = date.getFullYear()+"-"+date.getMonth()+1+"-"+date.getDate();
+      this.personInfo.birthday=dateType;
+      this.personInfo.area=data.area;
+      this.personInfo.profession=data.profession;
+      this.personInfo.movies=data.movies;
+      this.personInfo.collect_num=data.collect_num+1;
+      this.personInfo.is_collect=data.is_collect;
+      this.personInfo.content=data.introduction;
+    },
+    getPersonInfo(){
+      var person_id=sessionStorage.getItem("person_id");
+      console.log(person_id);
+      axios.get("http://localhost:8070/Artist/ArtistOwnPage",
+          {
+            params:{
+              user_id:this.$store.state.id,
+              person_id:person_id
+            }
+          },
+          { withCredentials: true }
+      ).then((response)=>{
+        console.log(response);
+        var data=response.data.data;
+        this.setPersonInfo(data);
+      }).catch((error)=>{
+        this.$message.error("Loading Failed!");
+      })
+    }
   }
 }
 </script>

@@ -13,7 +13,7 @@
               <div class="mv_info">
                 <el-row>
                   <el-col :span="6" class="mv_cl_list col3"  v-for="movie in movieList" :key="movie.movie_id">
-                    <div class="mv_cl_card" @click="toMovieInfo()">
+                    <div class="mv_cl_card" @click="toMovieInfo(movie.movie_id)">
                       <el-card :body-style="{ padding: '0px' }">
                         <img :src="movie.movie_pic"/>
                         <div class="info">
@@ -92,6 +92,10 @@ export default {
     this.getMovieCollection();//需要触发的函数
   },
   methods:{
+    toMovieInfo(id){
+      sessionStorage.setItem("movie_id",id);
+      this.$router.push('/MovieInfo');
+    },
     setMovieCollection(data){
       this.movieList=[];
       for(let i=0;i<data.length;i++) {

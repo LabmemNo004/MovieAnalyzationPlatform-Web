@@ -46,7 +46,7 @@
               <div class=movieList1>
                 <el-row :gutter="20">
                   <el-col :span="6" class="col3" v-for="movie in movieList1" :key="movie.movie_id">
-                    <div class="movieCard" @click="toMovieInfo()">
+                    <div class="movieCard" @click="toMovieInfo(movie.movie_id)">
                       <el-card :body-style="{ padding: '0px'}">
                         <img :src="movie.movie_pic"/>
                         <div class="info">
@@ -127,91 +127,7 @@ export default {
       movie_type:null,
       movie_time:null,
       movie_area:null,
-
-
-      headPictures: [
-        {id: 0, source: require('../assets/images/header1.png')},
-        {id: 1, source: require('../assets/images/header2.png')},
-        {id: 2, source: require('../assets/images/header3.png')},
-        {id: 3, source: require('../assets/images/header4.png')},
-        {id: 4, source: require('../assets/images/header5.png')}
-      ],
-      movieList1: [
-        {
-          movie_id: 1,
-          movie_pic: require('../assets/images/1.png'),
-          movie_name: 'The God Father',
-          movie_rate: 4.8
-        },
-        {
-          movie_id: 2,
-          movie_pic: require('../assets/images/2.png'),
-          movie_name: 'Man of Steel',
-          movie_rate: 4.9
-        },
-        {
-          movie_id: 3,
-          movie_pic: require('../assets/images/3.png'),
-          movie_name: 'I am Legend',
-          movie_rate: '4.8'
-        },
-        {
-          movie_id: 4,
-          movie_pic: require('../assets/images/1.png'),
-          movie_name: 'The God Father',
-          movie_rate: 4.8
-        },
-        {
-          movie_id: 5,
-          movie_pic: require('../assets/images/2.png'),
-          movie_name: 'Man of Steel',
-          movie_rate: 4.9
-        },
-        {
-          movie_id: 6,
-          movie_pic: require('../assets/images/3.png'),
-          movie_name: 'I am Legend',
-          movie_rate: '4.8'
-        }
-      ],
-      movieList2: [
-        {
-          movie_id: 1,
-          movie_pic: require('../assets/images/1.png'),
-          movie_name: 'The God Father',
-          movie_rate: 4.8
-        },
-        {
-          movie_id: 2,
-          movie_pic: require('../assets/images/2.png'),
-          movie_name: 'Man of Steel',
-          movie_rate: 4.9
-        },
-        {
-          movie_id: 3,
-          movie_pic: require('../assets/images/3.png'),
-          movie_name: 'I am Legend',
-          movie_rate: '4.8'
-        },
-        {
-          movie_id: 4,
-          movie_pic: require('../assets/images/1.png'),
-          movie_name: 'The God Father',
-          movie_rate: 4.8
-        },
-        {
-          movie_id: 5,
-          movie_pic: require('../assets/images/2.png'),
-          movie_name: 'Man of Steel',
-          movie_rate: 4.9
-        },
-        {
-          movie_id: 6,
-          movie_pic: require('../assets/images/3.png'),
-          movie_name: 'I am Legend',
-          movie_rate: '4.8'
-        }
-      ],
+      movieList1: [],
       searchMovieList: [
         {
           movie_id: 1,
@@ -316,7 +232,8 @@ export default {
       this.pagenum=val;
       this.getMovieList();
     },
-    toMovieInfo(){
+    toMovieInfo(id){
+      sessionStorage.setItem("movie_id",id);
       this.$router.push('/MovieInfo');
     }
   },

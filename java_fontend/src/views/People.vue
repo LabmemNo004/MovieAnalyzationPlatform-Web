@@ -24,7 +24,7 @@
             </div>
             <!--star_sort end-->
             <!--star info list begin-->
-              <div class="starList_info" v-for="person in personList" :key="person.person_id" @click="toPeopleInfo()">
+              <div class="starList_info" v-for="person in personList" :key="person.person_id" @click="toPeopleInfo(person.person_id)">
                 <div class="star_cards">
                   <div class="star_photos">
                     <a href="#">
@@ -64,50 +64,7 @@ export default {
       personnum:80,
       pagenum:1,
       p_radio:'1',
-      personList: [
-        {
-          person_id: 1,
-          person_pic: require('../assets/images/person1.jpg'),
-          person_name: 'Gal Gadot',
-          person_profession:'actor',
-          person_movies:['Batman v Superman: Dawn of Justice','Wonder Woman','Justice League']
-        },
-        {
-          person_id: 2,
-          person_pic: require('../assets/images/person2.jpg'),
-          person_name: 'Chris Evans',
-          person_profession:'actor',
-          person_movies: ['The Avengers','Avengers: Infinity War','Avengers: Age of Ultron']
-        },
-        {
-          person_id: 3,
-          person_pic: require('../assets/images/person3.jpg'),
-          person_name: 'Angelina Jolie',
-          person_profession:'actor',
-          person_movies: ['Mr. & Mrs. Smith','Wanted','Maleficent']
-        },
-        {
-          person_id: 4,
-          person_pic: require('../assets/images/person1.jpg'),
-          person_name: 'Gal Gadotr',
-          person_profession:'actor',
-          person_movies:['Batman v Superman: Dawn of Justice','Wonder Woman','Justice League']
-        },
-        {
-          person_id: 5,
-          person_pic: require('../assets/images/person2.jpg'),
-          person_name: 'Chris Evans',
-          person_profession:'actor',
-          person_movies: ['The Avengers','Avengers: Infinity War','Avengers: Age of Ultron']
-        },
-        {
-          person_id: 6,
-          person_pic: require('../assets/images/person3.jpg'),
-          person_name: 'Angelina Jolie',
-          person_profession:'actor',
-          person_movies: ['Mr. & Mrs. Smith','Wanted','Maleficent']
-        }
-      ]
+      personList: []
     }
 
   },
@@ -115,7 +72,8 @@ export default {
     this.getPersonList();//需要触发的函数
   },
   methods:{
-    toPeopleInfo(){
+    toPeopleInfo(id){
+      sessionStorage.setItem("person_id",id);
       this.$router.push('/PeopleInfo');
     },
     setPersonList(data){

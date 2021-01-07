@@ -12,7 +12,7 @@
               <div class="ps_info">
                 <el-row>
                   <el-col :span="6" class="ps_cl_list col3"  v-for="person in personList" :key="person.person_id">
-                    <div class="mv_cl_card">
+                    <div class="mv_cl_card" @click="toPeopleInfo(person.person_id)">
                       <el-card :body-style="{ padding: '0px' }">
                         <img :src="person.person_pic"/>
                         <div class="info">
@@ -85,11 +85,14 @@ export default {
       personList: [],
     }
   },
-  mounted:function(){
+  mounted:function(id){
     this.getPeopleCollectionList();//需要触发的函数
   },
   methods:{
-    toPeopleInfo(){
+    toPeopleInfo(id){
+      console.log("toPeopleInfo");
+      console.log("toPeopleInfo,person_id:",id);
+      sessionStorage.setItem("person_id",id);
       this.$router.push('/PeopleInfo');
     },
     setPeopleCollection(data){
@@ -121,6 +124,9 @@ export default {
       }).catch((error)=>{
         this.$message.error("Loading Failed!");
       })
+    },
+    handleCurrentChange(){
+
     }
   }
 }
