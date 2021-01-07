@@ -5,7 +5,7 @@
         <el-col :span="2"></el-col>
         <el-col :span="14">
           <div class="cl_op">
-            <span class="sonListTitle_l">Collection({{personList.length}})</span>
+            <span class="sonListTitle_l">Collection({{people_collect_num}})</span>
           </div>
           <div class="collection_con">
             <div class="ps_cl">
