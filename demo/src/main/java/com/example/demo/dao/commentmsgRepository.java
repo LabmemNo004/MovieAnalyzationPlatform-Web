@@ -45,9 +45,9 @@ public interface commentmsgRepository extends JpaRepository<commentmsg,Integer> 
 
     @Modifying
     @Transactional
-    @Query(value="update commentmsg set text=?3" +
+    @Query(value="update commentmsg set text=?3,time=?4" +
             " where userID=?2 AND movieID=?1 ",nativeQuery = true)
-    void UpdateComment(Integer movieID,Integer userID,String content);
+    void UpdateComment(Integer movieID,Integer userID,String content,Date time);
 
 
 //    @Modifying
