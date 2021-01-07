@@ -180,7 +180,7 @@ public class UserController {
         file.transferTo(new File(filename));
 
 
-        tempfileName="../assets/images/"+tempfileName;
+//        tempfileName="../assets/images/"+tempfileName;
         UserService.UpdateAvator(userid,tempfileName);
 
         Map<String, String> result = new HashMap<>(4);
@@ -256,7 +256,10 @@ public class UserController {
     )
     {
         JSONArray temp1= collectService.getCollectMovie(userid,pagenum,pagesize);
-        return new JsonResult(temp1, "成功");
+        int i=temp1.size()-1;
+        Object counts=temp1.getJSONObject(i).get("total");
+        temp1.fluentRemove(i);
+        return new JsonResult(temp1, "成功",counts);
     }
 
     @GetMapping(value = "/CollectionPeople")
@@ -270,7 +273,10 @@ public class UserController {
     )
     {
         JSONArray temp1= collectService.getCollectPeople(userid,pagenum,pagesize);
-        return new JsonResult(temp1, "成功");
+        int i=temp1.size()-1;
+        Object counts=temp1.getJSONObject(i).get("total");
+        temp1.fluentRemove(i);
+        return new JsonResult(temp1, "成功",counts);
     }
 
 

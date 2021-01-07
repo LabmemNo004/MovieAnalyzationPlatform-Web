@@ -2,10 +2,8 @@ package com.example.demo.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.example.demo.Entity.commentmsg;
-import com.example.demo.Entity.movie;
 import com.example.demo.Entity.numbers;
 import com.example.demo.JSON.JsonResult;
-import com.example.demo.annotation.UserLoginToken;
 import com.example.demo.service.CommentService;
 import com.example.demo.service.MovieService;
 import com.example.demo.service.NumberService;
@@ -51,8 +49,10 @@ public class MovieController {
     )
     {
         JSONArray temp=movieService.getMovieLike(query,pagenum,pagesize);
-        return new JsonResult(temp,
-                "成功");
+        int i=temp.size()-1;
+        Object counts=temp.getJSONObject(i).get("total");
+        temp.fluentRemove(i);
+        return new JsonResult(temp,"成功",counts);
     }
 
 
@@ -67,8 +67,10 @@ public class MovieController {
     )
     {
         JSONArray temp=movieService.getMovieByType(type,order,pagenum,pagesize);
-        return new JsonResult(temp,
-                "成功");
+        int i=temp.size()-1;
+        Object counts=temp.getJSONObject(i).get("total");
+        temp.fluentRemove(i);
+        return new JsonResult(temp,"成功",counts);
     }
 
 
@@ -76,7 +78,7 @@ public class MovieController {
     @ApiOperation(value = "展示单个电影信息页",
             notes = "展示电影所有情况,身份未确定评论等一些个人信息无法展示")
     public JsonResult MovieDetails(
-            @RequestParam("token") String token,
+            @RequestParam(value="token",required = false) String token,
             @RequestParam("movie_id") Integer movie_id,
             @RequestParam("user_id") Integer user_id
     )
@@ -96,7 +98,10 @@ public class MovieController {
             )
     {
         JSONArray temp=movieService.getMovieComment(movie_id,pagenum,pagesize);
-        return new JsonResult(temp,"成功");
+        int i=temp.size()-1;
+        Object counts=temp.getJSONObject(i).get("total");
+        temp.fluentRemove(i);
+        return new JsonResult(temp,"成功",counts);
     }
 
 

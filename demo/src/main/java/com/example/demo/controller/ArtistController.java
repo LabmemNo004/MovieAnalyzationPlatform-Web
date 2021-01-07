@@ -18,9 +18,6 @@ public class ArtistController {
     @Autowired
     private ArtistService artistService;
 
-    @Autowired
-    private UserService userService;
-
 
     @GetMapping(value = "/ArtistList")
     @ApiOperation(value = "展示演员或者导演列表",
@@ -36,19 +33,21 @@ public class ArtistController {
         JSONArray temp=new JSONArray();
         if(profession.equals("Actor"))
         {
-            temp=artistService.getArtistID('A');
+            temp=artistService.getArtistID('A',pagenum,pagesize);
         }
         else if(profession.equals("Director"))
         {
-            temp=artistService.getArtistID('D');
+            temp=artistService.getArtistID('D',pagenum,pagesize);
         }
         else if(profession.equals("all"))
         {
-            temp=artistService.getArtistID('A');
-            temp.addAll(artistService.getArtistID('D'));
+            temp=artistService.getArtistID('A',pagenum,pagesize);
+            temp.addAll(artistService.getArtistID('D',pagenum,pagesize));
         }
-        return new JsonResult(temp,
-                "成功");
+        int i=temp.size()-1;
+        Object counts=temp.getJSONObject(i).get("total");
+        temp.fluentRemove(i);
+        return new JsonResult(temp,"成功",counts);
     }
 
 

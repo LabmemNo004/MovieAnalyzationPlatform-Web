@@ -79,20 +79,22 @@ public class AdminController {
 
         String filePathBefor=System.getProperty("user.dir")+"/src/main/resources/static/image/";
         filePathBefor=filePathBefor.replace('\\','/');
+        filePathBefor=filePathBefor.replace("demo","java_fontend");
 
         String CDY="";
         String CXW="";
         String TZY="";
         String LYF="D:/github/Chen/MovieAnalyzationPlatform-Web/demo/src/main/resources/static/image/";
 
-        String filename=filePathBefor+
-                RandomStringUtils.randomAlphanumeric(10)+
+        String tempfileName=RandomStringUtils.randomAlphanumeric(10)+
                 file.getOriginalFilename();
+
+        String filename=filePathBefor+tempfileName;
 
 
         file.transferTo(new File(filename));
 
-        movieService.UploadAvatar(movieID,filename);
+        movieService.UploadAvatar(movieID,tempfileName);
 
         Map<String, String> result = new HashMap<>(4);
         result.put("contentType", file.getContentType());
@@ -144,20 +146,22 @@ public class AdminController {
          */
         String filePathBefor=System.getProperty("user.dir")+"/src/main/resources/static/image/";
         filePathBefor=filePathBefor.replace('\\','/');
+        filePathBefor=filePathBefor.replace("demo","java_fontend");
 
         String CDY="";
         String CXW="";
         String TZY="";
         String LYF="D:/github/Chen/MovieAnalyzationPlatform-Web/demo/src/main/resources/static/image/";
 
-        String filename=filePathBefor+
-                RandomStringUtils.randomAlphanumeric(10)+
+        String tempfileName=RandomStringUtils.randomAlphanumeric(10)+
                 file.getOriginalFilename();
+
+        String filename=filePathBefor+tempfileName;
 
 
         file.transferTo(new File(filename));
 
-        artistService.UploadAvatar(personID,filename);
+        artistService.UploadAvatar(personID,tempfileName);
 
         Map<String, String> result = new HashMap<>(4);
         result.put("contentType", file.getContentType());
