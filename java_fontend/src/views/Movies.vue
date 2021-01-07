@@ -48,7 +48,7 @@
                   <el-col :span="6" class="col3" v-for="movie in movieList1" :key="movie.movie_id">
                     <div class="movieCard" @click="toMovieInfo(movie.movie_id)">
                       <el-card :body-style="{ padding: '0px'}">
-                        <img :src="movie.movie_pic"/>
+                        <img :src="converPic(movie.movie_pic)"/>
                         <div class="info">
                           <div class="info1">
                             <i class="el-icon-star-on color1"></i>
@@ -78,7 +78,7 @@
                   <el-col :span="4" class="col3" v-for="movie in searchMovieList" :key="movie.movie_id">
                     <div class="movieCard" @click="toMovieInfo()">
                       <el-card :body-style="{ padding: '0px' }">
-                        <img :src="movie.movie_pic"/>
+                        <img :src="converPic(movie.movie_pic)"/>
                         <div class="info">
                           <div class="info1">
                             <i class="el-icon-star-on color1"></i>
@@ -235,6 +235,14 @@ export default {
     toMovieInfo(id){
       sessionStorage.setItem("movie_id",id);
       this.$router.push('/MovieInfo');
+    },
+    converPic(url){
+      if(url==null||url==''){
+        return require('../assets/images/unload.png');
+      }
+      else{
+        return require('../assets/images/'+url);
+      }
     }
   },
   created(){
