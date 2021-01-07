@@ -7,7 +7,7 @@
                     <el-menu-item index="/Home">Home</el-menu-item>
                     <el-menu-item index="/Movies">Movies</el-menu-item>
                     <el-menu-item index="/People">People</el-menu-item>
-                    <el-menu-item index="/Rank" v-if="this.$store.state.role==1">Rank</el-menu-item>
+                    <el-menu-item index="/Rank" v-if="this.$store.state.role==1"><a href="http://localhost:3000" rel="nofollow noopener noreferrer" >Rank</a></el-menu-item>
                 </el-menu>
             </el-col>
             <el-col :span="4" :offset="4" class="col2">
