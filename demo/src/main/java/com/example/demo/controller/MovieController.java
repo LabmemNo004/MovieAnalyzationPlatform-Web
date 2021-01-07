@@ -187,8 +187,11 @@ public class MovieController {
             @RequestParam("operations") Integer operations
             )
     {
-        int temp1=0;
-        movieService.AddCollectMovie(userid, movieId, operations);
+        int temp1=movieService.AddCollectMovie(userid, movieId, operations);
+        if(temp1==1)
+        {
+            return new JsonResult(temp1,"错误操作！未收藏无法取消收藏");
+        }
         if(operations==1)
         {
             return new JsonResult(temp1,"收藏电影成功");

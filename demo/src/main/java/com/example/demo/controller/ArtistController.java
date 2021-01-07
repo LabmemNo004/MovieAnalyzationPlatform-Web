@@ -73,8 +73,12 @@ public class ArtistController {
             @RequestParam("operations") Integer operations
     )
     {
-        int temp1=0;
-        artistService.AddCollectPeople(userid,artistID,operations);
+        int temp1=artistService.AddCollectPeople(userid,artistID,operations);
+        if(temp1==1)
+        {
+            return new JsonResult(temp1,
+                    "错误操作！未关注无法取消关注");
+        }
         if(operations==1)
         {
             return new JsonResult(temp1,

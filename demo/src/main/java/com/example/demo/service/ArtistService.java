@@ -127,7 +127,7 @@ public class ArtistService {
         return temp;
     }
 
-    public void AddCollectPeople(Integer userID,Integer artistID,Integer operation)
+    public Integer AddCollectPeople(Integer userID,Integer artistID,Integer operation)
     {
         if(operation==1)
         {
@@ -137,10 +137,16 @@ public class ArtistService {
         }
         else
         {
+            follow temp=FollowRepository.findByUserIDAndArtistID(userID,artistID);
+            if(temp==null)
+            {
+                return 1;
+            }
             FollowRepository.DeleteNewFollow(userID,artistID);
             UserRepository.DeleteCollectPeople(userID);
             ArtistRepository.DeleteCollectedUser(artistID);
         }
+        return 0;
     }
 
 
