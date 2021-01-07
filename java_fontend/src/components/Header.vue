@@ -7,7 +7,7 @@
                     <el-menu-item index="/Home">Home</el-menu-item>
                     <el-menu-item index="/Movies">Movies</el-menu-item>
                     <el-menu-item index="/People">People</el-menu-item>
-                    <el-menu-item index="/Rank">Rank</el-menu-item>
+                    <el-menu-item index="/Rank" v-if="this.$store.state.role==1">Rank</el-menu-item>
                 </el-menu>
             </el-col>
             <el-col :span="4" :offset="4" class="col2">
@@ -79,7 +79,13 @@ import axios from "axios";
            img.onerror = null; //防止闪图
         },
         toPersonalHome(){
-            this.$router.push("/PersonalHome");
+            if(this.$store.state.role==0){
+               this.$router.push("/PersonalHome");
+            }
+            else{
+                this.$router.push("/Admin");
+            }
+            
         },
         toPersonalInfo(){
             this.$router.push("PersonalInfo");
