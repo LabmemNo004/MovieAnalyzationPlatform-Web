@@ -17,7 +17,7 @@ public class NumberService {
     {
         if(CommentMsg!=0)
         {
-            numberReposiroty.updateNumberById2(CommentMsg);
+            numberReposiroty.updateNumberById3(CommentMsg);
         }
 
         if(ArtistID==0&MovieID==0)
@@ -26,11 +26,11 @@ public class NumberService {
         }
         if(userID==0&&MovieID==0)
         {
-            numberReposiroty.updateNumberById1(ArtistID);
+            numberReposiroty.updateNumberById2(ArtistID);
         }
         if(userID==0&ArtistID==0)
         {
-            numberReposiroty.updateNumberById2(MovieID);
+            numberReposiroty.updateNumberById1(MovieID);
         }
     }
 

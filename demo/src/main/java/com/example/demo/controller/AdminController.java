@@ -62,9 +62,7 @@ public class AdminController {
         temp.setIntroduction(Introduction);
         numbers number=numberService.getSimpleNumbers();
         temp.setMovieID(number.getMovieNumadd());
-        movieID=number.getMovieNumadd() + 1;
-        numberService.updataNumber(0,0,
-                movieID,0);
+
         temp.setPublishTime(publish_time);
         temp.setType(type);
         temp.setTitle(movie_name);
@@ -72,29 +70,23 @@ public class AdminController {
         temp.setDirector(directors);
         temp.setCommentnum(0);
         movieService.saveMovie(temp);
-        String movie_pic="";
-        /**
-         * 上传图片获得图片地址。
-         */
+
 
         String filePathBefor=System.getProperty("user.dir")+"/src/assets/images/";
         filePathBefor=filePathBefor.replace('\\','/');
         filePathBefor=filePathBefor.replace("demo","java_fontend");
 
-        String CDY="";
-        String CXW="";
-        String TZY="";
-        String LYF="D:/github/Chen/MovieAnalyzationPlatform-Web/demo/src/main/resources/static/image/";
-
         String tempfileName=RandomStringUtils.randomAlphanumeric(10)+
                 file.getOriginalFilename();
 
         String filename=filePathBefor+tempfileName;
-
-
         file.transferTo(new File(filename));
 
-        movieService.UploadAvatar(movieID,tempfileName);
+        movieService.UploadAvatar(number.getMovieNumadd(),tempfileName);
+        movieID=number.getMovieNumadd() + 1;
+        numberService.updataNumber(0,0,
+                movieID,0);
+
 
         Map<String, String> result = new HashMap<>(4);
         result.put("contentType", file.getContentType());

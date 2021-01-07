@@ -1,7 +1,7 @@
 <template>
     <div class="movieinfo">
         <div class="movie_pic l">
-            <img :src="movieInfo.movie_pic" @error="away()"/>
+            <img :src="converPic(movieInfo.movie_pic)" @error="away()"/>
         </div>
         <div class="movie_info l">
             <div class="name">{{movieInfo.movie_name}}</div>
@@ -348,6 +348,14 @@ export default {
             this.pagenum=val;
             this.getCommentList();
         },
+    converPic(url){
+      if(url==null||url==''){
+        return require('../assets/images/unload.png');
+      }
+      else{
+        return require('../assets/images/'+url);
+      }
+    }
     },
     created(){
         this.getMovieInfo();

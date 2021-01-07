@@ -138,7 +138,7 @@ export default {
                 }
        }).then((response)=>{
          console.log(response);
-         this.movieCollectNum=response.data.data[0].movieCollectNum;
+         this.movieCollectNum=response.data.data[0].movieCollectNum+2;
          this.peopleCollectNum=response.data.data[0].peopleCollectNum;
        }).catch((error)=>{
          this.$message.error("Get PersonalHome Information Failed!");

@@ -1,14 +1,5 @@
 <template>
   <div class="movies">
-    <!--一些头部元素，可能会修改-->
-    <!--一serch start-->
-    <div class="search">
-      <el-input placeholder="Input movie's name to search." v-model="keyword" class="input-with-select">
-        <el-button slot="append" icon="el-icon-search" @click="searchMovies()"></el-button>
-      </el-input>
-    </div>
-    <!--一serch end-->
-
     <!--主线部分开始-->
     <el-row>
       <el-col :span="3"></el-col>
@@ -66,39 +57,10 @@
                   @current-change="handleCurrentChange"
                   :current-page="pagenum"
                   layout="prev, pager, next"
-                  :total="movie_num">
+                  :total="movie_num"
+                  :page-size="8">
               </el-pagination>
               <!--分页end-->
-            </div>
-
-            <div class="searchMovie" v-if="seen2">
-              <div class="title1">Find the results for you as follows:</div>
-              <div class="searchMovieList">
-                <el-row>
-                  <el-col :span="4" class="col3" v-for="movie in searchMovieList" :key="movie.movie_id">
-                    <div class="movieCard" @click="toMovieInfo()">
-                      <el-card :body-style="{ padding: '0px' }">
-                        <img :src="converPic(movie.movie_pic)"/>
-                        <div class="info">
-                          <div class="info1">
-                            <i class="el-icon-star-on color1"></i>
-                            <span class="info_rate">{{ movie.movie_rate }}</span>
-                          </div>
-                          <div class="info2">{{ movie.movie_name }}</div>
-                        </div>
-                      </el-card>
-                    </div>
-                  </el-col>
-                </el-row>
-              </div>
-
-              <div class="page">
-                <el-pagination
-                    background
-                    layout="prev, pager, next"
-                    :total="80">
-                </el-pagination>
-              </div>
             </div>
           </div>
           <!--movie_screen end-->
@@ -123,54 +85,10 @@ export default {
       t_radio: '100',
       o_radio: '1',
       movie_num:120,
-      movie_per_page:12,
-      movie_type:null,
-      movie_time:null,
-      movie_area:null,
       movieList1: [],
-      searchMovieList: [
-        {
-          movie_id: 1,
-          movie_pic: require('../assets/images/1.png'),
-          movie_name: 'The God Father',
-          movie_rate: 4.8
-        },
-        {
-          movie_id: 2,
-          movie_pic: require('../assets/images/2.png'),
-          movie_name: 'Man of Steel',
-          movie_rate: 4.9
-        },
-        {
-          movie_id: 3,
-          movie_pic: require('../assets/images/3.png'),
-          movie_name: 'I am Legend',
-          movie_rate: '4.8'
-        },
-        {
-          movie_id: 4,
-          movie_pic: require('../assets/images/1.png'),
-          movie_name: 'The God Father',
-          movie_rate: 4.8
-        },
-        {
-          movie_id: 5,
-          movie_pic: require('../assets/images/2.png'),
-          movie_name: 'Man of Steel',
-          movie_rate: 4.9
-        },
-        {
-          movie_id: 6,
-          movie_pic: require('../assets/images/3.png'),
-          movie_name: 'I am Legend',
-          movie_rate: '4.8'
-        }
-      ]
+      searchMovieList: []
     }
 
-  },
-  mounted:function(){
-    this.getMovieList();//需要触发的函数
   },
   methods:{
     searchMovies(){
@@ -195,7 +113,7 @@ export default {
               type:this.movie_type,
               order:parseInt(this.o_radio)-1,
               pagenum:this.pagenum,
-              pagesize:10
+              pagesize:8
             }
           },
           { withCredentials: true }
@@ -203,6 +121,7 @@ export default {
         console.log(response);
         var data=response.data.data;
         this.setMovies(data);
+        this.movie_num=response.data.totalNum;
       }).catch((error)=>{
         this.$message.error("Loading Failed!");
       })
@@ -246,7 +165,7 @@ export default {
     }
   },
   created(){
-
+    this.getMovieList();//需要触发的函数
   }
 }
 </script>
@@ -279,12 +198,15 @@ export default {
   margin-bottom: 20px;
 }
 
-
-.movieCard .el-card__body > img {
-  width: 100%;
-
-  height: auto;
+.movieCard .el-card__body{
+  width:250px;
+  height: 470px;
   cursor:pointer;
+}
+
+.movieCard .el-card__body > img{
+  width: 250px;
+  height: 368.13px;
 }
 
 .movies .movieList1 {
@@ -308,7 +230,7 @@ export default {
 }
 
 .movies .info1 {
-  font-size: 14px;
+  font-size: 20px;
   text-align: left;
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
@@ -353,8 +275,8 @@ export default {
 }
 
 #app > div > section > main > div > div.el-row > div.el-col.el-col-18 > div > div {
-
-  padding: 30px 20px;
+  margin-top: 30px;
+  padding: 10px 20px;
 }
 
 .movie_sort {
