@@ -36,4 +36,6 @@ public interface followRepository extends JpaRepository<follow, followPK> {
             "where userID=?1 AND artistID=?2",nativeQuery = true)
     void DeleteNewFollow(Integer userId,Integer artistID);
 
+    follow findByUserIDAndArtistID(Integer useID, Integer artistID);
+
 }

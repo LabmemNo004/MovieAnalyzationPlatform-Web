@@ -55,13 +55,14 @@ public class AdminController {
             @RequestParam("duration") Integer duration
     ) throws IOException
     {
-        int movieID=0;
         movie temp=new movie();
         temp.setArea(area);
         temp.setCollectnum(0);
         temp.setIntroduction(Introduction);
         numbers number=numberService.getSimpleNumbers();
-        temp.setMovieID(number.getMovieNumadd());
+
+        int movieID=number.getMovieNumadd();
+        temp.setMovieID(movieID);
 
         temp.setPublishTime(publish_time);
         temp.setType(type);
@@ -82,8 +83,8 @@ public class AdminController {
         String filename=filePathBefor+tempfileName;
         file.transferTo(new File(filename));
 
-        movieService.UploadAvatar(number.getMovieNumadd(),tempfileName);
-        movieID=number.getMovieNumadd();
+        movieService.UploadAvatar(movieID,tempfileName);
+
         numberService.updataNumber(0,0,
                 movieID + 1,0);
 
@@ -115,10 +116,11 @@ public class AdminController {
             @RequestParam("Avatar") MultipartFile file
             ) throws IOException
     {
-        int personID=0;
+
         artist temp=new artist();
         numbers number=numberService.getSimpleNumbers();
-        temp.setId(number.getArtistNumadd());
+        int personID=number.getArtistNumadd();
+        temp.setId(personID);
 
         temp.setPersonName(personName);
         temp.setSex(sex);
@@ -152,7 +154,7 @@ public class AdminController {
 
         file.transferTo(new File(filename));
 
-        artistService.UploadAvatar(number.getArtistNumadd(),tempfileName);
+        artistService.UploadAvatar(personID,tempfileName);
 
         Map<String, String> result = new HashMap<>(4);
         result.put("contentType", file.getContentType());
@@ -164,10 +166,9 @@ public class AdminController {
          */
         participate temp10=new participate();
         temp10.setMovieID(movieID);
-        temp10.setArtistID(number.getArtistNumadd());
+        temp10.setArtistID(personID);
         followService.SaveMovieAndArtist(temp10);
 
-        personID=number.getArtistNumadd();
         numberService.updataNumber(0,personID + 1,
                 0,0);
 
