@@ -1,0 +1,16 @@
+@import '../../styles/app';
+
+.tables-basic {
+  .table th {
+    font-size: $font-size-sm;
+  }
+}
+
+.design1{
+  margin : 0px 0px 0px 30px;
+}
+
+.design2{
+  max-height:400px ;
+  overflow:scroll ;
+}
