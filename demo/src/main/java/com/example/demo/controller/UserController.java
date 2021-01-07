@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.demo.Entity.users;
 import com.example.demo.JSON.JsonResult;
 import com.example.demo.service.*;
-import com.example.demo.annotation.UserLoginToken;
+import com.example.demo.auth.UserLoginToken;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +62,9 @@ public class UserController {
             {
                 b.put(tags[i],temp[i]);
             }
+            String token =
+                    tokenService.getToken(Integer.parseInt(temp[0].toString()),password);
+            b.put("token",token);
             return new JsonResult(b, "登陆成功");
         }
     }
@@ -112,7 +115,7 @@ public class UserController {
 
 
     @UserLoginToken
-    @GetMapping("/getMessage")
+    @PostMapping("/getMessage")
     public String getMessage(){
 
         return "你已通过验证";
@@ -212,7 +215,7 @@ public class UserController {
         return new JsonResult(temp1, "获取个人信息成功");
     }
 
-
+    @UserLoginToken
     @GetMapping(value = "/PersonalHomePage")
     @ApiOperation(value = "展示个人信息主页",
             notes = "传递token和id确认身份,要展示评论电影的分页情况，以及评论收藏总数")

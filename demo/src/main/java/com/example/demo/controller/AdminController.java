@@ -6,7 +6,7 @@ import com.example.demo.Entity.movie;
 import com.example.demo.Entity.numbers;
 import com.example.demo.Entity.participate;
 import com.example.demo.JSON.JsonResult;
-import com.example.demo.annotation.PassToken;
+import com.example.demo.auth.PassToken;
 import com.example.demo.service.ArtistService;
 import com.example.demo.service.FollowService;
 import com.example.demo.service.MovieService;
@@ -41,7 +41,7 @@ public class AdminController {
     private FollowService followService;
 
 
-    @PassToken
+
     @PostMapping(value = "/UploadMovie")
     @ApiOperation(value = "上传一部电影", notes = "未完无法使用")
     public JsonResult UploadMovie(
@@ -77,7 +77,7 @@ public class AdminController {
          * 上传图片获得图片地址。
          */
 
-        String filePathBefor=System.getProperty("user.dir")+"/src/main/resources/static/image/";
+        String filePathBefor=System.getProperty("user.dir")+"/src/assets/images/";
         filePathBefor=filePathBefor.replace('\\','/');
         filePathBefor=filePathBefor.replace("demo","java_fontend");
 
@@ -109,7 +109,7 @@ public class AdminController {
     }
 
 
-    @PassToken
+
     @PostMapping(value = "/UploadMoviePerson")
     @ApiOperation(value = "上传电影的对应人物", notes = "未完无法使用")
     public JsonResult UploadMoviePerson(
@@ -144,7 +144,7 @@ public class AdminController {
         /**
          * 上传图片获得图片地址。
          */
-        String filePathBefor=System.getProperty("user.dir")+"/src/main/resources/static/image/";
+        String filePathBefor=System.getProperty("user.dir")+"/src/assets/images/";
         filePathBefor=filePathBefor.replace('\\','/');
         filePathBefor=filePathBefor.replace("demo","java_fontend");
 
