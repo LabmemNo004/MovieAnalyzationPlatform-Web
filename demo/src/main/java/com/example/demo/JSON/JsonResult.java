@@ -4,6 +4,16 @@ public class JsonResult<T> {
     private T data;
     private String msg;
 
+    private Object totalNum;
+
+    public Object getTotalNum() {
+        return totalNum;
+    }
+
+    public void setTotalNum(Object totalNum) {
+        this.totalNum = totalNum;
+    }
+
     public T getData() {
         return data;
     }
@@ -50,6 +60,13 @@ public class JsonResult<T> {
      * @param data
      * @param msg
      */
+    public JsonResult(T data, String msg,Object totalNum) {
+        this.totalNum=totalNum;
+        this.data = data;
+        this.msg = msg;
+    }
+
+
     public JsonResult(T data, String msg) {
         this.data = data;
         this.msg = msg;

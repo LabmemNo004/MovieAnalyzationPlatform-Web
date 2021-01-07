@@ -65,7 +65,7 @@ public class CollectService {
             b.add(temp3);
         }
         JSONObject temp3=new JSONObject();
-        temp3.put("total",b.size());
+        temp3.put("total",total);
         b.add(temp3);
         return b;
     }
@@ -116,6 +116,9 @@ public class CollectService {
             }
             b.add(temp3);
         }
+        JSONObject ss=new JSONObject();
+        ss.put("total",total);
+        b.add(ss);
         return b;
     }
 

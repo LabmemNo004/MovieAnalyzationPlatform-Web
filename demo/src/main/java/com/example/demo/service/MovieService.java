@@ -149,6 +149,9 @@ public class MovieService {
             b.put("movie_pic",temp2.getPhoto());
             a.add(b);
         }
+        JSONObject ss=new JSONObject();
+        ss.put("total",total);
+        a.add(ss);
         return a;
     }
 
@@ -226,6 +229,9 @@ public class MovieService {
             a.add(b);
 
         }
+        JSONObject ss=new JSONObject();
+        ss.put("total",total);
+        a.add(ss);
         return a;
     }
 
@@ -250,12 +256,18 @@ public class MovieService {
         b.put("introduction",tempMovie.getIntroduction());
         b.put("collect_num",tempMovie.getCollectnum());
         b.put("comment_num",tempMovie.getCommentnum());
+        /**
+         * 暂时一个评论
+         */
         commentmsg temp9=
                 CommentmsdRepository.findByMovieIDAndAndUserID(movieID, userID);
+
+        watchlist temp10=
+                WatchlistRepository.findByUserIDAndMovieID(userID,movieID);
         b.put("my_rate",temp9.getHelpfulness());
         b.put("my_comment",temp9.getText());
 
-        watchlist temp10=WatchlistRepository.findByUserIDAndMovieID(userID,movieID);
+
         if(temp10==null)
         {
             b.put("is_collect",false);
@@ -313,6 +325,9 @@ public class MovieService {
             }
             a.add(b);
         }
+        JSONObject ss=new JSONObject();
+        ss.put("total",total);
+        a.add(ss);
         return a;
     }
 

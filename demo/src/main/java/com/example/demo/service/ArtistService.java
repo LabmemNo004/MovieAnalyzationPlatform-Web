@@ -28,13 +28,38 @@ public class ArtistService {
     @Resource
     private userRepository UserRepository;
 
-    public JSONArray getArtistID(Character type)
+    public JSONArray getArtistID(Character type,Integer pagenum,Integer pagesize)
     {
         JSONArray temp=new JSONArray();
         List<artist> some=ArtistRepository.getArtistID(type);
-
+        int total=some.size();
+        int start=0;
+        int end=0;
+        if(total>(pagenum - 1)*pagesize)
+        {
+            start=(pagenum - 1)*pagesize;
+            if(total>pagenum*pagesize)
+            {
+                end=pagenum*pagesize;
+            }
+            else
+            {
+                end=total;
+            }
+        }
+        else
+        {
+            return null;
+        }
+        /**
+         * 自index开始到total/或者本页结尾
+         */
+        int index=0;
         for(artist shabi:some)
         {
+            index++;
+            if(index<=start) continue;
+            if(index>end) break;
             JSONObject temp3=new JSONObject();
 
             List<String> temp1=ArtistRepository.getArtistMovie2(shabi.getId());
@@ -46,9 +71,10 @@ public class ArtistService {
             temp3.put("person_pic",shabi.getPicture());
             temp.add(temp3);
         }
+        JSONObject ss=new JSONObject();
+        ss.put("total",total);
+        temp.add(ss);
         return temp;
-
-
     }
 
     public JSONArray ShowArtistOwn(Integer userid,Integer artistid)
@@ -112,11 +138,13 @@ public class ArtistService {
 
     public void saveArtist(artist temp)
     {
+
         ArtistRepository.save(temp);
     }
 
     public void UploadAvatar(Integer personID,String filename)
     {
+
         ArtistRepository.UpdateAvator(personID, filename);
     }
 
