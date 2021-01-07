@@ -76,4 +76,7 @@ public interface movieRepository extends JpaRepository<movie, Integer> {
     @Query(value="select * from movie where movieID=?1",nativeQuery = true)
     movie getOneMovie(Integer movieID);
 
+    @Query(value="select Director from movie where movieID=?1")
+    String getDirectorsMovie(Integer movieID);
+
 }

@@ -247,9 +247,11 @@ public class MovieService {
 
         movie tempMovie=MovieRepository.getDetailMovie(movieID);
         List<String> ActorName=
-                ParticipateRepository.GetMoviesPerson(movieID,"Actor");
+                ParticipateRepository.GetMoviesPerson(movieID,"演员");
         List<String> DirectorName=
-                ParticipateRepository.GetMoviesPerson(movieID,"Director");
+                ParticipateRepository.GetMoviesPerson(movieID,"导演");
+        String ttt=MovieRepository.getDirectorsMovie(movieID);
+        DirectorName.add(ttt);
         JSONObject b=new JSONObject();
         b.put("movie_name",tempMovie.getTitle());
         b.put("movie_pic",tempMovie.getPhoto());

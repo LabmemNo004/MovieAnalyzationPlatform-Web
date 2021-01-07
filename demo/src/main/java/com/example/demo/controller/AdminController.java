@@ -83,9 +83,9 @@ public class AdminController {
         file.transferTo(new File(filename));
 
         movieService.UploadAvatar(number.getMovieNumadd(),tempfileName);
-        movieID=number.getMovieNumadd() + 1;
+        movieID=number.getMovieNumadd();
         numberService.updataNumber(0,0,
-                movieID,0);
+                movieID + 1,0);
 
 
         Map<String, String> result = new HashMap<>(4);
@@ -167,8 +167,8 @@ public class AdminController {
         temp10.setArtistID(number.getArtistNumadd());
         followService.SaveMovieAndArtist(temp10);
 
-        personID=number.getArtistNumadd() +1;
-        numberService.updataNumber(0,personID,
+        personID=number.getArtistNumadd();
+        numberService.updataNumber(0,personID + 1,
                 0,0);
 
         return new JsonResult(0, "上传成功");
