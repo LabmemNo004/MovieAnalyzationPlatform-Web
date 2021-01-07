@@ -86,7 +86,7 @@ export default {
     return {
       pagenum:1,
       movieList:[],
-      movie_collect_num:80,
+      movie_collect_num:0,
     }
   },
   mounted:function(){
