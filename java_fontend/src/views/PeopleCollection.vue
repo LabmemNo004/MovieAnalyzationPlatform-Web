@@ -28,7 +28,8 @@
                   @current-change="handleCurrentChange"
                   :current-page="pagenum"
                   layout="prev, pager, next"
-                  :total="people_collect_num">
+                  :total="people_collect_num"
+                  :page-size="8">
               </el-pagination>
               <!--分页end-->
             </div>

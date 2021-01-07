@@ -33,7 +33,8 @@
                   @current-change="handleCurrentChange"
                   :current-page="pagenum"
                   layout="prev, pager, next"
-                  :total="movie_collect_num">
+                  :total="movie_collect_num"
+                  :page-size="8">
               </el-pagination>
               <!--分页end-->
             </div>
@@ -85,7 +86,7 @@ export default {
     return {
       pagenum:1,
       movieList:[],
-      movie_collect_num:0,
+      movie_collect_num:80,
     }
   },
   mounted:function(){

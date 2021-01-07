@@ -1,12 +1,5 @@
 <template>
   <div class="person">
-    <!--一serch start-->
-    <div class="search">
-      <el-input placeholder="Input movie's name to search." v-model="keyword" class="input-with-select">
-        <el-button slot="append" icon="el-icon-search" @click="searchMovies()"></el-button>
-      </el-input>
-    </div>
-    <!--一serch end-->
     <div class="star_container">
       <el-row>
         <el-col :span="3"></el-col>
@@ -44,7 +37,8 @@
                 @current-change="handleCurrentChange"
                 :current-page="pagenum"
                 layout="prev, pager, next"
-                :total="personnum">
+                :total="personnum"
+                :page-size="8">
             </el-pagination>
             <!--分页end-->
           </div>
@@ -67,9 +61,6 @@ export default {
       personList: []
     }
 
-  },
-  mounted:function(){
-    this.getPersonList();//需要触发的函数
   },
   methods:{
     toPeopleInfo(id){
@@ -119,6 +110,9 @@ export default {
         return require('../assets/images/'+url);
       }
     }
+  },
+  created() {
+    this.getPersonList();//需要触发的函数
   }
 }
 </script>

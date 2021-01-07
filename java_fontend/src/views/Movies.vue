@@ -1,14 +1,5 @@
 <template>
   <div class="movies">
-    <!--一些头部元素，可能会修改-->
-    <!--一serch start-->
-    <div class="search">
-      <el-input placeholder="Input movie's name to search." v-model="keyword" class="input-with-select">
-        <el-button slot="append" icon="el-icon-search" @click="searchMovies()"></el-button>
-      </el-input>
-    </div>
-    <!--一serch end-->
-
     <!--主线部分开始-->
     <el-row>
       <el-col :span="3"></el-col>
@@ -66,39 +57,10 @@
                   @current-change="handleCurrentChange"
                   :current-page="pagenum"
                   layout="prev, pager, next"
-                  :total="movie_num">
+                  :total="movie_num"
+                  :page-size="8">
               </el-pagination>
               <!--分页end-->
-            </div>
-
-            <div class="searchMovie" v-if="seen2">
-              <div class="title1">Find the results for you as follows:</div>
-              <div class="searchMovieList">
-                <el-row>
-                  <el-col :span="4" class="col3" v-for="movie in searchMovieList" :key="movie.movie_id">
-                    <div class="movieCard" @click="toMovieInfo()">
-                      <el-card :body-style="{ padding: '0px' }">
-                        <img :src="converPic(movie.movie_pic)"/>
-                        <div class="info">
-                          <div class="info1">
-                            <i class="el-icon-star-on color1"></i>
-                            <span class="info_rate">{{ movie.movie_rate }}</span>
-                          </div>
-                          <div class="info2">{{ movie.movie_name }}</div>
-                        </div>
-                      </el-card>
-                    </div>
-                  </el-col>
-                </el-row>
-              </div>
-
-              <div class="page">
-                <el-pagination
-                    background
-                    layout="prev, pager, next"
-                    :total="80">
-                </el-pagination>
-              </div>
             </div>
           </div>
           <!--movie_screen end-->
@@ -127,9 +89,6 @@ export default {
       searchMovieList: []
     }
 
-  },
-  mounted:function(){
-    this.getMovieList();//需要触发的函数
   },
   methods:{
     searchMovies(){
@@ -206,7 +165,7 @@ export default {
     }
   },
   created(){
-
+    this.getMovieList();//需要触发的函数
   }
 }
 </script>
@@ -316,8 +275,8 @@ export default {
 }
 
 #app > div > section > main > div > div.el-row > div.el-col.el-col-18 > div > div {
-
-  padding: 30px 20px;
+  margin-top: 30px;
+  padding: 10px 20px;
 }
 
 .movie_sort {
