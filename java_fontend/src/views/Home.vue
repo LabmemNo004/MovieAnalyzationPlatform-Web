@@ -259,7 +259,7 @@ export default {
               type: "all",
               order: 0,
               pagenum: 1,
-              pagesize: 25
+              pagesize: 30
             }
           },
           {withCredentials: true}
