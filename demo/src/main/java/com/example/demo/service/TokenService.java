@@ -20,6 +20,8 @@ public class TokenService {
         String token="";
         token= JWT.create().withAudience(Integer.toString(UserID))// 将 user id 保存到 token 里面
                 .sign(Algorithm.HMAC256(password));// 以 password 作为 token 的密钥
+
+
         return token;
     }
 
