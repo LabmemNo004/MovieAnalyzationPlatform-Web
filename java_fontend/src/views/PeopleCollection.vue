@@ -17,6 +17,7 @@
                         <img :src="converPic(person.person_pic)"/>
                         <div class="info">
                           <div class="info2">{{ person.person_name }}</div>
+                          <div class="info2">{{ person.person_profession }}</div>
                         </div>
                       </el-card>
                     </div>

@@ -268,7 +268,7 @@ export default {
                 this.movieInfo=response.data.data[0];
                 var time=new Date(this.movieInfo.pub_time);
                 this.movieInfo.pub_time=dateFormat1(time);
-                this.movieInfo.collect_num+=1;
+                // this.movieInfo.collect_num+=1;
                 //this.movieInfo.duration=convert(this.movieInfo.duration);
             }).catch((error)=>{
                 this.$message.error("Get Movie's Details Failed!");
