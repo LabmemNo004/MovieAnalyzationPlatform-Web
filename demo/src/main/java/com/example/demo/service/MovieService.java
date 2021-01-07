@@ -296,6 +296,14 @@ public class MovieService {
 
         List<Object []> temp=
                 CommentmsdRepository.getOtherCommentMovie(movieID);
+
+        if(temp.isEmpty())
+        {
+            JSONObject b=new JSONObject();
+            b.put("total",-100);
+            a.add(b);
+            return a;
+        }
         int total=temp.size();
         int start=0;
         int end=0;
