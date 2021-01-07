@@ -36,7 +36,7 @@
             <el-row>
               <el-col :span="12" class="col" v-for="comment in commentList" :key="comment.movie_name">
                 <div class="l">
-                  <img :src="comment.movie_pic" class="image" @error="away()"/>
+                  <img :src="converPic(comment.movie_pic)" class="image" @error="away()"/>
                 </div>
                 <div class="l movieInfo">
                   <div class="movie_name">{{comment.movie_name}}</div>
@@ -170,6 +170,13 @@ export default {
         img.src = this.unload;   
         img.onerror = null; //防止闪图
     },
+     converPic(url) {
+      if (url == null || url == '') {
+        return require('../assets/images/unload.png');
+      } else {
+        return require('../assets/images/' + url);
+      }
+    }
   },
   created(){
      this.getHomeInfo();
@@ -277,7 +284,7 @@ export default {
 
 .personalhome .movieInfo{
   margin:0px 40px 0px 20px;
-  width:440px;
+  width:420px;
 }
 
 .personalhome .movie_name{
