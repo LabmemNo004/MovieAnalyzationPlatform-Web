@@ -8,11 +8,11 @@
             <div class="information">
                 <div class="info1">
                     <span class="span1">Director: </span>
-                    <span class="span2" v-for="director in movieInfo.director" :key="director">{{director  }}</span>
+                    <span class="span2" v-for="director in movieInfo.director" :key="director">{{director}} / </span>
                 </div>
                 <div class="info1">
                     <span class="span1">Main Actors: </span>
-                    <span class="span2" v-for="actor in movieInfo.actors" :key="actor">{{actor  }}</span>
+                    <span class="span2" v-for="actor in movieInfo.actors" :key="actor">{{actor}} / </span>
                 </div>
                  <div class="info1">
                     <span class="span1">Type: </span>
