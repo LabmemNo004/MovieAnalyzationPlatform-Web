@@ -16,8 +16,8 @@
                       <el-card :body-style="{ padding: '0px' }">
                         <img :src="converPic(person.person_pic)"/>
                         <div class="info">
-                          <div class="info2">{{ person.person_name }}</div>
-                          <div class="info2">{{ person.person_profession }}</div>
+                          <div class="info2 name_decoration">{{ person.person_name }}</div>
+                          <div class="info2 profession_decoration">{{ person.person_profession }}</div>
                         </div>
                       </el-card>
                     </div>
@@ -331,5 +331,9 @@ export default {
   color: white;
 }
 
-
+.profession_decoration{
+  font-size:10px;
+  color:#666666;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 </style>
