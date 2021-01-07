@@ -29,7 +29,7 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="Birthday" class="item2">
-            <el-date-picker type="date" placeholder="选择日期" v-model="personalForm.birthday" style="width: 100%;"></el-date-picker>
+            <el-date-picker type="date" placeholder="Select Date" v-model="personalForm.birthday" style="width: 100%;"></el-date-picker>
           </el-form-item>
           <el-form-item label="Phone Number" class="item3">
             <el-input v-model="personalForm.phone" disabled></el-input>
@@ -100,7 +100,13 @@ export default {
               this.personalForm.phone=data.phone;
               this.personalForm.email=data.email;
               this.personalForm.signature=data.signature;
-              this.personalForm.avatar=data.avatar;
+              if(data.avatar==null||data.avatar==''){
+                this.personalForm.avatar=require('../assets/images/avatar.png');
+              }
+              else{
+                this.personalForm.avatar=data.avatar;
+              }
+              
               this.loading=false;
             }).catch((error)=>{
               this.$message.error("Loading Failed!");
@@ -126,7 +132,7 @@ export default {
       let fd = new FormData();
       fd.append('userid',this.$store.state.id);       
       fd.append('file',obj.file);//传文件 
-      axios.post("http://localhost:8070/User/ModifyAvatar?",fd).then((response)=>{
+      axios.post("http://localhost:8070/User/ModifyAvatar",fd).then((response)=>{
         console.log(response);
         this.$message.success("Upload Success!");
       }).catch((error)=>{

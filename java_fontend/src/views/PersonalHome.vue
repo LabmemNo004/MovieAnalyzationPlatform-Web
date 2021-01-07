@@ -116,23 +116,20 @@ export default {
                 pagenum: this.pagenum,
                 pagesize:4
           }
-        }
-          ).then((response)=>{
+        }).then((response)=>{
                console.log(response);
-               if(response.data.data.length==0){
-                 return;
-               }
                this.commentList=response.data.data;
-               if(reaponse.data.totalNum<0){
-                 this.commentNum=0;
-               }
-               else{
-                  this.commentNum=response.data.totalNum; 
-               }
+               if(response.data.totalNum<0){
+                  this.commentNum=0;
+                }
+                else{
+                    this.commentNum=response.data.totalNum; 
+                }
                 
-          }).catch((error)=>{
-            this.$message.error("Get Comments Failed!");
-          })
+              }).catch((error)=>{
+                console.log(error);
+                 this.$message.error("Get Comments Failed!");
+               });
     },
     async getHomeInfo(){
        axios.get("http://localhost:8070/User/PersonalHomePage",{

@@ -21,7 +21,7 @@
                         <el-upload
                             class="avatar-uploader"
                             action
-                            :http-request="uploadMovie"
+                            :on-change="uploadMovie"
                             :auto-upload="false"
                             :before-upload="beforeAvatarUpload">
                             <img v-if="imageUrl1" :src="imageUrl1" class="avatar">
@@ -34,7 +34,7 @@
                                 <el-input v-model="movieForm.movie_name" style="width:450px" placeholder="Title"></el-input>
                             </el-form-item>
                             <el-form-item label="Director">
-                                <el-input v-model="movieForm.area" style="width:450px" placeholder="Director of Movie"></el-input>
+                                <el-input v-model="movieForm.director" style="width:450px" placeholder="Director of Movie"></el-input>
                             </el-form-item>
                             <el-form-item label="Type">
                                 <el-select v-model="movieForm.type" placeholder="To Select" style="width:450px">
@@ -60,7 +60,7 @@
                                 <el-input v-model="movieForm.duration" style="width:450px" placeholder="Minutes"></el-input>
                             </el-form-item>
                             <el-form-item label="Introduction">
-                                <el-input type="textarea" v-model="movieForm.Introduction" :rows="5" maxlength="500" show-word-limit></el-input>
+                                <el-input type="textarea" v-model="movieForm.introduction" :rows="5" maxlength="500" show-word-limit></el-input>
                             </el-form-item>
                         </el-form>
                     </div>
@@ -77,7 +77,7 @@
                             class="avatar-uploader"
                             action
                             :auto-upload="false"
-                            :http-request="uploadPicture"
+                            :on-change="uploadPicture"
                             :before-upload="beforeAvatarUpload">
                             <img v-if="imageUrl2" :src="imageUrl2" class="avatar">
                             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -114,7 +114,7 @@
                                 </el-select>
                             </el-form-item>
                             <el-form-item label="Introduction">
-                                <el-input type="textarea" v-model="movieForm.Introduction" :rows="5" maxlength="500" show-word-limit></el-input>
+                                <el-input type="textarea" v-model="personForm.introduction" :rows="5" maxlength="500" show-word-limit></el-input>
                             </el-form-item>
                         </el-form>
                     </div>
@@ -130,6 +130,13 @@
 </template>
 
 <script>
+import axios from "axios";
+const dateFormat1=function(t){
+    let year=new Date(t).getFullYear();
+    let month=new Date(t).getMonth() + 1 < 10? "0" + (new Date(t).getMonth() + 1): new Date(t).getMonth() + 1;
+    let date=new Date(t).getDate() < 10? "0" + new Date(t).getDate(): new Date(t).getDate();
+    return year+"-"+month+"-"+date;
+}
 export default {
     data(){
         return{
@@ -144,7 +151,6 @@ export default {
             movieForm:{
                 movie_name:'',
                 director:'',
-                actor:'',
                 type:'',
                 area:'',
                 time:'',
@@ -240,16 +246,36 @@ export default {
             }
             return require('../assets/images/'+url);
         },
-        uploadMovie(){
-
+        uploadMovie(file){
+           console.log(file);
+           this.movie_pic=file.raw;
+           this.imageUrl1 = URL.createObjectURL(file.raw);
         },
-        uploadPicture(){
-
+        uploadPicture(file){
+           console.log(file);
+           this.person_pic=file.raw;
+           this.imageUrl2 = URL.createObjectURL(file.raw);
         },
         async submit1(){
-
+            let fd = new FormData();
+            fd.append('movie_pic',this.movie_pic);
+            fd.append('movie_name',this.movieForm.movie_name);
+            fd.append('type',this.movieForm.type);
+            fd.append('area',this.movieForm.area);
+            fd.append('directors',this.movieForm.director);
+            fd.append('duration',this.movieForm.duration);
+            fd.append('publish_time',dateFormat1(this.movieForm.time));
+            fd.append('Introduction',this.movieForm.introduction);
+            axios.post("http://localhost:8070/Admin/UploadMovie",fd).then((response)=>{
+                console.log(response);
+                this.$message.success("Upload Movie Success!");
+            }).catch((error)=>{
+                this.$message.error("Upload Movie Failed!");
+            })
         },
         async submit2(){
+            let fd = new FormData();
+            
 
         }
     }
