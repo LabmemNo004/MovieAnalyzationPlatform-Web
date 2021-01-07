@@ -98,9 +98,18 @@ public class MovieController {
             )
     {
         JSONArray temp=movieService.getMovieComment(movie_id,pagenum,pagesize);
+
+
         int i=temp.size()-1;
         Object counts=temp.getJSONObject(i).get("total");
-        temp.fluentRemove(i);
+        if(counts.equals(-100))
+        {
+            return new JsonResult(temp,"成功",counts);
+        }
+        else
+        {
+            temp.fluentRemove(i);
+        }
         return new JsonResult(temp,"成功",counts);
     }
 
