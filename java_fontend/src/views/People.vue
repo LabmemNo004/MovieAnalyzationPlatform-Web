@@ -143,6 +143,10 @@ export default {
 .person .person_info{
   padding: 20px 30px;
   float: left;
+  width:600px;
+  height: 110px;
+  overflow: hidden;
+  margin:0px;
 }
 
 .person .person_sort{
@@ -188,8 +192,8 @@ export default {
 }
 
 .star_photos>a>img{
-  height: 100%;
-  width: auto;
+  height: 150px;
+  width: 100px;
 }
 
 .star_content{
@@ -225,5 +229,9 @@ export default {
 #app > div > section > main > div > div.star_container > div > div.el-col.el-col-18 > div > div.el-pagination .is-background .el-pager li:not(.disabled).active{
   background-color: #0066c0;
   color: white;
+}
+
+.person_info>p{
+  margin:5px 5px;
 }
 </style>
