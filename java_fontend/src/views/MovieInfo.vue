@@ -1,18 +1,18 @@
 <template>
     <div class="movieinfo">
         <div class="movie_pic l">
-            <img :src="movieInfo.movie_pic"/>
+            <img :src="movieInfo.movie_pic" @error="away()"/>
         </div>
         <div class="movie_info l">
             <div class="name">{{movieInfo.movie_name}}</div>
             <div class="information">
                 <div class="info1">
                     <span class="span1">Director: </span>
-                    <span class="span2">{{movieInfo.director}}</span>
+                    <span class="span2" v-for="director in movieInfo.director" :key="director">{{director  }}</span>
                 </div>
                 <div class="info1">
                     <span class="span1">Main Actors: </span>
-                    <span class="span2">{{movieInfo.actors}}</span>
+                    <span class="span2" v-for="actor in movieInfo.actors" :key="actor">{{actor  }}</span>
                 </div>
                  <div class="info1">
                     <span class="span1">Type: </span>
@@ -46,7 +46,7 @@
             <div class="title l">Introduction</div>
             <div class="line1 l"></div>
             <div class="clear"></div>
-            <div class="content">{{movieInfo.content}}</div>
+            <div class="content">{{movieInfo.introduction}}</div>
         </div>
         <div class="comment">
             <div class="title l">Rate and Comments</div>
@@ -99,7 +99,7 @@
                 </div>
             </div>
             <div class="userComment">
-                <div>User Comments({{movieInfo.comment_num}})</div>
+                <div>User Comments({{this.totalNum}})</div>
                 <div class=comments v-if="movieInfo.comment_num!=0">
                     <div v-for="comment in commentList" :key="comment.username" >
                         <el-divider></el-divider>
@@ -128,12 +128,12 @@
                     <div>No Comments.</div>
                 </div>
             </div>
-            <div class="page" v-if="movieInfo.comment_num!=0">
+            <div class="page" v-if="totalNum!=0">
                 <el-pagination
                     @current-change="handleCurrentChange"
                     :current-page="pagenum"
                     layout="prev, pager, next"
-                    :total="movieInfo.comment_num"
+                    :total="totalNum"
                     :page-size="5">
                 </el-pagination>
             </div>
@@ -152,7 +152,13 @@ const dateFormat=function(t){
     return year+"-"+month+"-"+date+" "+hour+":"+minute+":"+second;
 }
 const dateFormat1=function(t){
-    
+    let year=new Date(t).getFullYear();
+    let month=new Date(t).getMonth() + 1 < 10? "0" + (new Date(t).getMonth() + 1): new Date(t).getMonth() + 1;
+    let date=new Date(t).getDate() < 10? "0" + new Date(t).getDate(): new Date(t).getDate();
+    return year+"-"+month+"-"+date;
+}
+const convert=function(t){
+    return t/3600;
 }
 export default {
   name: 'MovieInfo',
@@ -161,8 +167,10 @@ export default {
         show:false,
         pagenum:1,
         defaultImg:require('../assets/images/avatar.png'),
+        unload:require('../assets/images/unload.png'),
+        totalNum:0,
         movieInfo:{
-            movie_pic:require('../assets/images/1.png'),
+           /* movie_pic:require('../assets/images/1.png'),
             movie_name:'The God Father',
             director:'Francis Ford Coppola',
             actors:'Marlon Brando,Al Pacino',
@@ -175,7 +183,7 @@ export default {
             is_collect:false,
             my_rate:4.8,
             my_comment:'',
-            content:"The Godfather is an extraordinary novel which has become a modern day classic. Puzo pulls us inside the violent society of the Mafia and its gang wars.The leader, Vito Corleone, is the Godfather. He is a benevolent despot who stops at nothing to gain and hold power. His command post is a fortress on Long Island from which he presides over a vast underground empire that includes the rackets, gambling, bookmaking, and unions. His influence runs through all levels of American society, from the cop on the beat to the nation's mighty.Mario Puzo, a master storyteller, introduces us to unforgettable characters, and the elements of this world explode to life in this violent and impassioned chronicle."
+            content:"The Godfather is an extraordinary novel which has become a modern day classic. Puzo pulls us inside the violent society of the Mafia and its gang wars.The leader, Vito Corleone, is the Godfather. He is a benevolent despot who stops at nothing to gain and hold power. His command post is a fortress on Long Island from which he presides over a vast underground empire that includes the rackets, gambling, bookmaking, and unions. His influence runs through all levels of American society, from the cop on the beat to the nation's mighty.Mario Puzo, a master storyteller, introduces us to unforgettable characters, and the elements of this world explode to life in this violent and impassioned chronicle."*/
             
         },
         Form:{
@@ -208,19 +216,42 @@ export default {
     
   },
   methods:{
+      away(){
+        let img = event.srcElement;   
+        img.src = this.unload;   
+        img.onerror = null; //防止闪图
+    },
       def(){
            let img = event.srcElement;   
            img.src = this.defaultImg;   
            img.onerror = null; //防止闪图
        },
         collect(){
+            var movieid=sessionStorage.getItem("movie_id");
+            console.log(movieid);
             if(this.movieInfo.is_collect==false){
-                this.movieInfo.is_collect=true;
-                this.movieInfo.collect_num++;
+                var op=1;
+                axios.post("http://localhost:8070/Movie/Collection?userid="+this.$store.state.id+"&movieId="+movieid+"&operations="+op).then((response)=>{
+                    console.log(response);
+                    this.$message.success("Collect Succeed!");
+                    this.movieInfo.is_collect=true;
+                    this.movieInfo.collect_num++;
+                }).catch((error)=>{
+                    this.$message.error("Collect Failed!");
+                })
+                
             }
             else{
-                this.movieInfo.is_collect=false;
-                this.movieInfo.collect_num--;
+                var op=0;
+                axios.post("http://localhost:8070/Movie/Collection?userid="+this.$store.state.id+"&movieId="+movieid+"&operations="+op).then((response)=>{
+                    console.log(response);
+                    this.$message.success("Cancel Succeed!");
+                    this.movieInfo.is_collect=false;
+                    this.movieInfo.collect_num--;
+                }).catch((error)=>{
+                    this.$message.error("Cancel Failed!");
+                })
+               
             }
         },
         async getMovieInfo(){
@@ -233,6 +264,10 @@ export default {
                 }
             }).then((response)=>{
                 console.log(response);
+                this.movieInfo=response.data.data[0];
+                var time=new Date(this.movieInfo.pub_time);
+                this.movieInfo.pub_time=dateFormat1(time);
+                //this.movieInfo.duration=convert(this.movieInfo.duration);
             }).catch((error)=>{
                 this.$message.error("Get Movie's Details Failed!");
             })
@@ -240,7 +275,7 @@ export default {
         async getCommentList(){
             var movieid=sessionStorage.getItem("movie_id");
             console.log(movieid);
-            await axios.get("http://localhost:8070/Movie/MovieComment",{
+            axios.get("http://localhost:8070/Movie/MovieComment",{
                  params:{
                   movie_id:movieid,
                   pagenum:this.pagenum,
@@ -249,6 +284,7 @@ export default {
             }).then((response)=>{
                 console.log(response);
                 this.commentList=response.data.data;
+                this.totalNum=response.data.totalNum;
                 var i=0;
                 for(i=0;i<this.commentList.length;i++){
                     var date=new Date(this.commentList[i].time);

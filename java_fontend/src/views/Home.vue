@@ -79,7 +79,8 @@
             @current-change="handleCurrentChange"
             :current-page="pagenum"
             layout="prev, pager, next"
-            :total="80">
+            :total="total"
+            :page-size="10">
           </el-pagination>
         </div>
       </div>
@@ -95,7 +96,7 @@ export default {
       keyword:'',
       seen1:true,
       seen2:false,
-      total:6,
+      total:0,
       pagenum:1,
       unload:require('../assets/images/unload.png'),
       headPictures: [
@@ -243,6 +244,7 @@ export default {
         }).then((response)=>{
           console.log(response);
           this.searchMovieList=response.data.data;
+          this.total=response.data.totalNum;
           this.seen1=false;
           this.seen2=true;
         }).catch((error)=>{
@@ -262,7 +264,7 @@ export default {
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
       this.pagenum=val;
-      this.getMovieList();
+      this.searchMovies();
     },
     toMovieInfo(id){
       sessionStorage.setItem("movie_id",id);

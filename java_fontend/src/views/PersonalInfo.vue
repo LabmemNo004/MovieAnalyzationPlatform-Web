@@ -7,9 +7,10 @@
           <el-form-item label="User Avatar" class="item0">
             <el-upload
               class="avatar-uploader"
-              action="https://jsonplaceholder.typicode.com/posts/"
+              action
               :show-file-list="false"
-              :on-success="handleAvatarSuccess"
+              :http-request="changeFile"
+              :on-success="AvatarUploadSuccess"
               :before-upload="beforeAvatarUpload">
               <img v-if="personalForm.avatar" :src="personalForm.avatar" class="avatar" @error="def()">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -56,6 +57,18 @@ const dateFormat=function(t){
     let date=new Date(t).getDate() < 10? "0" + new Date(t).getDate(): new Date(t).getDate();
     return year+"-"+month+"-"+date;
 }
+export function parsingPictureData (file, id) {
+  return fetch({
+    url: 'http://localhost:8070/User/ModifyAvatar',
+    method: 'post',  // 方式一定是post
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      'userid': id,      //放到formData里后端拿不到，所以放到请求头里了
+      'file':file
+    }
+  })
+}
+
 export default {
   name: 'PersonalInfo',
   data(){
@@ -119,21 +132,41 @@ export default {
             });
 
     },
-    handleAvatarSuccess(res, file) {
-        this.personalForm.avatar = URL.createObjectURL(file.raw);
+    AvatarUploadSuccess(res, file){
+      /*console.log("上传");
+      let fd = new FormData(); //参数的格式是formData格式的       
+      fd.append("file", obj.file); //参数
+      axios.post("http://localhost:8070/User/ModifyAvatar?userid="+this.$store.state.id+"&file="+obj.file).then((response)=>{
+         console.log(response);
+         this.$message.success("Upload Success!");
+      }).catch((error)=>{
+        this.$message.error("Upload Failed!");
+      })*/
+    },
+    changeFile(file) {
+      console.log(file);       
+      /*let fd = new FormData();       
+      fd.append('file',file);//传文件          */  
+      parsingPictureData(obj.file,this.$store.state.id).then((response)=>{
+        console.log(response);
+        this.$message.success("Upload Success!");
+      }).catch((error)=>{
+        this.$message.error("Upload Failed!");
+      }) 
     },
     beforeAvatarUpload(file) {
-      const isJPG = file.type === 'image/jpeg';
-      const isLt2M = file.size / 1024 / 1024 < 2;
-
-      if (!isJPG) {
-        this.$message.error('上传头像图片只能是 JPG 格式!');
+      const isJPG = file.type === "image/jpeg";
+      const isJPG2 = file.type === "image/jpg";
+      const isPNG = file.type === "image/png";
+      const isLt5M = file.size / 1024 / 1024 < 5;
+      if (!isJPG && !isJPG2 && !isPNG) {
+        this.$message.error("Only jpg or png!");
       }
-      if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!');
+      if (!isLt5M) {
+        this.$message.warning("请上传5MB以内的图片!");
       }
-      return isJPG && isLt2M;
-    }
+      return (isJPG || isJPG2 || isPNG) && isLt5M;
+    },
   }
 }
 </script>
