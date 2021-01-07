@@ -275,7 +275,7 @@ export default {
         },
         async submit2(){
             let fd = new FormData();
-            
+            fd.append('')
 
         }
     }

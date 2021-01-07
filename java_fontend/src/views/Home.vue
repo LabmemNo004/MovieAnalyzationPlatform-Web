@@ -256,6 +256,9 @@ export default {
     getMovieList(){
        axios.get("http://localhost:8070/Movie/MainPageTenMovie").then((response)=>{
          console.log(response);
+         if(response.data.data[0].total==-100){
+           return;
+         }
          this.movieList1=response.data.data;
        }).catch((error)=>{
          this.$message.error("Get Movies List Failed!");
