@@ -66,7 +66,7 @@ public interface movieRepository extends JpaRepository<movie, Integer> {
     @Query(value="select * from movie ORDER BY collect_num DESC ",nativeQuery = true)
     List<movie> findMoviesAllTypeCollect();
 
-    @Query(value="select * from movie ORDER BY comment_num DESC ",nativeQuery = true)
+    @Query(value="select * from movie ORDER BY commentnum DESC ",nativeQuery = true)
     List<movie> findMoviesAllTypeComment();
 
 

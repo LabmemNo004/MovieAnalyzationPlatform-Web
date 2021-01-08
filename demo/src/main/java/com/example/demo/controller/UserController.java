@@ -136,17 +136,16 @@ public class UserController {
     )
     {
         int temp1=0;
-        int i=UserService.checkName(username);
-        if(i==1)
-        {
-            return new JsonResult(0,"用户名已被占用");
-        }
-        else
-        {
+//        int i=UserService.checkName(username);
+//        if(i==1)
+//        {
+//            return new JsonResult(0,"用户名已被占用");
+//        }
+
             UserService.UpdatePersonalInfor(userid, username,
                     sex, birthday, phone, email, signature);
             return new JsonResult(temp1, "修改个人信息成功");
-        }
+
     }
 
     @PostMapping(value = "/ModifyAvatar",headers="content-type=multipart/form-data")
