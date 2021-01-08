@@ -38,7 +38,7 @@
                 :current-page="pagenum"
                 layout="prev, pager, next"
                 :total="personnum"
-                :page-size="8">
+                :page-size="6">
             </el-pagination>
             <!--分页end-->
           </div>
@@ -55,7 +55,7 @@ export default {
   name: 'person',
   data() {
     return {
-      personnum:80,
+      personnum:0,
       pagenum:1,
       p_radio:'1',
       personList: []
@@ -95,6 +95,7 @@ export default {
         }
         console.log(response);
         var data=response.data.data;
+        this.personnum=response.data.totalNum;
         this.setPersonList(data);
       }).catch((error)=>{
         this.$message.error("Loading Failed!");

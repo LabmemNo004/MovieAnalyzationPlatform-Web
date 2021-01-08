@@ -104,7 +104,7 @@
                     <div v-for="comment in commentList" :key="comment.username" >
                         <el-divider></el-divider>
                         <div class="l">
-                            <img :src="comment.avatar" @error="def()"/>
+                            <img :src="getAvatar(comment.avatar)" @error="def()"/>
                         </div>
                         <div class="l username">
                             <span class="span6">{{comment.username}}</span>
@@ -356,7 +356,13 @@ export default {
       else{
         return require('../assets/images/'+url);
       }
-    }
+    },
+    getAvatar(url){
+            if(url==null||url==''){
+                return require('../assets/images/avatar.png');
+            }
+            return require('../assets/images/'+url);
+        }
     },
     created(){
         this.getMovieInfo();
